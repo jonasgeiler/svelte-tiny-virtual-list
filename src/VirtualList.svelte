@@ -292,17 +292,16 @@
 			Object.entries(
 				sticky ? {
 					...STYLE_STICKY_ITEM,
-					[SIZE_PROP[scrollDirection]]:            size,
-					[MARGIN_PROP[scrollDirection]]:          offset,
-					[OPPOSITE_MARGIN_PROP[scrollDirection]]: -(offset + size),
+					[SIZE_PROP[scrollDirection]]:            cssVal(size),
+					[MARGIN_PROP[scrollDirection]]:          cssVal(offset),
+					[OPPOSITE_MARGIN_PROP[scrollDirection]]: cssVal(-(offset + size)),
 				} : {
 					...STYLE_ITEM,
-					[SIZE_PROP[scrollDirection]]:     size,
-					[POSITION_PROP[scrollDirection]]: offset,
+					[SIZE_PROP[scrollDirection]]:     cssVal(size),
+					[POSITION_PROP[scrollDirection]]: cssVal(offset),
 				},
 			).reduce((prev, [key, val], i) => {
-				const cssVal = key === 'z-index' ? val : cssVal(val);
-				const curr = key + ':' + cssVal + ';';
+				const curr = key + ':' + val + ';';
 				return i === 0 ? curr : prev + curr;
 			}, '');
 	}
