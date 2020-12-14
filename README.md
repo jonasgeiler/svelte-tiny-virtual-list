@@ -27,6 +27,7 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 - **Scroll to index** or **set the initial scroll offset**
 - **Supports fixed** or **variable** heights/widths
 - **Vertical** or **Horizontal** lists
+- [`svelte-infinite-loading`](https://github.com/Skayo/svelte-infinite-loading) compatibility
 
 ## Installation
 
