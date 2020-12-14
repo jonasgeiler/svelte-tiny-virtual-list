@@ -15,9 +15,18 @@ export const SCROLL_CHANGE_REASON = {
 	REQUESTED: 1,
 };
 
-const DEFAULT_STYLE_ITEM = 'top:0;left:0;width:100%;';
-export const STYLE_ITEM = DEFAULT_STYLE_ITEM + 'position:absolute;';
-export const STYLE_STICKY_ITEM = DEFAULT_STYLE_ITEM + 'position:sticky;z-index:1;';
+export const STYLE_ITEM = {
+	position: 'absolute',
+	top:      0,
+	left:     0,
+	width:    '100%',
+};
+
+export const STYLE_STICKY_ITEM = {
+	...STYLE_ITEM,
+	position:  'sticky',
+	'z-index': 1,
+};
 
 export const SCROLL_PROP = {
 	[DIRECTION.VERTICAL]:   'scrollTop',
@@ -35,11 +44,11 @@ export const POSITION_PROP = {
 };
 
 export const MARGIN_PROP = {
-	[DIRECTION.VERTICAL]:   'marginTop',
-	[DIRECTION.HORIZONTAL]: 'marginLeft',
+	[DIRECTION.VERTICAL]:   'margin-top',
+	[DIRECTION.HORIZONTAL]: 'margin-left',
 };
 
 export const OPPOSITE_MARGIN_PROP = {
-	[DIRECTION.VERTICAL]:   'marginBottom',
-	[DIRECTION.HORIZONTAL]: 'marginRight',
+	[DIRECTION.VERTICAL]:   'margin-bottom',
+	[DIRECTION.HORIZONTAL]: 'margin-right',
 };

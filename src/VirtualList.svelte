@@ -110,7 +110,7 @@
 
 	onDestroy(() => {
 		if (mounted) rootNode.removeEventListener('scroll', handleScroll);
-	})
+	});
 
 
 	function propsUpdated() {
@@ -126,7 +126,7 @@
 
 		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig({
-				itemSizeGetter: itemSizeGetter(itemSize),
+				itemSizeGetter:    itemSizeGetter(itemSize),
 				itemCount:         itemCount,
 				estimatedItemSize: getEstimatedItemSize(),
 			});
@@ -171,7 +171,7 @@
 
 		if (
 			prevState.offset !== offset ||
-		    prevState.scrollChangeReason !== scrollChangeReason
+			prevState.scrollChangeReason !== scrollChangeReason
 		) {
 			refresh();
 		}
@@ -197,12 +197,13 @@
 		innerStyle = SIZE_PROP[scrollDirection] + ':' + cssVal(sizeAndPositionManager.getTotalSize()) + ';';
 
 		if (stickyIndices != null && stickyIndices.length !== 0) {
-			stickyIndices.forEach(index =>
+			for (let i = 0; i < stickyIndices.length; i++) {
+				const index = stickyIndices[i];
 				updatedItems.push({
-					index,
+					index: index,
 					style: getStyle(index, true),
-				}),
-			);
+				});
+			}
 
 			if (scrollDirection === DIRECTION.HORIZONTAL) {
 				innerStyle += 'display:flex;';
@@ -270,8 +271,8 @@
 
 		dispatchEvent('afterScroll', {
 			offset,
-			event
-		})
+			event,
+		});
 	}
 
 	function getNodeOffset() {
@@ -301,14 +302,22 @@
 
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
-		return (styleCache[index] = sticky
-			? STYLE_STICKY_ITEM +
-			  SIZE_PROP[scrollDirection] + ':' + cssVal(size) + ';' +
-			  MARGIN_PROP[scrollDirection] + ':' + cssVal(offset) + ';' +
-			  OPPOSITE_MARGIN_PROP[scrollDirection] + ':' + cssVal(-(offset + size)) + ';'
-			: STYLE_ITEM +
-			  SIZE_PROP[scrollDirection] + ':' + cssVal(size) + ';' +
-			  POSITION_PROP[scrollDirection] + ':' + cssVal(offset) + ';');
+		return styleCache[index] =
+			Object.entries(
+				sticky ? {
+					...STYLE_STICKY_ITEM,
+					[SIZE_PROP[scrollDirection]]:            size,
+					[MARGIN_PROP[scrollDirection]]:          offset,
+					[OPPOSITE_MARGIN_PROP[scrollDirection]]: -(offset + size),
+				} : {
+					...STYLE_ITEM,
+					[SIZE_PROP[scrollDirection]]:     size,
+					[POSITION_PROP[scrollDirection]]: offset,
+				},
+			).reduce((prev, [key, val], i) => {
+				const curr = key + ':' + cssVal(val) + ';';
+				return i === 0 ? curr : prev + curr;
+			}, '');
 	}
 
 	function cssVal(val) {
