@@ -160,7 +160,13 @@ _\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly,
   
 ### Methods
 
-Use them like this:
+- `recomputeSizes(startIndex: number)` - This method force recomputes the item sizes after the specified index (these are normally cached).
+- `refresh()` - This method refreshes the currently visible items.
+
+`VirtualList` has no way of knowing when its underlying data has changed, since it only receives a itemSize property. If the itemSize is a `number`, this isn't an issue, as it can compare before and after values and automatically call `recomputeSizes` internally.
+However, if you're passing a function to `itemSize`, that type of comparison is error prone. In that event, you'll need to call `recomputeSizes` manually to inform the `VirtualList` that the size of its items has changed.
+
+#### Use the methods like this:
 
 ```svelte
 <script>
@@ -190,17 +196,6 @@ Use them like this:
   </div>
 </VirtualList>
 ```
-
-#### `recomputeSizes(startIndex: number)`
-
-This method force recomputes the item sizes after the specified index (these are normally cached).
-
-`VirtualList` has no way of knowing when its underlying data has changed, since it only receives a itemSize property. If the itemSize is a `number`, this isn't an issue, as it can compare before and after values and automatically call `recomputeSizes` internally.
-However, if you're passing a function to `itemSize`, that type of comparison is error prone. In that event, you'll need to call `recomputeSizes` manually to inform the `VirtualList` that the size of its items has changed.
-
-#### `refresh()`
-
-This method refreshes the currently visible items.
 
 ### Styling
 
