@@ -132,7 +132,6 @@
 			});
 
 			recomputeSizes();
-			refresh();
 		}
 
 		if (prevProps.scrollOffset !== scrollOffset) {
@@ -184,7 +183,7 @@
 		prevState = state;
 	}
 
-	export function refresh() {
+	function refresh() {
 		const { offset } = state;
 		const { start, stop } = sizeAndPositionManager.getVisibleRange({
 			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
@@ -243,6 +242,7 @@
 	export function recomputeSizes(startIndex = 0) {
 		styleCache = {};
 		sizeAndPositionManager.resetItem(startIndex);
+		refresh();
 	}
 
 	function getOffsetForIndex(index, _scrollToAlignment = scrollToAlignment, _itemCount = itemCount) {
