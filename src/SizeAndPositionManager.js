@@ -28,7 +28,7 @@ import { ALIGNMENT } from './constants';
  * @typedef Options
  * @type {object}
  * @property {number} itemCount
- * @property {ItemSizeGetter} itemSizeGetter
+ * @property {ItemSize} itemSize
  * @property {number} estimatedItemSize
  */
 
@@ -37,12 +37,12 @@ export default class SizeAndPositionManager {
 	/**
 	 * @param {Options} options
 	 */
-	constructor({ itemCount, itemSizeGetter, estimatedItemSize }) {
+	constructor({ itemSize, itemCount, estimatedItemSize }) {
 		/**
 		 * @private
-		 * @type {ItemSizeGetter}
+		 * @type {ItemSize}
 		 */
-		this.itemSizeGetter = itemSizeGetter;
+		this.itemSize = itemSize;
 
 		/**
 		 * @private
@@ -71,12 +71,20 @@ export default class SizeAndPositionManager {
 		 * @type {number}
 		 */
 		this.lastMeasuredIndex = -1;
+
+		this.checkForMismatchItemSizeAndItemCount();
+
+		if (!this.justInTime) this.computeTotalSizeAndPositionData();
+	}
+
+	get justInTime() {
+		return typeof this.itemSize === 'function';
 	}
 
 	/**
 	 * @param {Options} options
 	 */
-	updateConfig({ itemCount, itemSizeGetter, estimatedItemSize }) {
+	updateConfig({ itemSize, itemCount, estimatedItemSize }) {
 		if (itemCount != null) {
 			this.itemCount = itemCount;
 		}
@@ -85,9 +93,58 @@ export default class SizeAndPositionManager {
 			this.estimatedItemSize = estimatedItemSize;
 		}
 
-		if (itemSizeGetter != null) {
-			this.itemSizeGetter = itemSizeGetter;
+		if (itemSize != null) {
+			this.itemSize = itemSize;
 		}
+
+		this.checkForMismatchItemSizeAndItemCount();
+
+		if (this.justInTime && this.totalSize != null) {
+			this.totalSize = undefined;
+		} else {
+			this.computeTotalSizeAndPositionData();
+		}
+	}
+
+	checkForMismatchItemSizeAndItemCount() {
+		if (Array.isArray(this.itemSize) && this.itemSize.length < this.itemCount) {
+			throw Error(
+				`When itemSize is an array, itemSize.length can't be smaller than itemCount`,
+			);
+		}
+	}
+
+	/**
+	 * @param {number} index
+	 */
+	getSize(index) {
+		const { itemSize } = this;
+
+		if (typeof itemSize === 'function') {
+			return itemSize(index);
+		}
+
+		return Array.isArray(itemSize) ? itemSize[index] : itemSize;
+	}
+
+	/**
+	 * Compute the totalSize and itemSizeAndPositionData at the start,
+	 * only when itemSize is a number or an array.
+	 */
+	computeTotalSizeAndPositionData() {
+		let totalSize = 0;
+		for (let i = 0; i < this.itemCount; i++) {
+			const size = this.getSize(i);
+			const offset = totalSize;
+			totalSize += size;
+
+			this.itemSizeAndPositionData[i] = {
+				offset,
+				size,
+			};
+		}
+
+		this.totalSize = totalSize;
 	}
 
 	getLastMeasuredIndex() {
@@ -97,7 +154,6 @@ export default class SizeAndPositionManager {
 
 	/**
 	 * This method returns the size and position for the item at the specified index.
-	 * It just-in-time calculates (or used cached values) for items leading up to the index.
 	 *
 	 * @param {number} index
 	 */
@@ -108,13 +164,25 @@ export default class SizeAndPositionManager {
 			);
 		}
 
+		return this.justInTime
+			? this.getJustInTimeSizeAndPositionForIndex(index)
+			: this.itemSizeAndPositionData[index];
+	}
+
+	/**
+	 * This is used when itemSize is a function.
+	 * just-in-time calculates (or used cached values) for items leading up to the index.
+	 *
+	 * @param {number} index
+	 */
+	getJustInTimeSizeAndPositionForIndex(index) {
 		if (index > this.lastMeasuredIndex) {
 			const lastMeasuredSizeAndPosition = this.getSizeAndPositionOfLastMeasuredItem();
 			let offset =
 				    lastMeasuredSizeAndPosition.offset + lastMeasuredSizeAndPosition.size;
 
 			for (let i = this.lastMeasuredIndex + 1; i <= index; i++) {
-				const size = this.itemSizeGetter(i);
+				const size = this.getSize(i);
 
 				if (size == null || isNaN(size)) {
 					throw Error(`Invalid size returned for index ${i} of value ${size}`);
@@ -137,17 +205,23 @@ export default class SizeAndPositionManager {
 	getSizeAndPositionOfLastMeasuredItem() {
 		return this.lastMeasuredIndex >= 0
 			? this.itemSizeAndPositionData[this.lastMeasuredIndex]
-			: {offset: 0, size: 0};
+			: { offset: 0, size: 0 };
 	}
 
 	/**
 	 * Total size of all items being measured.
-	 * This value will be completedly estimated initially.
-	 * As items as measured the estimate will be updated.
 	 *
 	 * @return {number}
 	 */
 	getTotalSize() {
+		// Return the pre computed totalSize when itemSize is number or array.
+		if (this.totalSize) return this.totalSize;
+
+		/**
+		 * When itemSize is a function,
+		 * This value will be completedly estimated initially.
+		 * As items as measured the estimate will be updated.
+		 */
 		const lastMeasuredSizeAndPosition = this.getSizeAndPositionOfLastMeasuredItem();
 
 		return (
@@ -272,7 +346,7 @@ export default class SizeAndPositionManager {
 			// If we've already measured items within this range just use a binary search as it's faster.
 			return this.binarySearch({
 				high: lastMeasuredIndex,
-				low: 0,
+				low:  0,
 				offset,
 			});
 		} else {
@@ -334,7 +408,7 @@ export default class SizeAndPositionManager {
 
 		return this.binarySearch({
 			high: Math.min(index, this.itemCount - 1),
-			low: Math.floor(index / 2),
+			low:  Math.floor(index / 2),
 			offset,
 		});
 	}

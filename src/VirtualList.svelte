@@ -56,8 +56,8 @@
 	const dispatchEvent = createEventDispatcher();
 
 	const sizeAndPositionManager = new SizeAndPositionManager({
-		itemCount:         itemCount,
-		itemSizeGetter:    itemSizeGetter(itemSize),
+		itemCount,
+		itemSize,
 		estimatedItemSize: getEstimatedItemSize(),
 	});
 
@@ -126,8 +126,8 @@
 
 		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig({
-				itemSizeGetter:    itemSizeGetter(itemSize),
-				itemCount:         itemCount,
+				itemSize,
+				itemCount,
 				estimatedItemSize: getEstimatedItemSize(),
 			});
 
@@ -230,10 +230,6 @@
 	}
 
 
-	function itemSizeGetter(_itemSize) {
-		return index => getSize(index, _itemSize);
-	}
-
 	function scrollTo(value) {
 		wrapper[SCROLL_PROP[scrollDirection]] = value;
 	}
@@ -283,14 +279,6 @@
 			(typeof itemSize === 'number' && itemSize) ||
 			50
 		);
-	}
-
-	function getSize(index, _itemSize) {
-		if (typeof _itemSize === 'function') {
-			return _itemSize(index);
-		}
-
-		return Array.isArray(_itemSize) ? _itemSize[index] : _itemSize;
 	}
 
 	function getStyle(index, sticky) {
