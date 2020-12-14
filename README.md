@@ -17,7 +17,7 @@
 
 ## About
 
-Instead of rendering all your list of data in a huge list, the virtual list component just renders the bits that are visible, keeping your page nice and light.  
+Instead of rendering all your data in a huge list, the virtual list component just renders the items that are visible, keeping your page nice and light.  
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
 
 ### Features
