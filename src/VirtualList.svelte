@@ -43,13 +43,13 @@
 
 	export let itemCount;
 	export let itemSize;
-	export let estimatedItemSize;
-	export let stickyIndices;
+	export let estimatedItemSize = null;
+	export let stickyIndices = null;
 
 	export let scrollDirection = DIRECTION.VERTICAL;
-	export let scrollOffset;
-	export let scrollToIndex;
-	export let scrollToAlignment;
+	export let scrollOffset = null;
+	export let scrollToIndex = null;
+	export let scrollToAlignment = null;
 
 	export let overscanCount = 3;
 
@@ -66,7 +66,7 @@
 	let items = [];
 
 	let state = {
-		offset:             scrollOffset || (scrollToIndex !== undefined && getOffsetForIndex(scrollToIndex)) || 0,
+		offset:             scrollOffset || (scrollToIndex != null && getOffsetForIndex(scrollToIndex)) || 0,
 		scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED,
 	};
 
@@ -101,9 +101,9 @@
 
 		rootNode.addEventListener('scroll', handleScroll, thirdEventArg);
 
-		if (scrollOffset !== undefined) {
+		if (scrollOffset != null) {
 			scrollTo(scrollOffset);
-		} else if (scrollToIndex !== undefined) {
+		} else if (scrollToIndex != null) {
 			scrollTo(getOffsetForIndex(scrollToIndex));
 		}
 	});
@@ -201,7 +201,7 @@
 		wrapperStyle = 'height:' + cssVal(height) + ';width:' + cssVal(width) + ';';
 		innerStyle = SIZE_PROP[scrollDirection] + ':' + cssVal(sizeAndPositionManager.getTotalSize()) + ';';
 
-		if (stickyIndices !== undefined && stickyIndices.length !== 0) {
+		if (stickyIndices != null && stickyIndices.length !== 0) {
 			stickyIndices.forEach(index =>
 				updatedItems.push({
 					index,
@@ -214,9 +214,9 @@
 			}
 		}
 
-		if (typeof start !== 'undefined' && typeof stop !== 'undefined') {
+		if (start !== undefined && stop !== undefined) {
 			for (let index = start; index <= stop; index++) {
-				if (stickyIndices !== undefined && stickyIndices.includes(index)) {
+				if (stickyIndices != null && stickyIndices.includes(index)) {
 					continue;
 				}
 

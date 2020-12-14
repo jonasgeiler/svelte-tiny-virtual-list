@@ -77,15 +77,15 @@ export default class SizeAndPositionManager {
 	 * @param {Options} options
 	 */
 	updateConfig({ itemCount, itemSizeGetter, estimatedItemSize }) {
-		if (itemCount !== undefined) {
+		if (itemCount != null) {
 			this.itemCount = itemCount;
 		}
 
-		if (estimatedItemSize !== undefined) {
+		if (estimatedItemSize != null) {
 			this.estimatedItemSize = estimatedItemSize;
 		}
 
-		if (itemSizeGetter !== undefined) {
+		if (itemSizeGetter != null) {
 			this.itemSizeGetter = itemSizeGetter;
 		}
 	}
@@ -116,7 +116,7 @@ export default class SizeAndPositionManager {
 			for (let i = this.lastMeasuredIndex + 1; i <= index; i++) {
 				const size = this.itemSizeGetter(i);
 
-				if (size === undefined || isNaN(size)) {
+				if (size == null || isNaN(size)) {
 					throw Error(`Invalid size returned for index ${i} of value ${size}`);
 				}
 
@@ -212,7 +212,7 @@ export default class SizeAndPositionManager {
 		const maxOffset = offset + containerSize;
 		let start = this.findNearestItem(offset);
 
-		if (typeof start === 'undefined') {
+		if (start === undefined) {
 			throw Error(`Invalid offset ${offset} specified`);
 		}
 
