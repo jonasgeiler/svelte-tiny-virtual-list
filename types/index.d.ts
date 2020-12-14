@@ -145,7 +145,7 @@ export interface AfterScrollDetail {
 	event: Event;
 
 	/**
-	 * Either the value of `rootNode.scrollTop` or `rootNode.scrollLeft`
+	 * Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
 	 */
 	offset: number;
 }

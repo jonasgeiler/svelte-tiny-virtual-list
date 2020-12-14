@@ -62,7 +62,7 @@
 	});
 
 	let mounted = false;
-	let rootNode;
+	let wrapper;
 	let items = [];
 
 	let state = {
@@ -99,7 +99,7 @@
 	onMount(() => {
 		mounted = true;
 
-		rootNode.addEventListener('scroll', handleScroll, thirdEventArg);
+		wrapper.addEventListener('scroll', handleScroll, thirdEventArg);
 
 		if (scrollOffset != null) {
 			scrollTo(scrollOffset);
@@ -109,7 +109,7 @@
 	});
 
 	onDestroy(() => {
-		if (mounted) rootNode.removeEventListener('scroll', handleScroll);
+		if (mounted) wrapper.removeEventListener('scroll', handleScroll);
 	});
 
 
@@ -200,7 +200,7 @@
 			for (let i = 0; i < stickyIndices.length; i++) {
 				const index = stickyIndices[i];
 				updatedItems.push({
-					index: index,
+					index,
 					style: getStyle(index, true),
 				});
 			}
@@ -237,7 +237,7 @@
 	}
 
 	function scrollTo(value) {
-		rootNode[SCROLL_PROP[scrollDirection]] = value;
+		wrapper[SCROLL_PROP[scrollDirection]] = value;
 	}
 
 	export function recomputeSizes(startIndex = 0) {
@@ -260,9 +260,9 @@
 	}
 
 	function handleScroll(event) {
-		const offset = getNodeOffset();
+		const offset = getWrapperOffset();
 
-		if (offset < 0 || state.offset === offset || event.target !== rootNode) return;
+		if (offset < 0 || state.offset === offset || event.target !== wrapper) return;
 
 		state = {
 			offset,
@@ -275,8 +275,8 @@
 		});
 	}
 
-	function getNodeOffset() {
-		return rootNode[SCROLL_PROP[scrollDirection]];
+	function getWrapperOffset() {
+		return wrapper[SCROLL_PROP[scrollDirection]];
 	}
 
 	function getEstimatedItemSize() {
@@ -325,14 +325,10 @@
 	}
 </script>
 
-<div bind:this={rootNode}
-     class="virtual-list-wrapper"
-     style={wrapperStyle}>
-
+<div bind:this={wrapper} class="virtual-list-wrapper" style={wrapperStyle}>
 	<slot name="header" />
 
-	<div class="virtual-list-inner"
-	     style={innerStyle}>
+	<div class="virtual-list-inner" style={innerStyle}>
 		{#each items as item (item.index)}
 			<slot name="item" style={item.style} index={item.index} />
 		{/each}

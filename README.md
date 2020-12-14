@@ -153,7 +153,7 @@ _\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly,
 - `afterScroll` - Fired after handling the scroll event
   - `detail` Props:
     - `event: ScrollEvent` - The original scroll event
-    - `offset: number` - Either the value of `rootNode.scrollTop` or `rootNode.scrollLeft`
+    - `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
 - `itemsUpdated` - Fired when the visible items are updated
   - `detail` Props:
     - `start: number` - Index of the first visible item
