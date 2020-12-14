@@ -22,7 +22,7 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 
 ### Features
 
-- **Tiny & dependency free** – Only 3kb gzipped
+- **Tiny & dependency free** – Only 5kb gzipped
 - **Render millions of items**, without breaking a sweat
 - **Scroll to index** or **set the initial scroll offset**
 - **Supports fixed** or **variable** heights/widths
