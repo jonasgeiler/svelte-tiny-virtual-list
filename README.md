@@ -1,6 +1,6 @@
 <p align="center"><img src="https://raw.githubusercontent.com/Skayo/svelte-tiny-virtual-list/master/assets/ListLogo.svg" alt="ListLogo" width="225"></p>
 <h2 align="center">svelte-tiny-virtual-list</h2>
-<p align="center">An infinite scroll component for Svelte apps</p>
+<p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
 <p align="center">
   <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
   <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
@@ -17,7 +17,7 @@
 
 ## About
 
-A tiny but mighty list virtualization library, with zero dependencies 💪  
+Instead of rendering all your list of data in a huge list, the virtual list component just renders the bits that are visible, keeping your page nice and light.  
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
 
 ### Features
