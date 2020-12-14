@@ -205,9 +205,7 @@
 				});
 			}
 
-			if (scrollDirection === DIRECTION.HORIZONTAL) {
-				innerStyle += 'display:flex;';
-			}
+			innerStyle += 'display:flex;' + (scrollDirection === DIRECTION.VERTICAL ? 'flex-direction:column;' : '');
 		}
 
 		if (start !== undefined && stop !== undefined) {
@@ -315,7 +313,8 @@
 					[POSITION_PROP[scrollDirection]]: offset,
 				},
 			).reduce((prev, [key, val], i) => {
-				const curr = key + ':' + cssVal(val) + ';';
+				const cssVal = key === 'z-index' ? val : cssVal(val);
+				const curr = key + ':' + cssVal + ';';
 				return i === 0 ? curr : prev + curr;
 			}, '');
 	}
