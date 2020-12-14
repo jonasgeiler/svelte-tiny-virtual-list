@@ -36,9 +36,6 @@ describe('SizeAndPositionManager', () => {
 	 * @return {{sizeAndPositionManager: SizeAndPositionManager, totalSize: number, itemSize: number}}
 	 */
 	function getItemSizeAndPositionManagerNumber(itemCount = 100, itemSize = 50) {
-		/** @type {number[]} */
-		const itemSizeGetterCalls = [];
-
 		const sizeAndPositionManager = new SizeAndPositionManager({
 			itemCount,
 			itemSize,
@@ -56,12 +53,9 @@ describe('SizeAndPositionManager', () => {
 	 * @return {{sizeAndPositionManager: SizeAndPositionManager, totalSize: number, itemSize: number[]}}
 	 */
 	function getItemSizeAndPositionManagerArray(itemCount = 100) {
-		const itemSize = range(itemCount).map(item => {
+		const itemSize = range(itemCount).map(() => {
 			return Math.max(Math.round(Math.random() * 100), 32);
 		});
-
-		/** @type {number[]} */
-		const itemSizeGetterCalls = [];
 
 		const sizeAndPositionManager = new SizeAndPositionManager({
 			itemCount,
