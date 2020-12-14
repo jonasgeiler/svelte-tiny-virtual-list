@@ -124,24 +124,15 @@
 			      prevProps.itemSize !== itemSize ||
 			      prevProps.estimatedItemSize !== estimatedItemSize;
 
-		if (prevProps.itemSize !== itemSize) {
+		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig({
 				itemSizeGetter: itemSizeGetter(itemSize),
-			});
-		}
-
-		if (
-			prevProps.itemCount !== itemCount ||
-			prevProps.estimatedItemSize !== estimatedItemSize
-		) {
-			sizeAndPositionManager.updateConfig({
 				itemCount:         itemCount,
 				estimatedItemSize: getEstimatedItemSize(),
 			});
-		}
 
-		if (itemPropsHaveChanged) {
 			recomputeSizes();
+			refresh();
 		}
 
 		if (prevProps.scrollOffset !== scrollOffset) {
@@ -177,9 +168,14 @@
 	function stateUpdated() {
 		if (!mounted) return;
 
-		refresh();
-
 		const { offset, scrollChangeReason } = state;
+
+		if (
+			prevState.offset !== offset ||
+		    prevState.scrollChangeReason !== scrollChangeReason
+		) {
+			refresh();
+		}
 
 		if (prevState.offset !== offset && scrollChangeReason === SCROLL_CHANGE_REASON.REQUESTED) {
 			scrollTo(offset);
