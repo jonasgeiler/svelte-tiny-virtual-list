@@ -241,6 +241,7 @@ You can style the elements of the virtual list like this:
 - **Controlled props**
     - [Scroll to index](https://svelte.dev/repl/bdf5ceb63f6e45f7bb14b90dbd2c11d9)
     - [Controlled scroll offset](https://svelte.dev/repl/68576a3919c44033a74416d4bc4fde7e)
+- [Hacker News using svelte-infinite-loading](https://svelte.dev/repl/2239cc4c861c41d18abbc858248f5a0d)
 
 ## License
 
