@@ -234,12 +234,12 @@ You can style the elements of the virtual list like this:
 ## Examples / Demo
 
 - **Basic setup**
-    - [Elements of equal height](https://svelte.dev/repl/c053fb0b13154b07a503ac04e0cb2c66)
-    - [Variable heights](https://svelte.dev/repl/73d404d5a26a47db969c4ebc154e8079)
-    - [Horizontal list](https://svelte.dev/repl/9a04b19fcf5f4da0bead27f1cdf55cfb)
+    - [Elements of equal height](https://svelte.dev/repl/e3811b44f311461dbbc7c2df830cde68)
+    - [Variable heights](https://svelte.dev/repl/93795c812f8d4541b6b942535b2ed855)
+    - [Horizontal list](https://svelte.dev/repl/4cd8acdfc96843b68265a19451b1bf3d)
 - **Controlled props**
-    - [Scroll to index](https://svelte.dev/repl/9a04b19fcf5f4da0bead27f1cdf55cfb)
-    - [Controlled scroll offset](https://svelte.dev/repl/9a04b19fcf5f4da0bead27f1cdf55cfb)
+    - [Scroll to index](https://svelte.dev/repl/bdf5ceb63f6e45f7bb14b90dbd2c11d9)
+    - [Controlled scroll offset](https://svelte.dev/repl/68576a3919c44033a74416d4bc4fde7e)
 
 ## License
 
