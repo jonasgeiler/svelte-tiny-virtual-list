@@ -239,13 +239,13 @@
 		refresh();
 	}
 
-	function getOffsetForIndex(index, _scrollToAlignment = scrollToAlignment, _itemCount = itemCount) {
+	function getOffsetForIndex(index, align = scrollToAlignment, _itemCount = itemCount) {
 		if (index < 0 || index >= _itemCount) {
 			index = 0;
 		}
 
 		return sizeAndPositionManager.getUpdatedOffsetForIndex({
-			align:         _scrollToAlignment,
+			align,
 			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
 			currentOffset: state.offset || 0,
 			targetIndex:   index,
