@@ -187,11 +187,14 @@
 
 		let updatedItems = [];
 
-		wrapperStyle = 'height:' + cssVal(height) +
-		               ';width:' + cssVal(width);
-
-		innerStyle = (scrollDirection === DIRECTION.VERTICAL ? 'flex-direction:column;height:' : 'width:') +
-		             cssVal(sizeAndPositionManager.getTotalSize());
+		const totalSize = sizeAndPositionManager.getTotalSize();
+		if (scrollDirection === DIRECTION.VERTICAL) {
+			wrapperStyle = `height:${height}px;width:${width};`;
+			innerStyle = `flex-direction:column;height:${totalSize}px;`;
+		} else {
+			wrapperStyle = `height:${height};width:${width}px`;
+			innerStyle = `width:${totalSize}px;`;
+		}
 
 		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
 		if (hasStickyIndices) {
@@ -285,30 +288,24 @@
 		let style;
 
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			style = 'left:0;width:100%;height:' + cssVal(size);
+			style = `left:0;width:100%;height:${size}px;`;
 
 			if (sticky) {
-				style += ';position:sticky;flex-grow:0;z-index:1;top:0;margin-top:' + cssVal(offset) +
-				         ';margin-bottom:' + cssVal(-(offset + size)) + ';';
+				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
 			} else {
-				style += ';position:absolute;top:' + cssVal(offset) + ';';
+				style += `position:absolute;top:${offset}px;`;
 			}
 		} else {
-			style = 'top:0;width:' + cssVal(size);
+			style = `top:0;width:${size}px;`;
 
 			if (sticky) {
-				style += ';position:sticky;z-index:1;left:0;margin-left:' + cssVal(offset) +
-				         ';margin-right:' + cssVal(-(offset + size)) + ';';
+				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
 			} else {
-				style += ';position:absolute;height:100%;left:' + cssVal(offset) + ';';
+				style += `position:absolute;height:100%;left:${offset};`;
 			}
 		}
 
 		return styleCache[index] = style;
-	}
-
-	function cssVal(val) {
-		return typeof val === 'number' ? val + 'px' : val;
 	}
 </script>
 
