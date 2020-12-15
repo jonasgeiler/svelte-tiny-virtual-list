@@ -288,7 +288,7 @@
 			style = 'left:0;width:100%;height:' + cssVal(size);
 
 			if (sticky) {
-				style += ';position:sticky;z-index:1;top:0;margin-top:' + cssVal(offset) +
+				style += ';position:sticky;flex-grow:0;z-index:1;top:0;margin-top:' + cssVal(offset) +
 				         ';margin-bottom:' + cssVal(-(offset + size)) + ';';
 			} else {
 				style += ';position:absolute;top:' + cssVal(offset) + ';';
