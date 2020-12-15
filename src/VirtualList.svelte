@@ -29,13 +29,7 @@
 	import {
 		DIRECTION,
 		SCROLL_CHANGE_REASON,
-		STYLE_ITEM,
-		STYLE_STICKY_ITEM,
-		MARGIN_PROP,
-		OPPOSITE_MARGIN_PROP,
-		POSITION_PROP,
 		SCROLL_PROP,
-		SIZE_PROP,
 	} from './constants';
 
 	export let height;
@@ -193,10 +187,14 @@
 
 		let updatedItems = [];
 
-		wrapperStyle = 'height:' + cssVal(height) + ';width:' + cssVal(width) + ';';
-		innerStyle = SIZE_PROP[scrollDirection] + ':' + cssVal(sizeAndPositionManager.getTotalSize()) + ';';
+		wrapperStyle = 'height:' + cssVal(height) +
+		               ';width:' + cssVal(width);
 
-		if (stickyIndices != null && stickyIndices.length !== 0) {
+		innerStyle = (scrollDirection === DIRECTION.VERTICAL ? 'flex-direction:column;height:' : 'width:') +
+		             cssVal(sizeAndPositionManager.getTotalSize());
+
+		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
+		if (hasStickyIndices) {
 			for (let i = 0; i < stickyIndices.length; i++) {
 				const index = stickyIndices[i];
 				updatedItems.push({
@@ -204,13 +202,11 @@
 					style: getStyle(index, true),
 				});
 			}
-
-			innerStyle += 'display:flex;' + (scrollDirection === DIRECTION.VERTICAL ? 'flex-direction:column;' : '');
 		}
 
 		if (start !== undefined && stop !== undefined) {
 			for (let index = start; index <= stop; index++) {
-				if (stickyIndices != null && stickyIndices.includes(index)) {
+				if (hasStickyIndices && stickyIndices.includes(index)) {
 					continue;
 				}
 
@@ -282,28 +278,33 @@
 	}
 
 	function getStyle(index, sticky) {
-		const style = styleCache[index];
-
-		if (style) return style;
+		if (styleCache[index]) return styleCache[index];
 
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
-		return styleCache[index] =
-			Object.entries(
-				sticky ? {
-					...STYLE_STICKY_ITEM,
-					[SIZE_PROP[scrollDirection]]:            cssVal(size),
-					[MARGIN_PROP[scrollDirection]]:          cssVal(offset),
-					[OPPOSITE_MARGIN_PROP[scrollDirection]]: cssVal(-(offset + size)),
-				} : {
-					...STYLE_ITEM,
-					[SIZE_PROP[scrollDirection]]:     cssVal(size),
-					[POSITION_PROP[scrollDirection]]: cssVal(offset),
-				},
-			).reduce((prev, [key, val], i) => {
-				const curr = key + ':' + val + ';';
-				return i === 0 ? curr : prev + curr;
-			}, '');
+		let style;
+
+		if (scrollDirection === DIRECTION.VERTICAL) {
+			style = 'left:0;width:100%;height:' + cssVal(size);
+
+			if (sticky) {
+				style += ';position:sticky;z-index:1;top:0;margin-top:' + cssVal(offset) +
+				         ';margin-bottom:' + cssVal(-(offset + size)) + ';';
+			} else {
+				style += ';position:absolute;top:' + cssVal(offset) + ';';
+			}
+		} else {
+			style = 'top:0;width:' + cssVal(size);
+
+			if (sticky) {
+				style += ';position:sticky;z-index:1;left:0;margin-left:' + cssVal(offset) +
+				         ';margin-right:' + cssVal(-(offset + size)) + ';';
+			} else {
+				style += ';position:absolute;height:100%;left:' + cssVal(offset) + ';';
+			}
+		}
+
+		return styleCache[index] = style;
 	}
 
 	function cssVal(val) {
@@ -332,6 +333,7 @@
 
 	.virtual-list-inner {
 		position:   relative;
+		display:    flex;
 		width:      100%;
 		min-height: 100%;
 	}
