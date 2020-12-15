@@ -17,9 +17,9 @@ export type ItemSizeGetter = (index: number) => number;
 export type ItemSize = number | number[] | ItemSizeGetter;
 
 /**
- * InfiniteLoading props
+ * VirtualList props
  */
-export interface InfiniteLoadingProps {
+export interface VirtualListProps {
 	/**
 	 * Width of List. This property will determine the number of rendered items when scrollDirection is `'horizontal'`.
 	 *
@@ -92,9 +92,9 @@ export interface InfiniteLoadingProps {
 
 
 /**
- * InfiniteLoading slots
+ * VirtualList slots
  */
-export interface InfiniteLoadingSlots {
+export interface VirtualListSlots {
 	/**
 	 * Slot for each item
 	 */
@@ -116,7 +116,7 @@ export interface InfiniteLoadingSlots {
 	header: {};
 
 	/**
-	 * Slot for the elements that should appear at the bottom of the list (e.g. `InfiniteLoading` component from `svelte-infinite-loading`)
+	 * Slot for the elements that should appear at the bottom of the list (e.g. `VirtualList` component from `svelte-infinite-loading`)
 	 */
 	footer: {};
 }
@@ -157,7 +157,7 @@ export interface AfterScrollEvent extends CustomEvent<AfterScrollDetail> {
 /**
  * VirtualList events
  */
-export interface InfiniteLoadingEvents {
+export interface VirtualListEvents {
 	/**
 	 * Fired when the visible items are updated
 	 */
@@ -171,7 +171,7 @@ export interface InfiniteLoadingEvents {
 
 
 /**
- * InfiniteLoading component
+ * VirtualList component
  */
-export default class InfiniteLoading extends SvelteComponentTyped<InfiniteLoadingProps, InfiniteLoadingEvents, InfiniteLoadingSlots> {
+export default class VirtualList extends SvelteComponentTyped<VirtualListProps, VirtualListEvents, VirtualListSlots> {
 }
