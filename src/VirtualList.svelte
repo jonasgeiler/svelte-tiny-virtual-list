@@ -87,6 +87,7 @@
 		estimatedItemSize,
 	);
 	$: stateUpdated(state);
+	$: if (mounted) recomputeSizes(height, width, stickyIndices); // call scroll.reset;
 
 	refresh(); // Initial Load
 
@@ -301,7 +302,7 @@
 			if (sticky) {
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
 			} else {
-				style += `position:absolute;height:100%;left:${offset};`;
+				style += `position:absolute;height:100%;left:${offset}px;`;
 			}
 		}
 
