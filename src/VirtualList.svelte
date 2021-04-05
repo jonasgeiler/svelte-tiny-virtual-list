@@ -60,7 +60,7 @@
 	let items = [];
 
 	let state = {
-		offset:             scrollOffset || (scrollToIndex != null && getOffsetForIndex(scrollToIndex)) || 0,
+		offset:             scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0,
 		scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED,
 	};
 
