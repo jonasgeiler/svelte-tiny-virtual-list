@@ -1,17 +1,9 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from 'svelte';
 
-export enum ALIGNMENT {
-	AUTO = 'auto',
-	START = 'start',
-	CENTER = 'center',
-	END = 'end',
-}
+export type Alignment = "auto" | "start" | "center" | "end";
 
-export enum DIRECTION {
-	HORIZONTAL = 'horizontal',
-	VERTICAL = 'vertical',
-}
+export type Direction = "horizontal" | "vertical";
 
 export type ItemSizeGetter = (index: number) => number;
 export type ItemSize = number | number[] | ItemSizeGetter;
@@ -49,7 +41,7 @@ export interface VirtualListProps {
 	 *
 	 * @default 'vertical'
 	 */
-	scrollDirection?: DIRECTION;
+	scrollDirection?: Direction;
 
 	/**
 	 * Can be used to control the scroll offset; Also useful for setting an initial scroll offset
@@ -65,10 +57,10 @@ export interface VirtualListProps {
 	 * Used in combination with `scrollToIndex`, this prop controls the alignment of the scrolled to item.
 	 * One of: `'start'`, `'center'`, `'end'` or `'auto'`.
 	 * Use `'start'` to always align items to the top of the container and `'end'` to align them bottom.
-	 * Use `'center`' to align them in the middle of the container.
+	 * Use `'center'` to align them in the middle of the container.
 	 * `'auto'` scrolls the least amount possible to ensure that the specified `scrollToIndex` item is fully visible.
 	 */
-	scrollToAlignment?: ALIGNMENT;
+	scrollToAlignment?: Alignment;
 
 	/**
 	 * An array of indexes (eg. `[0, 10, 25, 30]`) to make certain items in the list sticky (`position: sticky`)
