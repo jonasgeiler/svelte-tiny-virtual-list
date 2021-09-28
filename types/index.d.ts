@@ -80,6 +80,16 @@ export interface VirtualListProps {
 	 * The estimated total height is progressively adjusted as items are rendered.
 	 */
 	estimatedItemSize?: number;
+
+	/**
+	 * Function that returns the key of an item in the list, which is used to uniquely identify an item.
+	 * This is useful for dynamic data coming from a database or similar.
+	 * By default, it's using the item's index.
+	 *
+	 * @param index - The index of the item.
+	 * @return - Anything that uniquely identifies the item.
+	 */
+	getKey?: (index: number) => any;
 }
 
 

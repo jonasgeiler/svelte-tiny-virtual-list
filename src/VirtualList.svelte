@@ -39,6 +39,7 @@
 	export let itemSize;
 	export let estimatedItemSize = null;
 	export let stickyIndices = null;
+	export let getKey = null;
 
 	export let scrollDirection = DIRECTION.VERTICAL;
 	export let scrollOffset = null;
@@ -314,7 +315,7 @@
 	<slot name="header" />
 
 	<div class="virtual-list-inner" style={innerStyle}>
-		{#each items as item (item.index)}
+		{#each items as item (getKey ? getKey(item.index) : item.index)}
 			<slot name="item" style={item.style} index={item.index} />
 		{/each}
 	</div>

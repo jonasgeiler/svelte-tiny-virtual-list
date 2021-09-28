@@ -4,3 +4,4 @@ package-lock.json
 test/public/bundle.js
 .idea
 dist
+pnpm-lock.yaml
