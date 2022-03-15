@@ -222,8 +222,8 @@
 			}
 
 			dispatchEvent('itemsUpdated', {
-				startIndex: start,
-				stopIndex:  stop,
+				start,
+				end:  stop,
 			});
 		}
 
