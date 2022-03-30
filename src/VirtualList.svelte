@@ -88,7 +88,7 @@
 		estimatedItemSize,
 	);
 	$: stateUpdated(state);
-	$: if (mounted) recomputeSizes(height, width, stickyIndices); // call scroll.reset;
+	$: if (mounted) recomputeSizes(0, height, width, stickyIndices); // call scroll.reset;
 
 	refresh(); // Initial Load
 
