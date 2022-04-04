@@ -79,16 +79,20 @@
 	let wrapperStyle = '';
 	let innerStyle = '';
 
-	$: propsUpdated(
-		scrollToIndex,
-		scrollToAlignment,
-		scrollOffset,
-		itemCount,
-		itemSize,
-		estimatedItemSize,
-	);
-	$: stateUpdated(state);
-	$: if (mounted) recomputeSizes(0, height, width, stickyIndices); // call scroll.reset;
+	$: {
+		/* listen to updates: */ scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize;
+		propsUpdated();
+	}
+
+	$: {
+		/* listen to updates: */ state;
+		stateUpdated();
+	}
+
+	$: {
+		/* listen to updates: */ height, width, stickyIndices;
+		if (mounted) recomputeSizes(0); // call scroll.reset;
+	}
 
 	refresh(); // Initial Load
 
