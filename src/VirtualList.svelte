@@ -199,7 +199,7 @@
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
 			wrapperStyle = `height:${height};width:${width}px`;
-			innerStyle = `width:${totalSize}px;`;
+			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
 		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
