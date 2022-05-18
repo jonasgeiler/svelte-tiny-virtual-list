@@ -284,7 +284,7 @@
 	}
 
 	function getWrapperOffset() {
-		return wrapper[SCROLL_PROP[scrollDirection]];
+		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
 	}
 
 	function getEstimatedItemSize() {
