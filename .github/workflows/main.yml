@@ -1,5 +1,11 @@
 name: Test & Publish
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
@@ -30,6 +36,7 @@ jobs:
   publish:
     needs: test
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.3

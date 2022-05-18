@@ -2,6 +2,7 @@
 import { SvelteComponentTyped } from 'svelte';
 
 export type Alignment = "auto" | "start" | "center" | "end";
+export type ScrollBehaviour = "auto" | "smooth" | "instant";
 
 export type Direction = "horizontal" | "vertical";
 
@@ -61,6 +62,12 @@ export interface VirtualListProps {
 	 * `'auto'` scrolls the least amount possible to ensure that the specified `scrollToIndex` item is fully visible.
 	 */
 	scrollToAlignment?: Alignment;
+
+	/**
+	 * Used in combination with `scrollToIndex`, this prop controls the behaviour of the scrolling.
+	 * One of: `'auto'` (default), `'smooth'` or `'instant'`.
+	 */
+	scrollToBehaviour?: ScrollBehaviour;
 
 	/**
 	 * An array of indexes (eg. `[0, 10, 25, 30]`) to make certain items in the list sticky (`position: sticky`)

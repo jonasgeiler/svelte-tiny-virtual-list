@@ -30,6 +30,7 @@
 		DIRECTION,
 		SCROLL_CHANGE_REASON,
 		SCROLL_PROP,
+		SCROLL_PROP_LEGACY,
 	} from './constants';
 
 	export let height;
@@ -45,6 +46,7 @@
 	export let scrollOffset = null;
 	export let scrollToIndex = null;
 	export let scrollToAlignment = null;
+	export let scrollToBehaviour = 'instant';
 
 	export let overscanCount = 3;
 
@@ -227,7 +229,7 @@
 
 			dispatchEvent('itemsUpdated', {
 				start,
-				end:  stop,
+				end: stop,
 			});
 		}
 
@@ -236,7 +238,14 @@
 
 
 	function scrollTo(value) {
-		wrapper[SCROLL_PROP[scrollDirection]] = value;
+		if ('scroll' in window) {
+			wrapper.scroll({
+				[SCROLL_PROP[scrollDirection]]: value,
+				behavior:                       scrollToBehaviour,
+			});
+		} else {
+			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
+		}
 	}
 
 	export function recomputeSizes(startIndex = 0) {

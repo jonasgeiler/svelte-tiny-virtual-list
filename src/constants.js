@@ -16,6 +16,11 @@ export const SCROLL_CHANGE_REASON = {
 };
 
 export const SCROLL_PROP = {
+	[DIRECTION.VERTICAL]:   'top',
+	[DIRECTION.HORIZONTAL]: 'left',
+};
+
+export const SCROLL_PROP_LEGACY = {
 	[DIRECTION.VERTICAL]:   'scrollTop',
 	[DIRECTION.HORIZONTAL]: 'scrollLeft',
 };
