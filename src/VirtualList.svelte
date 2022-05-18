@@ -238,7 +238,7 @@
 
 
 	function scrollTo(value) {
-		if ('scroll' in window) {
+		if ('scroll' in wrapper) {
 			wrapper.scroll({
 				[SCROLL_PROP[scrollDirection]]: value,
 				behavior:                       scrollToBehaviour,
