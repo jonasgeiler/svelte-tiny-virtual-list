@@ -65,7 +65,7 @@ export interface VirtualListProps {
 
 	/**
 	 * Used in combination with `scrollToIndex`, this prop controls the behaviour of the scrolling.
-	 * One of: `'auto'` (default), `'smooth'` or `'instant'`.
+	 * One of: `'auto'`, `'smooth'` or `'instant'` (default).
 	 */
 	scrollToBehaviour?: ScrollBehaviour;
 
