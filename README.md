@@ -76,7 +76,7 @@ _\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly,
 ### Children
 
 - `row` - Snippet for each item
-  - Props:
+  - Params:
     - `index: number` - Item index
     - `style: string` - Item style, must be applied to the slot (look above for example)
 - `header` - Snippet for the elements that should appear at the top of the list
@@ -85,11 +85,11 @@ _\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly,
 ### Event handlers
 
 - `onAfterScroll` - Called after handling the scroll event
-  - Props:
+  - Params:
     - `event: ScrollEvent` - The original scroll event
     - `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
 - `onItemsUpdated` - Called when the visible items are updated
-  - Props:
+  - Params:
     - `start: number` - Index of the first visible item
     - `end: number` - Index of the last visible item
   
