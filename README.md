@@ -1,15 +1,9 @@
-<p align="center"><img src="https://raw.githubusercontent.com/Skayo/svelte-tiny-virtual-list/master/assets/ListLogo.svg" alt="ListLogo" width="225"></p>
 <h2 align="center">svelte-tiny-virtual-list</h2>
-<p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
-<p align="center">
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
-</p>
+<p align="center">A tiny but mighty list virtualization library for Svelte 5 & Tailwind &#128170;</p>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
-  <a href="#installation">Installation</a> •
+  <a href="#requirements">Requirements</a> •
   <a href="#usage">Usage</a> •
   <a href="#examples--demo">Examples</a> •
   <a href="#license">License</a>
@@ -19,6 +13,12 @@
 
 Instead of rendering all your data in a huge list, the virtual list component just renders the items that are visible, keeping your page nice and light.  
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
+This repo was forked from [skayo/svelte-tiny-virtual-list](https://github.com/skayo/svelte-tiny-virtual-list)
+
+## Requirements
+
+- **Svelte 5**
+- Tailwind
 
 ### Features
 
@@ -27,41 +27,6 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 - **Scroll to index** or **set the initial scroll offset**
 - **Supports fixed** or **variable** heights/widths
 - **Vertical** or **Horizontal** lists
-- [`svelte-infinite-loading`](https://github.com/Skayo/svelte-infinite-loading) compatibility
-
-## Installation
-
-> If you're using this component in a Sapper application, make sure to install the package to `devDependencies`!  
-> [More Details](https://github.com/sveltejs/sapper-template#using-external-components)
-
-With npm:
-
-```shell
-$ npm install svelte-tiny-virtual-list
-```
-
-With yarn:
-
-```shell
-$ yarn add svelte-tiny-virtual-list
-```
-
-With [pnpm](https://pnpm.js.org/) (recommended):
-
-```shell
-$ npm i -g pnpm
-$ pnpm install svelte-tiny-virtual-list
-```
-
-From CDN (via [unpkg](https://unpkg.com/)):
-
-```html
-<!-- UMD -->
-<script src="https://unpkg.com/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.js"></script>
-
-<!-- ES Module -->
-<script src="https://unpkg.com/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.mjs"></script>
-```
 
 ## Usage
 
@@ -69,55 +34,20 @@ From CDN (via [unpkg](https://unpkg.com/)):
 <script>
   import VirtualList from 'svelte-tiny-virtual-list';
 
-  const data = ['A', 'B', 'C', 'D', 'E', 'F', /* ... */];
+  let data = $state(['A', 'B', 'C', 'D', 'E', 'F', /* ... */]);
 </script>
 
 <VirtualList
     width="100%"
     height={600}
     itemCount={data.length}
-    itemSize={50}>
-  <div slot="item" let:index let:style {style}>
-    Letter: {data[index]}, Row: #{index}
-  </div>
-</VirtualList>
-```
-
-Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo/svelte-infinite-loading):
-
-```svelte
-<script>
-  import VirtualList from 'svelte-tiny-virtual-list';
-  import InfiniteLoading from 'svelte-infinite-loading';
-
-  let data = ['A', 'B', 'C', 'D', 'E', 'F', /* ... */];
-
-  function infiniteHandler({ detail: { complete, error } }) {
-    try {
-      // Normally you'd make an http request here...
-
-      const newData = ['G', 'H', 'I', 'J', 'K', 'L', /* ... */];
-      
-      data = [...data, ...newData];
-      complete();
-    } catch (e) {
-      error();
-    }
-  }
-</script>
-
-<VirtualList
-    width="100%"
-    height={600}
-    itemCount={data.length}
-    itemSize={50}>
-  <div slot="item" let:index let:style {style}>
-    Letter: {data[index]}, Row: #{index}
-  </div>
-
-  <div slot="footer">
-    <InfiniteLoading on:infinite={infiniteHandler} />
-  </div>
+    itemSize={50}
+>
+    {#snippet row({ index, style })}
+        <div {style}>
+            {data[index]}, Row: #{index}
+        </div>
+    {/snippet}
 </VirtualList>
 ```
 
@@ -138,26 +68,28 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 | overscanCount     | `number`                                          |           | Number of extra buffer items to render above/below the visible items. Tweaking this can help reduce scroll flickering on certain browsers/devices.                                                                                                                                                                                                                                                                                    |
 | estimatedItemSize | `number`                                          |           | Used to estimate the total size of the list before all of its items have actually been measured. The estimated total height is progressively adjusted as items are rendered.                                                                                                                                                                                                                                                          |
 | getKey            | `(index: number) => any`                          |           | Function that returns the key of an item in the list, which is used to uniquely identify an item. This is useful for dynamic data coming from a database or similar. By default, it's using the item's index.                                                                                                                                                                                                                         |
+| onAfterScroll     | `({ index: number, style: string }) => any`       |           | Function that is called after handling the scroll event                                                                                                                                                                                                                         |
+| onItemsUpdated     | `({ start: number, end: number }) => any`       |           | Function that is called after when the visible items are updated                                                                                                                                                                                                                        |
 
 _\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly, `width` must be a number if `scrollDirection` is `'horizontal'`_
 
-### Slots
+### Children
 
-- `item` - Slot for each item
+- `row` - Snippet for each item
   - Props:
     - `index: number` - Item index
     - `style: string` - Item style, must be applied to the slot (look above for example)
-- `header` - Slot for the elements that should appear at the top of the list
-- `footer` - Slot for the elements that should appear at the bottom of the list (e.g. `InfiniteLoading` component from `svelte-infinite-loading`)
+- `header` - Snippet for the elements that should appear at the top of the list
+- `footer` - Snippet for the elements that should appear at the bottom of the list
 
-### Events
+### Event handlers
 
-- `afterScroll` - Fired after handling the scroll event
-  - `detail` Props:
+- `onAfterScroll` - Called after handling the scroll event
+  - Props:
     - `event: ScrollEvent` - The original scroll event
     - `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
-- `itemsUpdated` - Fired when the visible items are updated
-  - `detail` Props:
+- `onItemsUpdated` - Called when the visible items are updated
+  - Props:
     - `start: number` - Index of the first visible item
     - `end: number` - Index of the last visible item
   
@@ -172,29 +104,31 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 
 ```svelte
 <script>
-  import { onMount } from 'svelte';
   import VirtualList from 'svelte-tiny-virtual-list';
 
-  const data = ['A', 'B', 'C', 'D', 'E', 'F', /* ... */];
+  let data = $state(['A', 'B', 'C', 'D', 'E', 'F', /* ... */]);
   
-  let virtualList;
+  let virtualList = $state();
   
   function handleClick() {
     virtualList.recomputeSizes(0);
-  }
+  };
 </script>
 
-<button on:click={handleClick}>Recompute Sizes</button>
+<button onclick={handleClick}>Recompute Sizes</button>
 
 <VirtualList
-        bind:this={virtualList}
-        width="100%"
-        height={600}
-        itemCount={data.length}
-        itemSize={50}>
-  <div slot="item" let:index let:style {style}>
-    Letter: {data[index]}, Row: #{index}
-  </div>
+    bind:this={virtualList}
+    width="100%"
+    height={600}
+    itemCount={data.length}
+    itemSize={50}
+>
+    {#snippet row({ index, style })}
+        <div {style}>
+            {data[index]}, Row: #{index}
+        </div>
+    {/snippet}
 </VirtualList>
 ```
 
@@ -206,35 +140,26 @@ You can style the elements of the virtual list like this:
 <script>
   import VirtualList from 'svelte-tiny-virtual-list';
 
-  const data = ['A', 'B', 'C', 'D', 'E', 'F', /* ... */];
+  let data = $state(['A', 'B', 'C', 'D', 'E', 'F', /* ... */]);
 </script>
 
-<div class="list">
+<div class="container">
   <VirtualList
       width="100%"
       height={600}
       itemCount={data.length}
-      itemSize={50}>
-    <div slot="item" let:index let:style {style}>
-      Letter: {data[index]}, Row: #{index}
-    </div>
+      itemSize={50}
+  >
+      {#snippet row({ index, style })}
+          <div {style} class="p-4 bg-slate-50 border">
+              {data[index]}, Row: #{index}
+          </div>
+      {/snippet}
   </VirtualList>
 </div>
-
-<style>
-  .list :global(.virtual-list-wrapper) {
-    background-color: #0f0;
-    /* ... */
-  }
-  
-  .list :global(.virtual-list-inner) {
-    background-color: #f00;
-    /* ... */
-  }
-</style>
 ```
 
-## Examples / Demo
+## Examples / Demo (OUTDATED)
 
 - **Basic setup**
     - [Elements of equal height](https://svelte.dev/repl/e3811b44f311461dbbc7c2df830cde68)
@@ -247,4 +172,4 @@ You can style the elements of the virtual list like this:
 
 ## License
 
-[MIT License](https://github.com/Skayo/svelte-tiny-virtual-list/blob/master/LICENSE)
+[MIT License](https://github.com/daminski/svelte-tiny-virtual-list-tailwind/blob/master/LICENSE)
