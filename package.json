@@ -1,5 +1,5 @@
 {
-	"name": "sveltekit-tiny-virtual-list-tailwind",
+	"name": "svelte-tiny-virtual-list-tailwind",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",
