@@ -1,9 +1,9 @@
-<h2 align="center">svelte-tiny-virtual-list</h2>
+<h2 align="center">svelte-tiny-virtual-list-tailwind</h2>
 <p align="center">A tiny but mighty list virtualization library for Svelte 5 & Tailwind</p>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
-  <a href="#requirements">Requirements</a> •
+  <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
   <a href="#examples--demo">Examples</a> •
   <a href="#license">License</a>
@@ -15,11 +15,6 @@ Instead of rendering all your data in a huge list, the virtual list component ju
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
 This repo was forked from [skayo/svelte-tiny-virtual-list](https://github.com/skayo/svelte-tiny-virtual-list)
 
-## Requirements
-
-- **Svelte 5**
-- Tailwind
-
 ### Features
 
 - **Tiny & dependency free**
@@ -27,6 +22,90 @@ This repo was forked from [skayo/svelte-tiny-virtual-list](https://github.com/sk
 - **Scroll to index** or **set the initial scroll offset**
 - **Supports fixed** or **variable** heights/widths
 - **Vertical** or **Horizontal** lists
+
+## Installation
+
+### Requirements
+
+- **Svelte 5**
+- Tailwind
+
+### Install svelte 5
+
+```bash
+npm create svelte@latest myapp
+```
+Pick svelte 5
+
+```bash
+cd myapp
+npm install
+```
+
+### Install Tailwind css
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+### Install svelte-tiny-virtual-list
+
+```bash
+npm install svelte-tiny-virtual-list-tailwind
+```
+
+### Update svelte.config.js
+
+```js
+import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+  kit: {
+    adapter: adapter()
+  },
+  preprocess: vitePreprocess()
+};
+export default config;
+```
+
+### Update tailwind.config.js
+
+```js
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './src/**/*.{html,js,svelte,ts}',
+    './node_modules/svelte-tiny-virtual-list-tailwind/dist/**/*.{html,js,svelte,ts}'
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+### Import Tailwind in app.css
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+### Import css in +layout.svelte
+
+```svelte
+<script>
+  import "../app.css";
+</script>
+
+<slot />
+```
+
+### 
 
 ## Usage
 
