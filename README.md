@@ -1,5 +1,5 @@
 <h2 align="center">svelte-tiny-virtual-list</h2>
-<p align="center">A tiny but mighty list virtualization library for Svelte 5 & Tailwind &#128170;</p>
+<p align="center">A tiny but mighty list virtualization library for Svelte 5 & Tailwind</p>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
