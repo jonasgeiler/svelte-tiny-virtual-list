@@ -8,100 +8,43 @@
 	} from '$lib/utils/constants';
 	import { ListState } from '$lib/utils/ListState.js';
 	import { ListProps } from '$lib/utils/ListProps.js';
+	
 
 	let {
-		/**
-		 * @type {number}
-		 */
 		height,
 
-		/**
-		 * @type {string}
-		 */
 		width = '100%',
 
-		/**
-		 * @type {number}
-		 */
 		itemCount,
 
-		/**
-		 * @type {number}
-		 */
 		itemSize,
 
-		/**
-		 * @type {number}
-		 */
 		estimatedItemSize = null,
 
-		/**
-		 * @type {Number[]}
-		 */
 		stickyIndices = null,
 
-		/**
-		 * @type {function}
-		 * @param {number} index
-		 */
 		getKey = null,
 
-		/**
-		 * @type {'horizontal'|'vertical'}
-		 */
 		scrollDirection = DIRECTION.VERTICAL,
 
-		/**
-		 * @type {number}
-		 */
 		scrollOffset = null,
 
-		/**
-		 * @type {number}
-		 */
 		scrollToIndex = null,
 
-		/**
-		 * @type {'auto'|'start'|'center'|'end'}
-		 */
 		scrollToAlignment = null,
 
-		/**
-		 * @type {'auto'|'instant'|'smooth'}
-		 */
 		scrollToBehaviour = 'instant',
-
-		/**
-		 * @type {number}
-		 */
+		
 		overscanCount = 3,
 
-		/**
-		 * @type {function}
-		 * @param {object} object { start, end }
-		 */
 		onListItemsUpdate = () => null,
 
-		/**
-		 * @type {function}
-		 * @param {object} object { offset, event }
-		 */
 		onAfterScroll = () => null,
 
-		/**
-		 * @type {snippet}
-		 */
 		header = null,
 
-		/**
-		 * @type {snippet}
-		 */
 		footer = null,
 
-		/**
-		 * @type {snippet}
-		 * @param {object} item { index, style }
-		 */
 		row = null
 	} = $props();
 
