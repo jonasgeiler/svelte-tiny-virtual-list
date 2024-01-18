@@ -112,9 +112,9 @@
 	});
 
 	let wrapper = $state(null);
-	let items = $state([]);
+	let items = $state.frozen([]);
 
-	let curState = $state(new ListState(scrollOffset || (scrollToIndex != null && itemCount && getOffsetForIndex(scrollToIndex))));
+	let curState = $state.frozen(new ListState(scrollOffset || (scrollToIndex != null && itemCount && getOffsetForIndex(scrollToIndex))));
 
 	let prevState = new ListState();
 	let prevProps = new ListProps(
@@ -129,7 +129,7 @@
 		stickyIndices
 	);
 
-	let styleCache = $state({});
+	let styleCache = {};
 	let wrapperStyle = $state("");
 	let innerStyle = $state("");
 
@@ -226,7 +226,7 @@
 		}
 
 		items = updatedItems;
-	}
+	};
 
 
 	function scrollTo(value) {
@@ -237,13 +237,13 @@
 			});
 		else
 			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
-	}
+	};
 
 	export function recomputeSizes(startIndex = 0) {
 		styleCache = {};
 		sizeAndPositionManager.resetItem(startIndex);
 		refresh();
-	}
+	};
 
 	function getOffsetForIndex(index, align = scrollToAlignment, _itemCount = itemCount) {
 		if (index < 0 || index >= _itemCount)
@@ -255,7 +255,7 @@
 			currentOffset: curState.offset || 0,
 			targetIndex:   index,
 		});
-	}
+	};
 
 	function handleScroll(event) {
 		const offset = getWrapperOffset();
@@ -269,11 +269,11 @@
 			offset,
 			event
 		});
-	}
+	};
 
 	function getWrapperOffset() {
 		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
-	}
+	};
 
 	function getEstimatedItemSize() {
 		return (
@@ -281,7 +281,7 @@
 			(typeof itemSize === 'number' && itemSize) ||
 			50
 		);
-	}
+	};
 
 	function getStyle(index, sticky) {
 		if (styleCache[index]) return styleCache[index];
@@ -307,7 +307,7 @@
 		}
 
 		return styleCache[index] = style;
-	}
+	};
 </script>
 
 <div
