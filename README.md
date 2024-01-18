@@ -51,8 +51,9 @@ npx tailwindcss init -p
 
 ### Install svelte-tiny-virtual-list-tailwind
 
+Clone repo locally and install
 ```bash
-npm install svelte-tiny-virtual-list-tailwind
+npm install path/to/package
 ```
 
 ### Update svelte.config.js
