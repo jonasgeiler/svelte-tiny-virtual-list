@@ -17,7 +17,7 @@ This repo was forked from [skayo/svelte-tiny-virtual-list](https://github.com/sk
 
 ### Features
 
-- **Tiny & dependency free**
+- **Tiny**
 - **Render millions of items**, without breaking a sweat
 - **Scroll to index** or **set the initial scroll offset**
 - **Supports fixed** or **variable** heights/widths
