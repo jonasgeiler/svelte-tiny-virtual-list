@@ -49,7 +49,7 @@ npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
-### Install svelte-tiny-virtual-list
+### Install svelte-tiny-virtual-list-tailwind
 
 ```bash
 npm install svelte-tiny-virtual-list-tailwind
