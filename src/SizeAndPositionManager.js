@@ -283,7 +283,7 @@ export default class SizeAndPositionManager {
 			return {};
 		}
 
-		const maxOffset = offset + containerSize;
+		const maxOffset = Math.max(0, offset || 0) + containerSize;
 		let start = this.findNearestItem(offset);
 
 		if (start === undefined) {
@@ -299,7 +299,7 @@ export default class SizeAndPositionManager {
 			stop++;
 			offset += this.getSizeAndPositionForIndex(stop).size;
 		}
-
+		
 		if (overscanCount) {
 			start = Math.max(0, start - overscanCount);
 			stop = Math.min(stop + overscanCount, this.itemCount - 1);

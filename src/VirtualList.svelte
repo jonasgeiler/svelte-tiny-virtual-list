@@ -60,6 +60,7 @@
 
 	let mounted = false;
 	let wrapper;
+	let scrollWrapper;
 	let items = [];
 
 	let state = {
@@ -101,7 +102,13 @@
 	onMount(() => {
 		mounted = true;
 
-		wrapper.addEventListener('scroll', handleScroll, thirdEventArg);
+		if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
+			scrollWrapper = wrapper;
+		} else {
+			scrollWrapper = window;
+		}
+
+		scrollWrapper.addEventListener('scroll', handleScroll, thirdEventArg);
 
 		if (scrollOffset != null) {
 			scrollTo(scrollOffset);
@@ -111,7 +118,9 @@
 	});
 
 	onDestroy(() => {
-		if (mounted) wrapper.removeEventListener('scroll', handleScroll);
+		if (mounted) {
+			scrollWrapper.removeEventListener('scroll', handleScroll);
+		}
 	});
 
 
@@ -187,20 +196,22 @@
 
 	function refresh() {
 		const { offset } = state;
+
+		const containerSize = getContainerSize();
 		const { start, stop } = sizeAndPositionManager.getVisibleRange({
-			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
+			containerSize,
 			offset,
 			overscanCount,
 		});
-
+		
 		let updatedItems = [];
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			wrapperStyle = `height:${height}px;width:${width};`;
+			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width}; overflow: ${height ? 'auto' : 'hidden'}`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			wrapperStyle = `height:${height};width:${width}px`;
+			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width}px; overflow: ${width ? 'auto' : 'hidden'}`;
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
@@ -238,13 +249,17 @@
 
 
 	function scrollTo(value) {
-		if ('scroll' in wrapper) {
-			wrapper.scroll({
+		if (scrollDirection === DIRECTION.VERTICAL && !height) {
+			value += wrapper.offsetTop;
+		}
+
+		if ('scroll' in scrollWrapper) {
+			scrollWrapper.scroll({
 				[SCROLL_PROP[scrollDirection]]: value,
 				behavior:                       scrollToBehaviour,
 			});
 		} else {
-			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
+			scrollWrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
 		}
 	}
 
@@ -259,9 +274,10 @@
 			index = 0;
 		}
 
+		const containerSize = getContainerSize();
 		return sizeAndPositionManager.getUpdatedOffsetForIndex({
 			align,
-			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
+			containerSize,
 			currentOffset: state.offset || 0,
 			targetIndex:   index,
 		});
@@ -269,9 +285,7 @@
 
 	function handleScroll(event) {
 		const offset = getWrapperOffset();
-
-		if (offset < 0 || state.offset === offset || event.target !== wrapper) return;
-
+		if (state.offset === offset || (event.target !== scrollWrapper && event.target !== document)) return;
 		state = {
 			offset,
 			scrollChangeReason: SCROLL_CHANGE_REASON.OBSERVED,
@@ -283,8 +297,28 @@
 		});
 	}
 
+	function getContainerSize() {
+		let visibleHeight = 0;
+		if (wrapper) {
+			const rect = wrapper.getBoundingClientRect();
+			visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+		}
+
+		const containerSize = scrollDirection === DIRECTION.VERTICAL ? (height || visibleHeight) : width;
+		
+		return containerSize;
+	}
+
 	function getWrapperOffset() {
-		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
+		if ('scroll' in scrollWrapper) {
+			if (scrollWrapper === window) {
+				return document.documentElement.scrollTop - wrapper.offsetTop;
+			} else {
+				return scrollWrapper.scrollTop;
+			}
+		} else {
+			return scrollWrapper[SCROLL_PROP_LEGACY[scrollDirection]];
+		}
 	}
 
 	function getEstimatedItemSize() {
@@ -297,7 +331,7 @@
 
 	function getStyle(index, sticky) {
 		if (styleCache[index]) return styleCache[index];
-
+		
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
 		let style;
