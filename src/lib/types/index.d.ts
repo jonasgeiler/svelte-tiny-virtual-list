@@ -107,6 +107,22 @@ export interface VirtualListProps {
      * @param object
      */
     onAfterScroll?: (object: AfterScrollParams) => any
+
+	/**
+	 * Classes for the list container
+	 * 
+	 * @default "overflow-auto will-change-transform"
+	 * 
+	 */
+	dangerously_set_classes_container: string;
+
+	/**
+	 * Classes for the list inner container
+	 * 
+	 * @default "relative flex w-full"
+	 * 
+	 */
+	dangerously_set_classes_inner_container: string;
 }
 
 

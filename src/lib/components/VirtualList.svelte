@@ -45,7 +45,11 @@
 
 		footer = null,
 
-		row = null
+		row = null,
+
+		dangerously_set_classes_container = "overflow-auto will-change-transform",
+
+		dangerously_set_classes_inner_container = "relative flex w-full"
 	} = $props();
 
 	const sizeAndPositionManager = new SizeAndPositionManager({
@@ -255,7 +259,7 @@
 
 <div
 	bind:this={wrapper}
-	class="overflow-auto will-change-transform"
+	class={dangerously_set_classes_container}
 	style={wrapperStyle}
 	on:scroll|passive={handleScroll}
 >
@@ -264,7 +268,7 @@
 	{/if}
 
 	<div
-		class="relative flex w-full"
+		class={dangerously_set_classes_inner_container}
 		style={innerStyle}
 	>
 		{#each items as item (getKey ? getKey(item.index) : item.index)}
