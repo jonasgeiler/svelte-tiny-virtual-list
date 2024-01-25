@@ -36,7 +36,8 @@
 	export let height;
 	export let width = '100%';
 
-	export let itemCount;
+	export let items;
+	export let itemCount = items && items.length > 0 ? items.length : undefined;
 	export let itemSize;
 	export let estimatedItemSize = null;
 	export let stickyIndices = null;
@@ -61,7 +62,7 @@
 	let mounted = false;
 	let wrapper;
 	let scrollWrapper;
-	let items = [];
+	let visibleItems = [];
 
 	let state = {
 		offset:             scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0,
@@ -244,7 +245,7 @@
 			});
 		}
 
-		items = updatedItems;
+		visibleItems = updatedItems;
 	}
 
 
@@ -362,8 +363,12 @@
 	<slot name="header" />
 
 	<div class="virtual-list-inner" style={innerStyle}>
-		{#each items as item (getKey ? getKey(item.index) : item.index)}
-			<slot name="item" style={item.style} index={item.index} />
+		{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}			
+			{#if items && items.length > 0}
+				<slot name="item" item={items[item.index]} style={item.style} index={item.index} />
+			{:else}
+				<slot name="item" style={item.style} index={item.index} />
+			{/if}
 		{/each}
 	</div>
 
