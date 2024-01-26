@@ -116,6 +116,11 @@ export interface VirtualListSlots {
 	 */
 	item: {
 		/**
+		 * Item
+		 */
+		item: T,
+		
+		/**
 		 * Item index
 		 */
 		index: number,
