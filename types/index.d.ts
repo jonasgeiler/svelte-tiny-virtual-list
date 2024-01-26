@@ -9,8 +9,6 @@ export type Direction = "horizontal" | "vertical";
 export type ItemSizeGetter = (index: number) => number;
 export type ItemSize = number | number[] | ItemSizeGetter;
 
-type T = $$Generic;
-
 /**
  * VirtualList props
  */
@@ -25,12 +23,12 @@ export interface VirtualListProps {
 	/**
 	 * Height of List. This property will determine the number of rendered items when scrollDirection is `'vertical'`.
 	 */
-	height: number | string;
+	height?: number | string;
 
 	/**
 	 * The items you want to render
 	 */
-	items?: Array<T>;
+	items?: any[];
 
 	/**
 	 * The number of items you want to render
