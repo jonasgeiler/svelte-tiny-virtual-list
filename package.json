@@ -1,6 +1,6 @@
 {
 	"name": "svelte-tiny-virtual-list-tailwind",
-	"version": "3.0.1",
+	"version": "3.0.2",
 	"description": "A tiny but mighty list virtualization component for svelte 5 & Tailwind",
 	"scripts": {
 		"dev": "vite dev",
