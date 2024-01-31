@@ -111,7 +111,7 @@ export interface VirtualListProps {
 	/**
 	 * Classes for the list container
 	 * 
-	 * @default "overflow-auto will-change-transform"
+	 * @default ""
 	 * 
 	 */
 	dangerously_set_classes_container: string;
@@ -119,7 +119,7 @@ export interface VirtualListProps {
 	/**
 	 * Classes for the list inner container
 	 * 
-	 * @default "relative flex w-full"
+	 * @default ""
 	 * 
 	 */
 	dangerously_set_classes_inner_container: string;

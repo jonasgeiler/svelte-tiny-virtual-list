@@ -47,9 +47,9 @@
 
 		row = null,
 
-		dangerously_set_classes_container = "overflow-auto will-change-transform",
+		dangerously_set_classes_container = "",
 
-		dangerously_set_classes_inner_container = "relative flex w-full"
+		dangerously_set_classes_inner_container = ""
 	} = $props();
 
 	const sizeAndPositionManager = new SizeAndPositionManager({
@@ -58,7 +58,7 @@
 		estimatedItemSize: getEstimatedItemSize()
 	});
 
-	let wrapper = $state(null);
+	let container = $state(null);
 	let items = $state.frozen([]);
 
 	let curState = $state.frozen(new ListState(scrollOffset || (scrollToIndex != null && itemCount && getOffsetForIndex(scrollToIndex))));
@@ -77,8 +77,12 @@
 	);
 
 	let styleCache = {};
-	let wrapperStyle = $state("");
-	let innerStyle = $state("");
+	
+	let containerStyle = $state("");
+	let innerContainerStyle = $state("");
+
+	let cContainer = $derived(`overflow-auto ${dangerously_set_classes_container}`);
+	let cInnerContainer = $derived(`relative flex w-full ${dangerously_set_classes_inner_container}`);
 
 	// Listen for updates to props
 	$effect(() => {
@@ -137,11 +141,11 @@
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			wrapperStyle = `height:${height}px;width:${width};`;
-			innerStyle = `flex-direction:column;height:${totalSize}px;`;
+			containerStyle = `height:${height}px;width:${width};`;
+			innerContainerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			wrapperStyle = `height:${height};width:${width}px`;
-			innerStyle = `min-height:100%;width:${totalSize}px;`;
+			containerStyle = `height:${height};width:${width}px`;
+			innerContainerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
 		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
@@ -177,13 +181,13 @@
 
 
 	function scrollTo(value) {
-		if ('scroll' in wrapper)
-			wrapper.scroll({
+		if ('scroll' in container)
+			container.scroll({
 				[SCROLL_PROP[scrollDirection]]: value,
 				behavior: scrollToBehaviour
 			});
 		else
-			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
+			container[SCROLL_PROP_LEGACY[scrollDirection]] = value;
 	};
 
 	export function recomputeSizes(startIndex = 0) {
@@ -205,9 +209,9 @@
 	};
 
 	function handleScroll(event) {
-		const offset = getWrapperOffset();
+		const offset = getContainerOffset();
 
-		if (offset < 0 || curState.offset === offset || event.target !== wrapper)
+		if (offset < 0 || curState.offset === offset || event.target !== container)
 			return;
 
 		curState = new ListState(offset, SCROLL_CHANGE_REASON.OBSERVED);
@@ -218,8 +222,8 @@
 		});
 	};
 
-	function getWrapperOffset() {
-		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
+	function getContainerOffset() {
+		return container[SCROLL_PROP_LEGACY[scrollDirection]];
 	};
 
 	function getEstimatedItemSize() {
@@ -258,9 +262,9 @@
 </script>
 
 <div
-	bind:this={wrapper}
-	class={dangerously_set_classes_container}
-	style={wrapperStyle}
+	bind:this={container}
+	class={cContainer}
+	style={containerStyle}
 	on:scroll|passive={handleScroll}
 >
 	{#if header}
@@ -268,8 +272,8 @@
 	{/if}
 
 	<div
-		class={dangerously_set_classes_inner_container}
-		style={innerStyle}
+		class={cInnerContainer}
+		style={innerContainerStyle}
 	>
 		{#each items as item (getKey ? getKey(item.index) : item.index)}
 			{@render row({ index: item.index, style: item.style })}
