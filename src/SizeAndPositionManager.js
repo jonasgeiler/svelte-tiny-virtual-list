@@ -240,7 +240,7 @@ export default class SizeAndPositionManager {
 	 * @param {number | undefined} targetIndex
 	 * @return {number} Offset to use to ensure the specified item is visible
 	 */
-	getUpdatedOffsetForIndex({ align = ALIGNMENT.START, containerSize, currentOffset, targetIndex }) {
+	getUpdatedOffsetForIndex(align = ALIGNMENT.START, containerSize, currentOffset, targetIndex) {
 		if (containerSize <= 0) {
 			return 0;
 		}
@@ -276,7 +276,7 @@ export default class SizeAndPositionManager {
 	 * @param {number} overscanCount
 	 * @return {{stop: number|undefined, start: number|undefined}}
 	 */
-	getVisibleRange({ containerSize = 0, offset, overscanCount }) {
+	getVisibleRange(containerSize = 0, offset, overscanCount) {
 		const totalSize = this.getTotalSize();
 
 		if (totalSize === 0) {

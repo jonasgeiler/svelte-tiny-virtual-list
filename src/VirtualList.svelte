@@ -1,29 +1,4 @@
-<script context="module">
-	/**
-	 * the third argument for event bundler
-	 * @see https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
-	 */
-	const thirdEventArg = (() => {
-		let result = false;
-
-		try {
-			const arg = Object.defineProperty({}, 'passive', {
-				get() {
-					result = { passive: true };
-					return true;
-				},
-			});
-
-			window.addEventListener('testpassive', arg, arg);
-			window.remove('testpassive', arg, arg);
-		} catch (e) { /* */
-		}
-
-		return result;
-	})();
-</script>
-
-<script>
+<script lang="ts">
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import SizeAndPositionManager from './SizeAndPositionManager';
 	import {
@@ -33,23 +8,30 @@
 		SCROLL_PROP_LEGACY,
 	} from './constants';
 
-	export let height;
-	export let width = '100%';
+	export let height: number | string = '';
+	export let width: number | string = '100%';
 
-	export let items;
-	export let itemCount = items && items.length > 0 ? items.length : undefined;
-	export let itemSize;
-	export let estimatedItemSize = null;
-	export let stickyIndices = null;
-	export let getKey = null;
+	type Alignment = "auto" | "start" | "center" | "end";
+	type ScrollBehaviour = "auto" | "smooth" | "instant";
+	type Direction = "horizontal" | "vertical";
+	type ItemSizeGetter = (index: number) => number;
+	type ItemSize = number | number[] | ItemSizeGetter;
+	type T = $$Generic;
 
-	export let scrollDirection = DIRECTION.VERTICAL;
-	export let scrollOffset = null;
-	export let scrollToIndex = null;
-	export let scrollToAlignment = null;
-	export let scrollToBehaviour = 'instant';
+	export let items: T[] = [];
+	export let itemCount: number = items.length;
+	export let itemSize: ItemSize;
+	export let estimatedItemSize: number = null;
+	export let stickyIndices: number[] = null;
+	export let getKey: (index: number) => any = null;
 
-	export let overscanCount = 3;
+	export let scrollDirection: Direction = 'vertical';
+	export let scrollOffset: number = null;
+	export let scrollToIndex: number = null;
+	export let scrollToAlignment: Alignment = null;
+	export let scrollToBehaviour: ScrollBehaviour = 'instant';
+
+	export let overscanCount: number = 3;
 
 	const dispatchEvent = createEventDispatcher();
 
@@ -62,7 +44,7 @@
 	let mounted = false;
 	let wrapper;
 	let scrollWrapper;
-	let visibleItems = [];
+	let visibleItems: {index: number, style: string}[] = [];
 
 	let state = {
 		offset:             scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0,
@@ -109,7 +91,7 @@
 			scrollWrapper = window;
 		}
 
-		scrollWrapper.addEventListener('scroll', handleScroll, thirdEventArg);
+		scrollWrapper.addEventListener('scroll', handleScroll);
 
 		if (scrollOffset != null) {
 			scrollTo(scrollOffset);
@@ -199,11 +181,11 @@
 		const { offset } = state;
 
 		const containerSize = getContainerSize();
-		const { start, stop } = sizeAndPositionManager.getVisibleRange({
-			containerSize,
+		const { start, stop } = sizeAndPositionManager.getVisibleRange(
+			Number(containerSize),
 			offset,
 			overscanCount,
-		});
+		);
 		
 		let updatedItems = [];
 
@@ -276,12 +258,12 @@
 		}
 
 		const containerSize = getContainerSize();
-		return sizeAndPositionManager.getUpdatedOffsetForIndex({
+		return sizeAndPositionManager.getUpdatedOffsetForIndex(
 			align,
-			containerSize,
-			currentOffset: state.offset || 0,
-			targetIndex:   index,
-		});
+			Number(containerSize),
+			state.offset || 0,
+			index,
+		);
 	}
 
 	function handleScroll(event) {
@@ -364,11 +346,7 @@
 
 	<div class="virtual-list-inner" style={innerStyle}>
 		{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}			
-			{#if items && items.length > 0}
-				<slot name="item" item={items[item.index]} style={item.style} index={item.index} />
-			{:else}
-				<slot name="item" style={item.style} index={item.index} />
-			{/if}
+			<slot name="item" item={items[item.index]} style={item.style} index={item.index} />
 		{/each}
 	</div>
 
