@@ -6,11 +6,13 @@
 		SCROLL_CHANGE_REASON,
 		SCROLL_PROP,
 		SCROLL_PROP_LEGACY,
+		WRAPPER_MODE,
 	} from './constants';
 
 	type Alignment = "auto" | "start" | "center" | "end";
 	type ScrollBehaviour = "auto" | "smooth" | "instant";
 	type Direction = "horizontal" | "vertical";
+	type WrapperMode = "div" | "table";
 	type ItemSizeGetter = (index: number) => number;
 	type ItemSize = number | number[] | ItemSizeGetter;
 	type T = $$Generic;
@@ -35,6 +37,8 @@
 	export let scrollToBehaviour: ScrollBehaviour = 'instant';
 
 	export let overscanCount: number = 3;
+
+	export let mode: WrapperMode = 'div';
 
 	const dispatchEvent = createEventDispatcher();
 
@@ -377,14 +381,29 @@
 <div bind:this={wrapper} class="virtual-list-wrapper" style={wrapperStyle}>
 	<slot name="header" />
 
-	<div class="virtual-list-inner" style={innerStyle}>
-		{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}			
-			<slot name="item" item={items[item.index]} style={item.style.style} index={item.index} />
-			{#if expandItems[item.index]}
-				<slot name="expandItem" item={items[item.index]} style={item.style.expandStyle} index={item.index} />
-			{/if}
-		{/each}
-	</div>
+	{#if mode === WRAPPER_MODE.DIV}
+		<div class="virtual-list-inner" style={innerStyle}>
+			{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}
+				<slot name="item" item={items[item.index]} style={item.style.style} index={item.index} />
+				{#if expandItems[item.index]}
+					<slot name="expandItem" item={items[item.index]} style={item.style.expandStyle} index={item.index} />
+				{/if}
+			{/each}
+		</div>
+	{:else}
+		<table class="virtual-list-inner" style={innerStyle}>
+			{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}
+				<tr style={item.style.style}>
+					<slot name="item" item={items[item.index]} index={item.index} />
+				</tr>
+				{#if expandItems[item.index]}
+					<tr style={item.style.expandStyle}>
+						<slot name="expandItem" item={items[item.index]} index={item.index} />
+					</tr>
+				{/if}
+			{/each}
+		</table>
+	{/if}
 
 	<slot name="footer" />
 </div>
