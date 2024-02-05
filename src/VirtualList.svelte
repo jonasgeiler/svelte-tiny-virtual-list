@@ -8,9 +8,6 @@
 		SCROLL_PROP_LEGACY,
 	} from './constants';
 
-	export let height: number | string = '';
-	export let width: number | string = '100%';
-
 	type Alignment = "auto" | "start" | "center" | "end";
 	type ScrollBehaviour = "auto" | "smooth" | "instant";
 	type Direction = "horizontal" | "vertical";
@@ -18,10 +15,16 @@
 	type ItemSize = number | number[] | ItemSizeGetter;
 	type T = $$Generic;
 
+	export let height: number | string = '';
+	export let width: number | string = '100%';
+	
 	export let items: T[] = [];
 	export let itemCount: number = items.length;
-	export let itemSize: ItemSize;
+	export let expandItems: boolean[] = new Array(items.length || itemCount).fill(false);
+	export let itemSize: ItemSize = 0;
+	export let expandItemSize: ItemSize = 0;
 	export let estimatedItemSize: number = null;
+	export let estimatedExpandItemSize: number = null;
 	export let stickyIndices: number[] = null;
 	export let getKey: (index: number) => any = null;
 
@@ -38,13 +41,17 @@
 	const sizeAndPositionManager = new SizeAndPositionManager({
 		itemCount,
 		itemSize,
+		expandItems,
+		expandItemSize,
 		estimatedItemSize: getEstimatedItemSize(),
+		estimatedExpandItemSize: getEstimatedExpandItemSize(),
 	});
 
 	let mounted = false;
-	let wrapper;
-	let scrollWrapper;
-	let visibleItems: {index: number, style: string}[] = [];
+	let wrapper = null;
+	let scrollWrapper = null;
+	let header = null, headerHeight = 0;
+	let visibleItems: {index: number, style: Record<string, string>}[] = [];
 
 	let state = {
 		offset:             scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0,
@@ -58,7 +65,10 @@
 		scrollOffset,
 		itemCount,
 		itemSize,
+		expandItems: [...expandItems],
+		expandItemSize,
 		estimatedItemSize,
+		estimatedExpandItemSize,
 	};
 
 	let styleCache = {};
@@ -66,7 +76,7 @@
 	let innerStyle = '';
 
 	$: {
-		/* listen to updates: */ scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize;
+		/* listen to updates: */ scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, expandItems, expandItemSize, estimatedItemSize, estimatedExpandItemSize;
 		propsUpdated();
 	}
 
@@ -91,6 +101,10 @@
 			scrollWrapper = window;
 		}
 
+		header = wrapper.querySelector('[slot="header"]');
+
+		if (header) headerHeight = header.offsetHeight;
+		
 		scrollWrapper.addEventListener('scroll', handleScroll);
 
 		if (scrollOffset != null) {
@@ -106,23 +120,27 @@
 		}
 	});
 
-
 	function propsUpdated() {
 		if (!mounted) return;
-
 		const scrollPropsHaveChanged =
 			      prevProps.scrollToIndex !== scrollToIndex ||
 			      prevProps.scrollToAlignment !== scrollToAlignment;
 		const itemPropsHaveChanged =
 			      prevProps.itemCount !== itemCount ||
 			      prevProps.itemSize !== itemSize ||
-			      prevProps.estimatedItemSize !== estimatedItemSize;
+				  prevProps.expandItems !== expandItems || 
+				  prevProps.expandItemSize !== expandItemSize || 
+			      prevProps.estimatedItemSize !== estimatedItemSize ||
+				  prevProps.estimatedExpandItemSize !== estimatedExpandItemSize;
 
 		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig({
-				itemSize,
 				itemCount,
+				itemSize,
+				expandItems,
+				expandItemSize,
 				estimatedItemSize: getEstimatedItemSize(),
+				estimatedExpandItemSize: getEstimatedExpandItemSize(),
 			});
 
 			recomputeSizes();
@@ -143,7 +161,6 @@
 					scrollToAlignment,
 					itemCount,
 				),
-
 				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED,
 			};
 		}
@@ -154,7 +171,10 @@
 			scrollOffset,
 			itemCount,
 			itemSize,
+			expandItems: [...expandItems],
+			expandItemSize,
 			estimatedItemSize,
+			estimatedExpandItemSize,
 		};
 	}
 
@@ -186,9 +206,7 @@
 			offset,
 			overscanCount,
 		);
-		
 		let updatedItems = [];
-
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width}; overflow: ${height ? 'auto' : 'hidden'}`;
@@ -295,9 +313,9 @@
 	function getWrapperOffset() {
 		if ('scroll' in scrollWrapper) {
 			if (scrollWrapper === window) {
-				return document.documentElement.scrollTop - wrapper.offsetTop;
+				return document.documentElement.scrollTop - wrapper.offsetTop - headerHeight;
 			} else {
-				return scrollWrapper.scrollTop;
+				return scrollWrapper.scrollTop - headerHeight;
 			}
 		} else {
 			return scrollWrapper[SCROLL_PROP_LEGACY[scrollDirection]];
@@ -312,32 +330,47 @@
 		);
 	}
 
+	function getEstimatedExpandItemSize() {
+		return (
+			estimatedExpandItemSize ||
+			(typeof expandItemSize === 'number' && expandItemSize) ||
+			50
+		);
+	}
+
 	function getStyle(index, sticky) {
 		if (styleCache[index]) return styleCache[index];
 		
-		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
-
-		let style;
-
+		const { size, offset, expandSize, expandOffset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);		
+		let style, expandStyle;
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			style = `left:0;width:100%;height:${size}px;`;
+			expandStyle = `left:0;width:100%;height:${size}px;`;
 
 			if (sticky) {
 				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
+				expandStyle += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${expandOffset}px;margin-bottom:${-(expandOffset + expandSize)}px;`;
 			} else {
 				style += `position:absolute;top:${offset}px;`;
+				expandStyle += `position:absolute;top:${expandOffset}px;`;
 			}
 		} else {
 			style = `top:0;width:${size}px;`;
+			expandStyle = `top:0;width:${size}px;`;
 
 			if (sticky) {
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
+				expandStyle += `position:sticky;z-index:1;left:0;margin-left:${expandOffset}px;margin-right:${-(expandOffset + expandSize)}px;`;
 			} else {
 				style += `position:absolute;height:100%;left:${offset}px;`;
+				expandStyle += `position:absolute;height:100%;left:${expandOffset}px;`;
 			}
 		}
 
-		return styleCache[index] = style;
+		return styleCache[index] = {
+			style,
+			expandStyle,
+		};
 	}
 </script>
 
@@ -346,7 +379,10 @@
 
 	<div class="virtual-list-inner" style={innerStyle}>
 		{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}			
-			<slot name="item" item={items[item.index]} style={item.style} index={item.index} />
+			<slot name="item" item={items[item.index]} style={item.style.style} index={item.index} />
+			{#if expandItems[item.index]}
+				<slot name="expandItem" item={items[item.index]} style={item.style.expandStyle} index={item.index} />
+			{/if}
 		{/each}
 	</div>
 
