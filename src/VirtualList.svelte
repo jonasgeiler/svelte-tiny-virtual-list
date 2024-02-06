@@ -22,7 +22,6 @@
 	
 	export let items: T[] = [];
 	export let itemCount: number = items.length;
-	export let expandItems: boolean[] = new Array(items.length || itemCount).fill(false);
 	export let itemSize: ItemSize = 0;
 	export let expandItemSize: ItemSize = 0;
 	export let estimatedItemSize: number = null;
@@ -39,6 +38,13 @@
 	export let overscanCount: number = 3;
 
 	export let mode: WrapperMode = 'div';
+
+	let expandItems: boolean[] = expandItemSize !== 0 ? new Array(items.length || itemCount).fill(false) : [];
+
+	export function onClick(index) {
+		if (expandItemSize === 0) return;
+		expandItems[index] = !expandItems[index];
+	}
 
 	const dispatchEvent = createEventDispatcher();
 
@@ -394,11 +400,11 @@
 		<table class="virtual-list-inner" style={innerStyle}>
 			{#each visibleItems as item (getKey ? getKey(item.index) : item.index)}
 				<tr style={item.style.style}>
-					<slot name="item" item={items[item.index]} index={item.index} />
+					<slot name="item" item={items[item.index]} index={item.index} style="" />
 				</tr>
 				{#if expandItems[item.index]}
 					<tr style={item.style.expandStyle}>
-						<slot name="expandItem" item={items[item.index]} index={item.index} />
+						<slot name="expandItem" item={items[item.index]} index={item.index} style="" />
 					</tr>
 				{/if}
 			{/each}
