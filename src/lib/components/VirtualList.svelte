@@ -235,7 +235,8 @@
 	};
 
 	function getStyle(index, sticky) {
-		if (styleCache[index]) return styleCache[index];
+		if (styleCache[index])
+			return styleCache[index];
 
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
