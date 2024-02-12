@@ -50,6 +50,9 @@ importers:
       svelte-check:
         specifier: ^3.6.0
         version: 3.6.4(postcss-load-config@3.1.4(postcss@8.4.35))(postcss@8.4.35)(svelte@4.2.10)
+      svelte-infinite-loading:
+        specifier: ^1.3.8
+        version: 1.3.8
       tslib:
         specifier: ^2.4.1
         version: 2.6.2
@@ -1209,6 +1212,9 @@ packages:
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       svelte: ^3.19.0 || ^4.0.0
+
+  svelte-infinite-loading@1.3.8:
+    resolution: {integrity: sha512-hn4o848LKd2Q+M11hiMWnfFxM1GHKVDi92HPZ1FYvfed4bEeRZL+QvFAQzhy1SACq6Si0CAJcQFUZpIYmAEnpQ==}
 
   svelte-preprocess@5.1.3:
     resolution: {integrity: sha512-xxAkmxGHT+J/GourS5mVJeOXZzne1FR5ljeOUAMXUkfEhkLEllRreXpbl3dIYJlcJRfL1LO1uIAPpBpBfiqGPw==}
@@ -2524,6 +2530,8 @@ snapshots:
   svelte-hmr@0.15.3(svelte@4.2.10):
     dependencies:
       svelte: 4.2.10
+
+  svelte-infinite-loading@1.3.8: {}
 
   svelte-preprocess@5.1.3(postcss-load-config@3.1.4(postcss@8.4.35))(postcss@8.4.35)(svelte@4.2.10)(typescript@5.3.3):
     dependencies:
