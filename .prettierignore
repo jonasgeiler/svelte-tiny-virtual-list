@@ -1,0 +1,7 @@
+# Ignore files for PNPM, NPM and YARN
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Ignore the license, since prettier breaks license detection
+LICENSE.md

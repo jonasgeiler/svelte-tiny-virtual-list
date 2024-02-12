@@ -1,5 +1,9 @@
-/* Forked from react-virtualized 💖 */
-import { ALIGNMENT } from './constants';
+/*
+ * SizeAndPositionManager was forked from react-tiny-virtual-list, which was
+ * forked from react-virtualized.
+ */
+
+import { ALIGNMENT } from '$lib/constants.js';
 
 /**
  * @callback ItemSizeGetter
