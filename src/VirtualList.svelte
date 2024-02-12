@@ -355,7 +355,7 @@
 		let style, expandStyle;
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			style = `left:0;width:100%;height:${size}px;`;
-			expandStyle = `left:0;width:100%;height:${size}px;`;
+			expandStyle = `left:0;width:100%;height:${expandSize}px;`;
 
 			if (sticky) {
 				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
@@ -366,7 +366,7 @@
 			}
 		} else {
 			style = `top:0;width:${size}px;`;
-			expandStyle = `top:0;width:${size}px;`;
+			expandStyle = `top:0;width:${expandSize}px;`;
 
 			if (sticky) {
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
