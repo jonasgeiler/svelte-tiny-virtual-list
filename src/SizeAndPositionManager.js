@@ -341,7 +341,7 @@ export default class SizeAndPositionManager {
 		if (totalSize === 0) {
 			return {};
 		}
-
+		
 		const maxOffset = Math.max(0, offset || 0) + containerSize;
 		let start = this.findNearestItem(offset);
 		

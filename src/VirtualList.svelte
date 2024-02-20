@@ -17,6 +17,8 @@
 	type ItemSize = number | number[] | ItemSizeGetter;
 	type T = $$Generic;
 
+	export let container: string = null;
+
 	export let height: number | string = '';
 	export let width: number | string = '100%';
 	
@@ -105,17 +107,32 @@
 	onMount(() => {
 		mounted = true;
 
-		if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
-			scrollWrapper = wrapper;
+		if (container) {
+			scrollWrapper = document.querySelector(container);
+		}
+
+		if (scrollWrapper) {
+			scrollWrapper.style.setProperty("height", getVisibleHeight(scrollWrapper) + "px", "important");
+			scrollWrapper.style.setProperty("overflow", "auto", "important");
+			scrollWrapper.style.setProperty("position", "relative", "important");
 		} else {
-			scrollWrapper = window;
+			if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
+				scrollWrapper = wrapper;
+				scrollWrapper.style.setProperty("overflow", "auto", "important");
+			} else {
+				scrollWrapper = document.querySelector("body");
+			}
+		}
+		
+		if (scrollWrapper === document.body) {
+			window.addEventListener('scroll', handleScroll);
+		} else {
+			scrollWrapper.addEventListener('scroll', handleScroll);
 		}
 
 		header = wrapper.querySelector('[slot="header"]');
 
 		if (header) headerHeight = header.offsetHeight;
-		
-		scrollWrapper.addEventListener('scroll', handleScroll);
 
 		if (scrollOffset != null) {
 			scrollTo(scrollOffset);
@@ -126,7 +143,11 @@
 
 	onDestroy(() => {
 		if (mounted) {
-			scrollWrapper.removeEventListener('scroll', handleScroll);
+			if (scrollWrapper === document.body) {
+				window.removeEventListener('scroll', handleScroll);
+			} else {
+				scrollWrapper.removeEventListener('scroll', handleScroll);
+			}	
 		}
 	});
 
@@ -210,7 +231,8 @@
 	function refresh() {
 		const { offset } = state;
 
-		const containerSize = getContainerSize();
+		const containerSize = getVisibleHeight(scrollWrapper === document.body ? wrapper : scrollWrapper);
+		
 		const { start, stop } = sizeAndPositionManager.getVisibleRange(
 			Number(containerSize),
 			offset,
@@ -219,10 +241,10 @@
 		let updatedItems = [];
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width}; overflow: ${height ? 'auto' : 'hidden'}`;
+			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width}px; overflow: ${width ? 'auto' : 'hidden'}`;
+			wrapperStyle = `height:${height ? height + 'px' : '100%'};width:${width}px;`;
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
@@ -257,7 +279,7 @@
 
 		visibleItems = updatedItems;
 	}
-
+	
 
 	function scrollTo(value) {
 		if (scrollDirection === DIRECTION.VERTICAL && !height) {
@@ -285,7 +307,7 @@
 			index = 0;
 		}
 
-		const containerSize = getContainerSize();
+		const containerSize = getVisibleHeight(scrollWrapper === document.body ? wrapper : scrollWrapper);
 		return sizeAndPositionManager.getUpdatedOffsetForIndex(
 			align,
 			Number(containerSize),
@@ -322,11 +344,10 @@
 
 	function getWrapperOffset() {
 		if ('scroll' in scrollWrapper) {
-			if (scrollWrapper === window) {
-				return document.documentElement.scrollTop - wrapper.offsetTop - headerHeight;
-			} else {
-				return scrollWrapper.scrollTop - headerHeight;
+			if (scrollWrapper === document.body) {
+				return document.documentElement.scrollTop - getDistanceToParent(wrapper, scrollWrapper) - headerHeight;
 			}
+			return scrollWrapper.scrollTop - getDistanceToParent(wrapper, scrollWrapper) - headerHeight;
 		} else {
 			return scrollWrapper[SCROLL_PROP_LEGACY[scrollDirection]];
 		}
@@ -382,6 +403,26 @@
 			expandStyle,
 		};
 	}
+
+	function getVisibleHeight(element) {
+		if (!element) return;
+		const rect = element.getBoundingClientRect();
+		const visibleTop = Math.max(rect.top, 0);
+		const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+		const visibleHeight = visibleBottom - visibleTop;
+
+		return Math.max(visibleHeight, 0);
+	}
+
+	function getDistanceToParent(child, parent) {
+		let distance = 0;
+		let currentElement = child;
+		while (currentElement && currentElement !== parent && currentElement !== document.body) {
+			distance += currentElement.offsetTop;
+			currentElement = currentElement.offsetParent;
+		}
+		return distance;
+	}
 </script>
 
 <div bind:this={wrapper} class="virtual-list-wrapper" style={wrapperStyle}>
@@ -420,7 +461,7 @@
 
 <style>
 	.virtual-list-wrapper {
-		overflow:                   auto;
+		/* overflow:                   auto; */
 		will-change:                transform;
 		-webkit-overflow-scrolling: touch;
 	}
