@@ -62,7 +62,7 @@
 	let mounted = false;
 	let wrapper = null;
 	let scrollWrapper = null;
-	let header = null, headerHeight = 0;
+	let header = null, headerHeight = 0, originalHeight = null;
 	let visibleItems: {index: number, style: Record<string, string>}[] = [];
 
 	let state = {
@@ -81,6 +81,7 @@
 		expandItemSize,
 		estimatedItemSize,
 		estimatedExpandItemSize,
+		container,
 	};
 
 	let styleCache = {};
@@ -88,7 +89,7 @@
 	let innerStyle = '';
 
 	$: {
-		/* listen to updates: */ scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, expandItems, expandItemSize, estimatedItemSize, estimatedExpandItemSize;
+		/* listen to updates: */ scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, expandItems, expandItemSize, estimatedItemSize, estimatedExpandItemSize, container;
 		propsUpdated();
 	}
 
@@ -107,32 +108,11 @@
 	onMount(() => {
 		mounted = true;
 
-		if (container) {
-			scrollWrapper = document.querySelector(container);
-		}
-
-		if (scrollWrapper) {
-			scrollWrapper.style.setProperty("height", getVisibleHeight(scrollWrapper) + "px", "important");
-			scrollWrapper.style.setProperty("overflow", "auto", "important");
-			scrollWrapper.style.setProperty("position", "relative", "important");
-		} else {
-			if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
-				scrollWrapper = wrapper;
-				scrollWrapper.style.setProperty("overflow", "auto", "important");
-			} else {
-				scrollWrapper = document.querySelector("body");
-			}
-		}
-		
-		if (scrollWrapper === document.body) {
-			window.addEventListener('scroll', handleScroll);
-		} else {
-			scrollWrapper.addEventListener('scroll', handleScroll);
-		}
-
 		header = wrapper.querySelector('[slot="header"]');
 
 		if (header) headerHeight = header.offsetHeight;
+
+		containerPropUpdated();
 
 		if (scrollOffset != null) {
 			scrollTo(scrollOffset);
@@ -147,7 +127,7 @@
 				window.removeEventListener('scroll', handleScroll);
 			} else {
 				scrollWrapper.removeEventListener('scroll', handleScroll);
-			}	
+			}
 		}
 	});
 
@@ -163,6 +143,7 @@
 				  prevProps.expandItemSize !== expandItemSize || 
 			      prevProps.estimatedItemSize !== estimatedItemSize ||
 				  prevProps.estimatedExpandItemSize !== estimatedExpandItemSize;
+		const containerPropChanged = prevProps.container !== container;
 
 		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig({
@@ -173,6 +154,8 @@
 				estimatedItemSize: getEstimatedItemSize(),
 				estimatedExpandItemSize: getEstimatedExpandItemSize(),
 			});
+
+			if (containerPropChanged) containerPropUpdated();
 
 			recomputeSizes();
 		}
@@ -206,7 +189,41 @@
 			expandItemSize,
 			estimatedItemSize,
 			estimatedExpandItemSize,
+			container,
 		};
+	}
+
+	function containerPropUpdated() {
+		if (prevProps.container && scrollWrapper) {
+			scrollWrapper.classList.remove("virtual-list-container");
+			if (originalHeight) {
+				scrollWrapper.style.setProperty("height", originalHeight);
+				originalHeight = null;
+			}
+		}
+		
+		if (container) {
+			scrollWrapper = document.querySelector(container);
+		}
+		
+		if (scrollWrapper) {
+			originalHeight = scrollWrapper.style.height;
+			scrollWrapper.style.setProperty("height", getVisibleHeight(scrollWrapper) + "px", "important");
+			scrollWrapper.classList.add("virtual-list-container");
+		} else {
+			if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
+				scrollWrapper = wrapper;
+				scrollWrapper.style.setProperty("overflow", "auto", "important");
+			} else {
+				scrollWrapper = document.querySelector("body");
+			}
+		}
+		
+		if (scrollWrapper === document.body) {
+			window.addEventListener('scroll', handleScroll);
+		} else {
+			scrollWrapper.addEventListener('scroll', handleScroll);
+		}
 	}
 
 	function stateUpdated() {
@@ -279,7 +296,6 @@
 
 		visibleItems = updatedItems;
 	}
-	
 
 	function scrollTo(value) {
 		if (scrollDirection === DIRECTION.VERTICAL && !height) {
@@ -470,5 +486,10 @@
 		position:   relative;
 		display:    flex;
 		width:      100%;
+	}
+
+	:global(.virtual-list-container) {
+		position: relative !important;
+		overflow: auto !important;
 	}
 </style>
