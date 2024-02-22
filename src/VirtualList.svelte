@@ -194,26 +194,26 @@
 	}
 
 	function containerPropUpdated() {
-		if (prevProps.container && scrollWrapper) {
-			scrollWrapper.classList.remove("virtual-list-container");
-			if (originalHeight) {
-				scrollWrapper.style.setProperty("height", originalHeight);
-				originalHeight = null;
-			}
-		}
-		
-		if (container) {
-			scrollWrapper = document.querySelector(container);
-		}
-		
-		if (scrollWrapper) {
-			originalHeight = scrollWrapper.style.height;
-			scrollWrapper.style.setProperty("height", getVisibleHeight(scrollWrapper) + "px", "important");
-			scrollWrapper.classList.add("virtual-list-container");
+		if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
+			scrollWrapper = wrapper;
+			scrollWrapper.style.setProperty("overflow", "auto", "important");
 		} else {
-			if ((scrollDirection === DIRECTION.VERTICAL && height) || (scrollDirection === DIRECTION.HORIZONTAL && width)) {
-				scrollWrapper = wrapper;
-				scrollWrapper.style.setProperty("overflow", "auto", "important");
+			if (prevProps.container && scrollWrapper) {
+				scrollWrapper.classList.remove("virtual-list-container");
+				if (originalHeight) {
+					scrollWrapper.style.setProperty("height", originalHeight);
+					originalHeight = null;
+				}
+			}
+			
+			if (container) {
+				scrollWrapper = document.querySelector(container);
+			}
+
+			if (scrollWrapper) {
+				originalHeight = scrollWrapper.style.height;
+				scrollWrapper.style.setProperty("height", getVisibleHeight(scrollWrapper) + "px", "important");
+				scrollWrapper.classList.add("virtual-list-container");
 			} else {
 				scrollWrapper = document.querySelector("body");
 			}
