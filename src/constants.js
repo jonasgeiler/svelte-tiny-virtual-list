@@ -24,3 +24,8 @@ export const SCROLL_PROP_LEGACY = {
 	[DIRECTION.VERTICAL]:   'scrollTop',
 	[DIRECTION.HORIZONTAL]: 'scrollLeft',
 };
+
+export const WRAPPER_MODE = {
+	DIV: 'div',
+	TABLE: 'table',
+};

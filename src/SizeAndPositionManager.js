@@ -17,6 +17,8 @@ import { ALIGNMENT } from './constants';
  * @type {object}
  * @property {number} size
  * @property {number} offset
+ * @property {number} expandSize
+ * @property {number} expandOffset
  */
 
 /**
@@ -29,7 +31,10 @@ import { ALIGNMENT } from './constants';
  * @type {object}
  * @property {number} itemCount
  * @property {ItemSize} itemSize
+ * @property {Array} expandItems
+ * @property {ItemSize} expandItemSize
  * @property {number} estimatedItemSize
+ * @property {number} estimatedExpandItemSize
  */
 
 export default class SizeAndPositionManager {
@@ -37,13 +42,7 @@ export default class SizeAndPositionManager {
 	/**
 	 * @param {Options} options
 	 */
-	constructor({ itemSize, itemCount, estimatedItemSize }) {
-		/**
-		 * @private
-		 * @type {ItemSize}
-		 */
-		this.itemSize = itemSize;
-
+	constructor({ itemCount, itemSize, expandItems, expandItemSize, estimatedItemSize, estimatedExpandItemSize }) {
 		/**
 		 * @private
 		 * @type {number}
@@ -52,9 +51,33 @@ export default class SizeAndPositionManager {
 
 		/**
 		 * @private
+		 * @type {ItemSize}
+		 */
+		this.itemSize = itemSize;
+
+		/**
+		 * @private
+		 * @type {Array}
+		 */
+		this.expandItems = expandItems;
+
+		/**
+		 * @private
+		 * @type {ItemSize}
+		 */
+		this.expandItemSize = expandItemSize;
+
+		/**
+		 * @private
 		 * @type {number}
 		 */
 		this.estimatedItemSize = estimatedItemSize;
+
+		/**
+		 * @private
+		 * @type {number}
+		 */
+		this.estimatedExpandItemSize = estimatedExpandItemSize;
 
 		/**
 		 * Cache of size and position data for items, mapped by item index.
@@ -84,17 +107,29 @@ export default class SizeAndPositionManager {
 	/**
 	 * @param {Options} options
 	 */
-	updateConfig({ itemSize, itemCount, estimatedItemSize }) {
+	updateConfig({ itemCount, itemSize, expandItems, expandItemSize, estimatedItemSize, estimatedExpandItemSize }) {
 		if (itemCount != null) {
 			this.itemCount = itemCount;
+		}
+
+		if (itemSize != null) {
+			this.itemSize = itemSize;
+		}
+
+		if (expandItems != null) {
+			this.expandItems = expandItems;
+		}
+
+		if (expandItemSize != null) {
+			this.expandItemSize = expandItemSize;
 		}
 
 		if (estimatedItemSize != null) {
 			this.estimatedItemSize = estimatedItemSize;
 		}
 
-		if (itemSize != null) {
-			this.itemSize = itemSize;
+		if (estimatedExpandItemSize != null) {
+			this.estimatedExpandItemSize = estimatedExpandItemSize;
 		}
 
 		this.checkForMismatchItemSizeAndItemCount();
@@ -128,6 +163,21 @@ export default class SizeAndPositionManager {
 	}
 
 	/**
+	 * @param {number} index
+	 */
+	getExpandSize(index) {
+		if (!this.expandItems[index]) return 0;
+		
+		const { expandItemSize } = this;
+
+		if (typeof expandItemSize === 'function') {
+			return expandItemSize(index);
+		}
+
+		return Array.isArray(expandItemSize) ? expandItemSize[index] : expandItemSize;
+	}
+
+	/**
 	 * Compute the totalSize and itemSizeAndPositionData at the start,
 	 * only when itemSize is a number or an array.
 	 */
@@ -135,12 +185,16 @@ export default class SizeAndPositionManager {
 		let totalSize = 0;
 		for (let i = 0; i < this.itemCount; i++) {
 			const size = this.getSize(i);
+			const expandSize = this.getExpandSize(i);
 			const offset = totalSize;
-			totalSize += size;
+			const expandOffset = totalSize + size;
+			totalSize += size + expandSize;
 
 			this.itemSizeAndPositionData[i] = {
-				offset,
 				size,
+				offset,
+				expandSize,
+				expandOffset,
 			};
 		}
 
@@ -180,17 +234,23 @@ export default class SizeAndPositionManager {
 			const lastMeasuredSizeAndPosition = this.getSizeAndPositionOfLastMeasuredItem();
 			let offset =
 				    lastMeasuredSizeAndPosition.offset + lastMeasuredSizeAndPosition.size;
+			let expandOffset = lastMeasuredSizeAndPosition.expandOffset + lastMeasuredSizeAndPosition.expandSize;
 
 			for (let i = this.lastMeasuredIndex + 1; i <= index; i++) {
 				const size = this.getSize(i);
-
+				const expandSize = this.getExpandSize(i);
 				if (size == null || isNaN(size)) {
 					throw Error(`Invalid size returned for index ${i} of value ${size}`);
+				}
+				if (expandSize == null || isNaN(expandSize)) {
+					throw Error(`Invalid expandSize returned for index ${i} of value ${expandSize}`);
 				}
 
 				this.itemSizeAndPositionData[i] = {
 					offset,
 					size,
+					expandOffset,
+					expandSize,
 				};
 
 				offset += size;
@@ -205,7 +265,7 @@ export default class SizeAndPositionManager {
 	getSizeAndPositionOfLastMeasuredItem() {
 		return this.lastMeasuredIndex >= 0
 			? this.itemSizeAndPositionData[this.lastMeasuredIndex]
-			: { offset: 0, size: 0 };
+			: { offset: 0, size: 0, expandOffset: 0, expandSize: 0 };
 	}
 
 	/**
@@ -216,7 +276,6 @@ export default class SizeAndPositionManager {
 	getTotalSize() {
 		// Return the pre computed totalSize when itemSize is number or array.
 		if (this.totalSize) return this.totalSize;
-
 		/**
 		 * When itemSize is a function,
 		 * This value will be completedly estimated initially.
@@ -227,7 +286,7 @@ export default class SizeAndPositionManager {
 		return (
 			lastMeasuredSizeAndPosition.offset +
 			lastMeasuredSizeAndPosition.size +
-			(this.itemCount - this.lastMeasuredIndex - 1) * this.estimatedItemSize
+			(this.itemCount - this.lastMeasuredIndex - 1) * (this.estimatedItemSize + this.estimatedExpandItemSize)
 		);
 	}
 
@@ -240,7 +299,7 @@ export default class SizeAndPositionManager {
 	 * @param {number | undefined} targetIndex
 	 * @return {number} Offset to use to ensure the specified item is visible
 	 */
-	getUpdatedOffsetForIndex({ align = ALIGNMENT.START, containerSize, currentOffset, targetIndex }) {
+	getUpdatedOffsetForIndex(align = ALIGNMENT.START, containerSize, currentOffset, targetIndex) {
 		if (containerSize <= 0) {
 			return 0;
 		}
@@ -276,30 +335,30 @@ export default class SizeAndPositionManager {
 	 * @param {number} overscanCount
 	 * @return {{stop: number|undefined, start: number|undefined}}
 	 */
-	getVisibleRange({ containerSize = 0, offset, overscanCount }) {
+	getVisibleRange(containerSize = 0, offset, overscanCount) {
 		const totalSize = this.getTotalSize();
 
 		if (totalSize === 0) {
 			return {};
 		}
-
-		const maxOffset = offset + containerSize;
+		
+		const maxOffset = Math.max(0, offset || 0) + containerSize;
 		let start = this.findNearestItem(offset);
-
+		
 		if (start === undefined) {
 			throw Error(`Invalid offset ${offset} specified`);
 		}
 
 		const datum = this.getSizeAndPositionForIndex(start);
-		offset = datum.offset + datum.size;
+		offset = datum.offset + datum.size + datum.expandSize;
 
 		let stop = start;
 
 		while (offset < maxOffset && stop < this.itemCount - 1) {
 			stop++;
-			offset += this.getSizeAndPositionForIndex(stop).size;
+			offset += this.getSizeAndPositionForIndex(stop).size + this.getSizeAndPositionForIndex(stop).expandSize;
 		}
-
+		
 		if (overscanCount) {
 			start = Math.max(0, start - overscanCount);
 			stop = Math.min(stop + overscanCount, this.itemCount - 1);
