@@ -74,45 +74,39 @@ export default class SizeAndPositionManager {
 
 		this.checkForMismatchItemSizeAndItemCount();
 
-		if (!this.justInTime) this.computeTotalSizeAndPositionData();
-	}
+		if (!this.justInTime)
+			this.computeTotalSizeAndPositionData();
+	};
 
 	get justInTime() {
 		return typeof this.itemSize === 'function';
-	}
+	};
 
 	/**
 	 * @param {Options} options
 	 */
 	updateConfig({ itemSize, itemCount, estimatedItemSize }) {
-		if (itemCount != null) {
+		if (itemCount != null)
 			this.itemCount = itemCount;
-		}
 
-		if (estimatedItemSize != null) {
+		if (estimatedItemSize != null)
 			this.estimatedItemSize = estimatedItemSize;
-		}
 
-		if (itemSize != null) {
+		if (itemSize != null)
 			this.itemSize = itemSize;
-		}
 
 		this.checkForMismatchItemSizeAndItemCount();
 
-		if (this.justInTime && this.totalSize != null) {
+		if (this.justInTime && this.totalSize != null)
 			this.totalSize = undefined;
-		} else {
+		else
 			this.computeTotalSizeAndPositionData();
-		}
-	}
+	};
 
 	checkForMismatchItemSizeAndItemCount() {
-		if (Array.isArray(this.itemSize) && this.itemSize.length < this.itemCount) {
-			throw Error(
-				`When itemSize is an array, itemSize.length can't be smaller than itemCount`,
-			);
-		}
-	}
+		if (Array.isArray(this.itemSize) && this.itemSize.length < this.itemCount)
+			throw Error(`When itemSize is an array, itemSize.length can't be smaller than itemCount`);
+	};
 
 	/**
 	 * @param {number} index
@@ -120,12 +114,11 @@ export default class SizeAndPositionManager {
 	getSize(index) {
 		const { itemSize } = this;
 
-		if (typeof itemSize === 'function') {
+		if (typeof itemSize === 'function')
 			return itemSize(index);
-		}
 
 		return Array.isArray(itemSize) ? itemSize[index] : itemSize;
-	}
+	};
 
 	/**
 	 * Compute the totalSize and itemSizeAndPositionData at the start,
@@ -145,11 +138,11 @@ export default class SizeAndPositionManager {
 		}
 
 		this.totalSize = totalSize;
-	}
+	};
 
 	getLastMeasuredIndex() {
 		return this.lastMeasuredIndex;
-	}
+	};
 
 
 	/**
@@ -158,16 +151,13 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 */
 	getSizeAndPositionForIndex(index) {
-		if (index < 0 || index >= this.itemCount) {
-			throw Error(
-				`Requested index ${index} is outside of range 0..${this.itemCount}`,
-			);
-		}
+		if (index < 0 || index >= this.itemCount)
+			throw Error(`Requested index ${index} is outside of range 0..${this.itemCount}`);
 
 		return this.justInTime
 			? this.getJustInTimeSizeAndPositionForIndex(index)
 			: this.itemSizeAndPositionData[index];
-	}
+	};
 
 	/**
 	 * This is used when itemSize is a function.
@@ -184,9 +174,8 @@ export default class SizeAndPositionManager {
 			for (let i = this.lastMeasuredIndex + 1; i <= index; i++) {
 				const size = this.getSize(i);
 
-				if (size == null || isNaN(size)) {
+				if (size == null || isNaN(size))
 					throw Error(`Invalid size returned for index ${i} of value ${size}`);
-				}
 
 				this.itemSizeAndPositionData[i] = {
 					offset,
@@ -200,13 +189,13 @@ export default class SizeAndPositionManager {
 		}
 
 		return this.itemSizeAndPositionData[index];
-	}
+	};
 
 	getSizeAndPositionOfLastMeasuredItem() {
 		return this.lastMeasuredIndex >= 0
 			? this.itemSizeAndPositionData[this.lastMeasuredIndex]
 			: { offset: 0, size: 0 };
-	}
+	};
 
 	/**
 	 * Total size of all items being measured.
@@ -215,7 +204,8 @@ export default class SizeAndPositionManager {
 	 */
 	getTotalSize() {
 		// Return the pre computed totalSize when itemSize is number or array.
-		if (this.totalSize) return this.totalSize;
+		if (this.totalSize)
+			return this.totalSize;
 
 		/**
 		 * When itemSize is a function,
@@ -229,7 +219,7 @@ export default class SizeAndPositionManager {
 			lastMeasuredSizeAndPosition.size +
 			(this.itemCount - this.lastMeasuredIndex - 1) * this.estimatedItemSize
 		);
-	}
+	};
 
 	/**
 	 * Determines a new offset that ensures a certain item is visible, given the alignment.
@@ -241,9 +231,8 @@ export default class SizeAndPositionManager {
 	 * @return {number} Offset to use to ensure the specified item is visible
 	 */
 	getUpdatedOffsetForIndex({ align = ALIGNMENT.START, containerSize, currentOffset, targetIndex }) {
-		if (containerSize <= 0) {
+		if (containerSize <= 0)
 			return 0;
-		}
 
 		const datum = this.getSizeAndPositionForIndex(targetIndex);
 		const maxOffset = datum.offset;
@@ -263,12 +252,13 @@ export default class SizeAndPositionManager {
 				break;
 			default:
 				idealOffset = Math.max(minOffset, Math.min(maxOffset, currentOffset));
+				break;
 		}
 
 		const totalSize = this.getTotalSize();
 
 		return Math.max(0, Math.min(totalSize - containerSize, idealOffset));
-	}
+	};
 
 	/**
 	 * @param {number} containerSize
@@ -279,16 +269,14 @@ export default class SizeAndPositionManager {
 	getVisibleRange({ containerSize = 0, offset, overscanCount }) {
 		const totalSize = this.getTotalSize();
 
-		if (totalSize === 0) {
+		if (totalSize === 0)
 			return {};
-		}
 
 		const maxOffset = offset + containerSize;
 		let start = this.findNearestItem(offset);
 
-		if (start === undefined) {
+		if (start === undefined)
 			throw Error(`Invalid offset ${offset} specified`);
-		}
 
 		const datum = this.getSizeAndPositionForIndex(start);
 		offset = datum.offset + datum.size;
@@ -309,7 +297,7 @@ export default class SizeAndPositionManager {
 			start,
 			stop,
 		};
-	}
+	};
 
 	/**
 	 * Clear all cached values for items after the specified index.
@@ -320,7 +308,7 @@ export default class SizeAndPositionManager {
 	 */
 	resetItem(index) {
 		this.lastMeasuredIndex = Math.min(this.lastMeasuredIndex, index - 1);
-	}
+	};
 
 	/**
 	 * Searches for the item (index) nearest the specified offset.
@@ -331,9 +319,8 @@ export default class SizeAndPositionManager {
 	 * @param {number} offset
 	 */
 	findNearestItem(offset) {
-		if (isNaN(offset)) {
+		if (isNaN(offset))
 			throw Error(`Invalid offset ${offset} specified`);
-		}
 
 		// Our search algorithms find the nearest match at or below the specified offset.
 		// So make sure the offset is at least 0 or no match will be found.
@@ -342,23 +329,23 @@ export default class SizeAndPositionManager {
 		const lastMeasuredSizeAndPosition = this.getSizeAndPositionOfLastMeasuredItem();
 		const lastMeasuredIndex = Math.max(0, this.lastMeasuredIndex);
 
-		if (lastMeasuredSizeAndPosition.offset >= offset) {
-			// If we've already measured items within this range just use a binary search as it's faster.
+		// If we've already measured items within this range just use a binary search as it's faster.
+		if (lastMeasuredSizeAndPosition.offset >= offset)
 			return this.binarySearch({
 				high: lastMeasuredIndex,
 				low:  0,
 				offset,
 			});
-		} else {
-			// If we haven't yet measured this high, fallback to an exponential search with an inner binary search.
-			// The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
-			// The overall complexity for this approach is O(log n).
+
+		// If we haven't yet measured this high, fallback to an exponential search with an inner binary search.
+		// The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
+		// The overall complexity for this approach is O(log n).
+		else
 			return this.exponentialSearch({
 				index: lastMeasuredIndex,
 				offset,
 			});
-		}
-	}
+	};
 
 	/**
 	 * @private
@@ -374,21 +361,19 @@ export default class SizeAndPositionManager {
 			middle = low + Math.floor((high - low) / 2);
 			currentOffset = this.getSizeAndPositionForIndex(middle).offset;
 
-			if (currentOffset === offset) {
+			if (currentOffset === offset)
 				return middle;
-			} else if (currentOffset < offset) {
+			else if (currentOffset < offset)
 				low = middle + 1;
-			} else if (currentOffset > offset) {
+			else if (currentOffset > offset)
 				high = middle - 1;
-			}
 		}
 
-		if (low > 0) {
+		if (low > 0)
 			return low - 1;
-		}
 
 		return 0;
-	}
+	};
 
 	/**
 	 * @private
@@ -411,5 +396,5 @@ export default class SizeAndPositionManager {
 			low:  Math.floor(index / 2),
 			offset,
 		});
-	}
-}
+	};
+};

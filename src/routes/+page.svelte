@@ -2,30 +2,44 @@
     import VirtualList from "$lib/components/VirtualList.svelte";
 
     const LIST_LENGTH = 2000;
-    const LIST_HEIGHT = 600;
-    const ITEM_HEIGHT = 50;
+    const LIST_HEIGHT = 400;
+    const ITEM_SIZE = 100;
+    const LIST_WIDTH = 800;
 
     class Row {
+
         constructor (index = 0) {
+
             this.index = index;
             this.title = "#" + (index + 1);
             this.content = (Math.floor(Math.random() * 999999999999)).toString(36);
-        }
+
+        };
+
     };
 
     const generateFakeData = (ll = 1) => {
         const dummArray = new Array(ll);
-        for(let i = 0; i < ll; i++) (dummArray[i] = new Row(i));
+
+        for(let i = 0; i < ll; i++)
+            dummArray[i] = new Row(i);
+
         return dummArray;
     };
 
-    let virtualList = $state();
+    let innerWidth = $state(1200);
+
+    let virtualListVertical = $state();
+
+    let virtualListHorizontal = $state();
 
     let listLength = $state(LIST_LENGTH);
 
     let listHeight = $state(LIST_HEIGHT);
 
-    let listItemSize = $state(ITEM_HEIGHT);
+    let listWidth = $state(LIST_WIDTH);
+
+    let listItemSize = $state(ITEM_SIZE);
 
     let fakeData = $derived(generateFakeData(listLength));
 
@@ -35,6 +49,11 @@
 
     const onsubmit = e => {
         e.preventDefault();
+    };
+
+    const recomputeSizes = () => {
+        virtualListVertical.recomputeSizes();
+        virtualListHorizontal.recomputeSizes();
     };
 
     const randomBgs = [
@@ -53,7 +72,10 @@
     ];
 </script>
 
+<svelte:window bind:innerWidth/>
+
 <main class="p-6 grid gap-6">
+
     <h1 class="text-xl font-extrabold">Sveltekit-tiny-virtual-list-tailwind</h1>
 
     <div>
@@ -69,6 +91,10 @@
                     <input type="range" min="10" max="1000" bind:value={listHeight}/>
                 </label>
                 <label class="grid gap-1">
+                    <span>Width: {listWidth}</span>
+                    <input type="range" min="10" max="{innerWidth - 48}" bind:value={listWidth}/>
+                </label>
+                <label class="grid gap-1">
                     <span>Item size: {listItemSize}</span>
                     <input type="range" min="1" max="200" bind:value={listItemSize}/>
                 </label>
@@ -81,7 +107,7 @@
                     </select>
                 </label>
                 <div>
-                    <button type="button" onclick={() => virtualList.recomputeSizes()}>Force recompute sizes</button>
+                    <button type="button" onclick={recomputeSizes}>Force recompute sizes</button>
                 </div>
                 <div>
                     <button type="button" onclick={() => (scrollToIndex = Math.floor(Math.random() * fakeData.length))}>Scroll to random index: {scrollToIndex}</button>
@@ -90,14 +116,17 @@
         </fieldset>
     </div>
 
+    <h2 class="font-bold">Vertical</h2>
+
     <div class="border-4 border-amber-500">
         <VirtualList
-            bind:this={virtualList}
+            bind:this={virtualListVertical}
             width="100%"
             height={listHeight}
             itemCount={fakeData.length}
             itemSize={listItemSize}
             {scrollToIndex}
+            {scrollToBehaviour}
         >
             {#snippet header()}
                 <header class="p-4">Header</header>
@@ -109,6 +138,27 @@
             {/snippet}
             {#snippet footer()}
                 <footer class="p-4">Footer</footer>
+            {/snippet}
+        </VirtualList>
+    </div>
+
+    <h2 class="font-bold">Horizontal</h2>
+
+    <div class="border-4 border-amber-500">
+        <VirtualList
+            bind:this={virtualListHorizontal}
+            scrollDirection="horizontal"
+            width={listWidth}
+            height="{listHeight}px"
+            itemCount={fakeData.length}
+            itemSize={listItemSize}
+            {scrollToIndex}
+            {scrollToBehaviour}
+        >
+            {#snippet row({ index, style })}
+                <div {style} class="p-4 {randomBgs[Math.floor(Math.random() * randomBgs.length)]}">
+                    {fakeData[index].content}, Row: #{index}
+                </div>
             {/snippet}
         </VirtualList>
     </div>

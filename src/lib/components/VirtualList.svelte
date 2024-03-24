@@ -1,4 +1,5 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import SizeAndPositionManager from '$lib/utils/SizeAndPositionManager';
 	import {
 		DIRECTION,
@@ -11,7 +12,7 @@
 	
 
 	let {
-		height,
+		height = '100%',
 
 		width = '100%',
 
@@ -260,13 +261,22 @@
 
 		return styleCache[index] = style;
 	};
+
+	onMount(() => {
+		if(container)
+			container.addEventListener("scroll", handleScroll, { passive: true });
+	});
+
+	onDestroy(() => {
+		if(container)
+			container.removeEventListener("scroll", handleScroll, { passive: true });
+	});
 </script>
 
 <div
 	bind:this={container}
 	class={cContainer}
 	style={containerStyle}
-	on:scroll|passive={handleScroll}
 >
 	{#if header}
 		{@render header()}
