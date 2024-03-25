@@ -135,14 +135,14 @@ export interface VirtualListProps {
 	/**
 	 * Classes for the list container
 	 * 
-	 * @default '''
+	 * @default ''
 	 */
 	dangerously_set_classes_container: string;
 
 	/**
 	 * Classes for the list inner container
 	 * 
-	 * @default '''
+	 * @default ''
 	 */
 	dangerously_set_classes_inner_container: string;
 }
