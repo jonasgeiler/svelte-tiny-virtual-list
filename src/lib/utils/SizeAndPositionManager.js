@@ -35,76 +35,103 @@ import { ALIGNMENT } from './constants';
 export default class SizeAndPositionManager {
 
 	/**
+	 * @private
+	 * @type {ItemSize}
+	 */
+	#itemSize = 0;
+
+	/**
+	 * @private
+	 * @type {number}
+	 */
+	#itemCount = 0;
+
+	/**
+	 * @private
+	 * @type {number}
+	 */
+	#estimatedItemSize = 0;
+
+	/**
+	 * Cache of size and position data for items, mapped by item index.
+	 *
+	 * @private
+	 * @type {SizeAndPositionData}
+	 */
+	#itemSizeAndPositionData = {};
+
+	/**
+	 * Measurements for items up to this index can be trusted; items afterward should be estimated.
+	 *
+	 * @private
+	 * @type {number}
+	 */
+	#lastMeasuredIndex = -1;
+
+	/**
+	 * Total size of items
+	 * 
+	 * @private
+	 * @type {number}
+	 */
+	#totalSize = 0;
+
+	get #justInTime() {
+		return typeof this.#itemSize === 'function';
+	};
+
+	/**
 	 * @param {Options} options
 	 */
 	constructor({ itemSize, itemCount, estimatedItemSize }) {
-		/**
-		 * @private
-		 * @type {ItemSize}
-		 */
-		this.itemSize = itemSize;
+		this.#itemSize = itemSize;
 
-		/**
-		 * @private
-		 * @type {number}
-		 */
-		this.itemCount = itemCount;
+		this.#itemCount = itemCount;
 
-		/**
-		 * @private
-		 * @type {number}
-		 */
-		this.estimatedItemSize = estimatedItemSize;
-
-		/**
-		 * Cache of size and position data for items, mapped by item index.
-		 *
-		 * @private
-		 * @type {SizeAndPositionData}
-		 */
-		this.itemSizeAndPositionData = {};
-
-		/**
-		 * Measurements for items up to this index can be trusted; items afterward should be estimated.
-		 *
-		 * @private
-		 * @type {number}
-		 */
-		this.lastMeasuredIndex = -1;
+		this.#estimatedItemSize = estimatedItemSize;
 
 		this.checkForMismatchItemSizeAndItemCount();
 
-		if (!this.justInTime)
+		if (!this.#justInTime)
 			this.computeTotalSizeAndPositionData();
-	};
 
-	get justInTime() {
-		return typeof this.itemSize === 'function';
+		/** Bind public methods */
+		this.updateConfig = this.updateConfig.bind(this);
+		this.checkForMismatchItemSizeAndItemCount = this.checkForMismatchItemSizeAndItemCount.bind(this);
+		this.getSize = this.getSize.bind(this);
+		this.computeTotalSizeAndPositionData = this.computeTotalSizeAndPositionData.bind(this);
+		this.getLastMeasuredIndex = this.getLastMeasuredIndex.bind(this);
+		this.getSizeAndPositionForIndex = this.getSizeAndPositionForIndex.bind(this);
+		this.getJustInTimeSizeAndPositionForIndex = this.getJustInTimeSizeAndPositionForIndex.bind(this);
+		this.getSizeAndPositionOfLastMeasuredItem = this.getSizeAndPositionOfLastMeasuredItem.bind(this);
+		this.getTotalSize = this.getTotalSize.bind(this);
+		this.getUpdatedOffsetForIndex = this.getUpdatedOffsetForIndex.bind(this);
+		this.getVisibleRange = this.getVisibleRange.bind(this);
+		this.resetItem = this.resetItem.bind(this);
+		this.findNearestItem = this.findNearestItem.bind(this);
+
 	};
 
 	/**
 	 * @param {Options} options
 	 */
 	updateConfig({ itemSize, itemCount, estimatedItemSize }) {
-		if (itemCount != null)
-			this.itemCount = itemCount;
+		this.#itemCount = itemCount;
 
-		if (estimatedItemSize != null)
-			this.estimatedItemSize = estimatedItemSize;
+		this.#estimatedItemSize = estimatedItemSize;
 
-		if (itemSize != null)
-			this.itemSize = itemSize;
+		this.#itemSize = itemSize;
 
 		this.checkForMismatchItemSizeAndItemCount();
 
-		if (this.justInTime && this.totalSize != null)
-			this.totalSize = undefined;
+		if (this.#justInTime && this.#totalSize)
+			this.#totalSize = 0;
 		else
 			this.computeTotalSizeAndPositionData();
 	};
 
 	checkForMismatchItemSizeAndItemCount() {
-		if (Array.isArray(this.itemSize) && this.itemSize.length < this.itemCount)
+		if (Array.isArray(this.#itemSize) && this.#itemSize.length < this.#itemCount)
 			throw Error(`When itemSize is an array, itemSize.length can't be smaller than itemCount`);
 	};
 
@@ -112,12 +139,11 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 */
 	getSize(index) {
-		const { itemSize } = this;
 
-		if (typeof itemSize === 'function')
-			return itemSize(index);
+		if (this.#justInTime)
+			return this.#itemSize(index);
 
-		return Array.isArray(itemSize) ? itemSize[index] : itemSize;
+		return Array.isArray(this.#itemSize) ? this.#itemSize[index] : this.#itemSize;
 	};
 
 	/**
@@ -126,24 +152,23 @@ export default class SizeAndPositionManager {
 	 */
 	computeTotalSizeAndPositionData() {
 		let totalSize = 0;
-		for (let i = 0; i < this.itemCount; i++) {
+		for (let i = 0; i < this.#itemCount; i++) {
 			const size = this.getSize(i);
 			const offset = totalSize;
 			totalSize += size;
 
-			this.itemSizeAndPositionData[i] = {
+			this.#itemSizeAndPositionData[i] = {
 				offset,
 				size,
 			};
 		}
 
-		this.totalSize = totalSize;
+		this.#totalSize = totalSize;
 	};
 
 	getLastMeasuredIndex() {
-		return this.lastMeasuredIndex;
+		return this.#lastMeasuredIndex;
 	};
-
 
 	/**
 	 * This method returns the size and position for the item at the specified index.
@@ -151,12 +176,12 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 */
 	getSizeAndPositionForIndex(index) {
-		if (index < 0 || index >= this.itemCount)
-			throw Error(`Requested index ${index} is outside of range 0..${this.itemCount}`);
+		if (index < 0 || index >= this.#itemCount)
+			throw Error(`Requested index ${index} is outside of range 0..${this.#itemCount}`);
 
-		return this.justInTime
+		return this.#justInTime
 			? this.getJustInTimeSizeAndPositionForIndex(index)
-			: this.itemSizeAndPositionData[index];
+			: this.#itemSizeAndPositionData[index];
 	};
 
 	/**
@@ -166,18 +191,18 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 */
 	getJustInTimeSizeAndPositionForIndex(index) {
-		if (index > this.lastMeasuredIndex) {
+		if (index > this.#lastMeasuredIndex) {
 			const lastMeasuredSizeAndPosition = this.getSizeAndPositionOfLastMeasuredItem();
 			let offset =
 				    lastMeasuredSizeAndPosition.offset + lastMeasuredSizeAndPosition.size;
 
-			for (let i = this.lastMeasuredIndex + 1; i <= index; i++) {
+			for (let i = this.#lastMeasuredIndex + 1; i <= index; i++) {
 				const size = this.getSize(i);
 
 				if (size == null || isNaN(size))
 					throw Error(`Invalid size returned for index ${i} of value ${size}`);
 
-				this.itemSizeAndPositionData[i] = {
+				this.#itemSizeAndPositionData[i] = {
 					offset,
 					size,
 				};
@@ -185,15 +210,15 @@ export default class SizeAndPositionManager {
 				offset += size;
 			}
 
-			this.lastMeasuredIndex = index;
+			this.#lastMeasuredIndex = index;
 		}
 
-		return this.itemSizeAndPositionData[index];
+		return this.#itemSizeAndPositionData[index];
 	};
 
 	getSizeAndPositionOfLastMeasuredItem() {
-		return this.lastMeasuredIndex >= 0
-			? this.itemSizeAndPositionData[this.lastMeasuredIndex]
+		return this.#lastMeasuredIndex >= 0
+			? this.#itemSizeAndPositionData[this.#lastMeasuredIndex]
 			: { offset: 0, size: 0 };
 	};
 
@@ -204,8 +229,8 @@ export default class SizeAndPositionManager {
 	 */
 	getTotalSize() {
 		// Return the pre computed totalSize when itemSize is number or array.
-		if (this.totalSize)
-			return this.totalSize;
+		if (this.#totalSize)
+			return this.#totalSize;
 
 		/**
 		 * When itemSize is a function,
@@ -217,7 +242,7 @@ export default class SizeAndPositionManager {
 		return (
 			lastMeasuredSizeAndPosition.offset +
 			lastMeasuredSizeAndPosition.size +
-			(this.itemCount - this.lastMeasuredIndex - 1) * this.estimatedItemSize
+			(this.#itemCount - this.#lastMeasuredIndex - 1) * this.#estimatedItemSize
 		);
 	};
 
@@ -283,14 +308,14 @@ export default class SizeAndPositionManager {
 
 		let stop = start;
 
-		while (offset < maxOffset && stop < this.itemCount - 1) {
+		while (offset < maxOffset && stop < this.#itemCount - 1) {
 			stop++;
 			offset += this.getSizeAndPositionForIndex(stop).size;
 		}
 
 		if (overscanCount) {
 			start = Math.max(0, start - overscanCount);
-			stop = Math.min(stop + overscanCount, this.itemCount - 1);
+			stop = Math.min(stop + overscanCount, this.#itemCount - 1);
 		}
 
 		return {
@@ -307,7 +332,7 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 */
 	resetItem(index) {
-		this.lastMeasuredIndex = Math.min(this.lastMeasuredIndex, index - 1);
+		this.#lastMeasuredIndex = Math.min(this.#lastMeasuredIndex, index - 1);
 	};
 
 	/**
@@ -327,11 +352,11 @@ export default class SizeAndPositionManager {
 		offset = Math.max(0, offset);
 
 		const lastMeasuredSizeAndPosition = this.getSizeAndPositionOfLastMeasuredItem();
-		const lastMeasuredIndex = Math.max(0, this.lastMeasuredIndex);
+		const lastMeasuredIndex = Math.max(0, this.#lastMeasuredIndex);
 
 		// If we've already measured items within this range just use a binary search as it's faster.
 		if (lastMeasuredSizeAndPosition.offset >= offset)
-			return this.binarySearch({
+			return this.#binarySearch({
 				high: lastMeasuredIndex,
 				low:  0,
 				offset,
@@ -341,7 +366,7 @@ export default class SizeAndPositionManager {
 		// The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
 		// The overall complexity for this approach is O(log n).
 		else
-			return this.exponentialSearch({
+			return this.#exponentialSearch({
 				index: lastMeasuredIndex,
 				offset,
 			});
@@ -353,7 +378,7 @@ export default class SizeAndPositionManager {
 	 * @param {number} high
 	 * @param {number} offset
 	 */
-	binarySearch({ low, high, offset }) {
+	#binarySearch({ low, high, offset }) {
 		let middle = 0;
 		let currentOffset = 0;
 
@@ -380,19 +405,19 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 * @param {number} offset
 	 */
-	exponentialSearch({ index, offset }) {
+	#exponentialSearch({ index, offset }) {
 		let interval = 1;
 
 		while (
-			index < this.itemCount &&
+			index < this.#itemCount &&
 			this.getSizeAndPositionForIndex(index).offset < offset
 			) {
 			index += interval;
 			interval *= 2;
 		}
 
-		return this.binarySearch({
-			high: Math.min(index, this.itemCount - 1),
+		return this.#binarySearch({
+			high: Math.min(index, this.#itemCount - 1),
 			low:  Math.floor(index / 2),
 			offset,
 		});

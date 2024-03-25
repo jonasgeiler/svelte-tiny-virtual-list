@@ -6,15 +6,15 @@ export class ListProps {
 
     /**
      * Constructor
-     * @param {number|null|undefined} scrollToIndex 
-     * @param {string|null|undefined} scrollToAlignment 
-     * @param {number|null|undefined} scrollOffset 
+     * @param {number} scrollToIndex 
+     * @param {'start' | 'center' | 'end' | 'auto'} scrollToAlignment 
+     * @param {number} scrollOffset 
      * @param {number} itemCount 
-     * @param {number} itemSize 
+     * @param {number | number[] | function} itemSize 
      * @param {number} estimatedItemSize 
      * @param {number} height 
      * @param {string} width 
-     * @param {number[]|null|undefined} stickyIndices 
+     * @param {number[]} stickyIndices 
      */
     constructor (scrollToIndex = null, scrollToAlignment = null, scrollOffset = null, itemCount = 0, itemSize = 0, estimatedItemSize = 50, height = 600, width = "100%", stickyIndices = null) {
         this.scrollToIndex = scrollToIndex;
@@ -30,15 +30,15 @@ export class ListProps {
 
     /**
      * Check if props have changed and update current object
-     * @param {number|null|undefined} scrollOffset 
-     * @param {number|null|undefined} scrollToIndex 
-     * @param {string|null|undefined} scrollToAlignment 
+     * @param {number} scrollOffset 
+     * @param {number} scrollToIndex 
+     * @param {'start' | 'center' | 'end' | 'auto'} scrollToAlignment 
      * @param {number} itemCount 
-     * @param {number} itemSize 
+     * @param {number | number[] | function} itemSize 
      * @param {number} estimatedItemSize 
      * @param {number} height 
      * @param {string} width 
-     * @param {number[]|null|undefined} stickyIndices 
+     * @param {number[]} stickyIndices 
      * @returns {Object}
      */
     havePropsChanged (scrollOffset, scrollToIndex, scrollToAlignment, itemCount, itemSize, estimatedItemSize, height, width, stickyIndices) {
@@ -52,7 +52,7 @@ export class ListProps {
 
     /**
      * Check if scrollOffset has changed and update
-     * @param {number|null|undefined} scrollOffset 
+     * @param {number} scrollOffset 
      * @returns {boolean}
      */
     _hasScrollOffsetChanged (scrollOffset) {
@@ -66,7 +66,7 @@ export class ListProps {
 
     /**
      * Check if scroll props have changed and update
-     * @param {number|null|undefined} scrollToIndex 
+     * @param {number} scrollToIndex 
      * @param {string} scrollToAlignment 
      * @returns 
      */
@@ -86,7 +86,7 @@ export class ListProps {
     /**
      * Check if item props have changed and update
      * @param {number} itemCount 
-     * @param {number} itemSize 
+     * @param {number | number[] | function} itemSize 
      * @param {number} estimatedItemSize 
      * @returns {boolean}
      */
@@ -111,7 +111,7 @@ export class ListProps {
      * Check if list props have changed and update
      * @param {number} height 
      * @param {string} width 
-     * @param {number[]|null|undefined} stickyIndices 
+     * @param {number[]} stickyIndices 
      * @returns {boolean}
      */
     _haveListPropsChanged (height, width, stickyIndices) {

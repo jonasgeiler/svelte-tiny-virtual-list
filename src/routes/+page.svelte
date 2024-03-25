@@ -1,7 +1,7 @@
 <script>
     import VirtualList from "$lib/components/VirtualList.svelte";
 
-    const LIST_LENGTH = 2000;
+    const LIST_LENGTH = 20;
     const LIST_HEIGHT = 400;
     const ITEM_SIZE = 100;
     const LIST_WIDTH = 800;
@@ -70,6 +70,8 @@
         "bg-purple-100",
         "bg-pink-100"
     ];
+
+    const cButton = "border px-4 py-2 hover:border-amber-500";
 </script>
 
 <svelte:window bind:innerWidth/>
@@ -94,23 +96,33 @@
                     <span>Width: {listWidth}</span>
                     <input type="range" min="10" max="{innerWidth - 48}" bind:value={listWidth}/>
                 </label>
-                <label class="grid gap-1">
-                    <span>Item size: {listItemSize}</span>
-                    <input type="range" min="1" max="200" bind:value={listItemSize}/>
-                </label>
+                {#if typeof listItemSize === "number"}
+                    <label class="grid gap-1">
+                        <span>Item size: {listItemSize}</span>
+                        <input type="range" min="1" max="200" bind:value={listItemSize}/>
+                    </label>
+                {/if}
+                <div class="grid gap-1">
+                    <span class="block">itemSize</span>
+                    <div class="flex gap-2 flex-wrap">
+                        <button class="{cButton}" type="button" onclick={() => (listItemSize = ITEM_SIZE)}>number</button>
+                        <button class="{cButton}" type="button" onclick={() => (listItemSize = fakeData.map(() => Math.floor(Math.random() * 200)))}>number[]</button>
+                        <button class="{cButton}" type="button" onclick={() => (listItemSize = (index) => Math.floor(Math.random() * index))}>function</button>
+                    </div>
+                </div>
                 <label class="grid gap-1">
                     <span>Scroll behaviour: <code>{scrollToBehaviour}</code></span>
-                    <select bind:value={scrollToBehaviour}>
+                    <select bind:value={scrollToBehaviour} class="{cButton}">
                         <option value="instant">instant</option>
                         <option value="auto">auto</option>
                         <option value="smooth">smooth</option>
                     </select>
                 </label>
                 <div>
-                    <button type="button" onclick={recomputeSizes}>Force recompute sizes</button>
+                    <button class="{cButton}" type="button" onclick={recomputeSizes}>Force recompute sizes</button>
                 </div>
                 <div>
-                    <button type="button" onclick={() => (scrollToIndex = Math.floor(Math.random() * fakeData.length))}>Scroll to random index: {scrollToIndex}</button>
+                    <button class="{cButton}" type="button" onclick={() => (scrollToIndex = Math.floor(Math.random() * fakeData.length))}>Scroll to random index: {scrollToIndex}</button>
                 </div>
             </form>
         </fieldset>

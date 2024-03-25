@@ -16,23 +16,23 @@
 
 		width = '100%',
 
-		itemCount,
+		itemCount = 0,
 
-		itemSize,
+		itemSize = 0,
 
-		estimatedItemSize = null,
+		estimatedItemSize = 0,
 
-		stickyIndices = null,
+		stickyIndices = [],
 
 		getKey = null,
 
 		scrollDirection = DIRECTION.VERTICAL,
 
-		scrollOffset = null,
+		scrollOffset = 0,
 
-		scrollToIndex = null,
+		scrollToIndex = -1,
 
-		scrollToAlignment = null,
+		scrollToAlignment = 'start',
 
 		scrollToBehaviour = 'instant',
 		
@@ -48,9 +48,9 @@
 
 		row = null,
 
-		dangerously_set_classes_container = "",
+		dangerously_set_classes_container = '',
 
-		dangerously_set_classes_inner_container = ""
+		dangerously_set_classes_inner_container = ''
 	} = $props();
 
 	const sizeAndPositionManager = new SizeAndPositionManager({
@@ -62,7 +62,7 @@
 	let container = $state(null);
 	let items = $state.frozen([]);
 
-	let curState = $state.frozen(new ListState(scrollOffset || (scrollToIndex != null && itemCount && getOffsetForIndex(scrollToIndex))));
+	let curState = $state.frozen(new ListState(scrollOffset || (scrollToIndex !== -1 && itemCount && getOffsetForIndex(scrollToIndex))));
 
 	let prevState = new ListState();
 	let prevProps = new ListProps(
@@ -102,10 +102,10 @@
 		if (scrollOffsetHasChanged) {
 			curState = new ListState(scrollOffset);
 			
-			if (typeof scrollToIndex === 'number')
+			if (scrollToIndex >= 0)
 				scrollTo(scrollOffset);
 			
-		} else if (typeof scrollToIndex === 'number' && (scrollPropsHaveChanged || itemPropsHaveChanged)) {
+		} else if (scrollToIndex >= 0 && (scrollPropsHaveChanged || itemPropsHaveChanged)) {
 			const offsetForIndex = getOffsetForIndex(
 					scrollToIndex,
 					scrollToAlignment,
@@ -149,8 +149,7 @@
 			innerContainerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
-		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
-		if (hasStickyIndices) {
+		if (stickyIndices.length) {
 			for (let i = 0; i < stickyIndices.length; i++) {
 				const index = stickyIndices[i];
 				updatedItems.push({
@@ -162,7 +161,7 @@
 
 		if (start !== undefined && stop !== undefined) {
 			for (let index = start; index <= stop; index++) {
-				if (hasStickyIndices && stickyIndices.includes(index))
+				if (stickyIndices.length && stickyIndices.includes(index))
 					continue;
 
 				updatedItems.push({
