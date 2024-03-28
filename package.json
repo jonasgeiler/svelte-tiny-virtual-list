@@ -32,6 +32,13 @@
     "dist",
     "types"
   ],
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "svelte": "./src/index.js",
+      "default": "./dist/svelte-tiny-virtual-list.js"
+    }
+  },
   "keywords": [
     "svelte",
     "virtual",
