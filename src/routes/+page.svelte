@@ -78,7 +78,7 @@
 
 <main class="p-6 grid gap-6">
 
-    <h1 class="text-xl font-extrabold">Sveltekit-tiny-virtual-list-tailwind</h1>
+    <h1 class="text-xl font-extrabold">Sveltekit-tiny-virtual-list</h1>
 
     <div>
         <fieldset class="border p-6">
@@ -175,3 +175,99 @@
         </VirtualList>
     </div>
 </main>
+
+<style>
+    .grid {
+        display: grid;
+    }
+    .block {
+        display: block;
+    }
+    .flex {
+        display: flex;
+    }
+    .gap-1 {
+        gap: 0.25rem;
+    }
+    .gap-2 {
+        gap: 0.5rem;
+    }
+    .gap-3 {
+        gap: 0.75rem;
+    }
+    .gap-6 {
+        gap: 1.5rem;
+    }
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+    .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .p-6 {
+        padding: 1.5rem;
+    }
+    .border {
+        border-width: 1px;
+        border-style: solid;
+    }
+    .border-4 {
+        border-width: 4px;
+        border-style: solid;
+    }
+    .hover\:border-amber-500:hover,
+    .border-amber-500 {
+        border-color: rgb(245 158 11 / 1);
+    }
+    .bg-amber-100 {
+        background-color: rgb(254 243 199 / 1);
+    }
+    .bg-zinc-100 {
+        background-color: rgb(244 244 245 / 1);
+    }
+    .bg-gray-100 {
+        background-color: rgb(243 244 246 / 1);
+    }
+    .bg-red-100 {
+        background-color: rgb(254 226 226 / 1);
+    }
+    .bg-orange-100 {
+        background-color: rgb(255 237 213 / 1);
+    }
+    .bg-yellow-100 {
+        background-color: rgb(254 249 195 / 1);
+    }
+    .bg-green-100 {
+        background-color: rgb(220 252 231 / 1);
+    }
+    .bg-teal-100 {
+        background-color: rgb(204 251 241 / 1);
+    }
+    .bg-blue-100 {
+        background-color: rgb(219 234 254 / 1);
+    }
+    .bg-indigo-100 {
+        background-color: rgb(224 231 255 / 1);
+    }
+    .bg-purple-100 {
+        background-color: rgb(243 232 255 / 1);
+    }
+    .bg-pink-100 {
+        background-color: rgb(252 231 243 / 1);
+    }
+    .text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+    }
+    .font-bold {
+        font-weight: 700;
+    }
+    .font-extrabold {
+        font-weight: 800;
+    }
+</style>

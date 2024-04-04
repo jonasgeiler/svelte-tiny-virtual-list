@@ -10,4 +10,4 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 package-lock.json
-svelte-tiny-virtual-list-tailwind-*
+svelte-tiny-virtual-list-*

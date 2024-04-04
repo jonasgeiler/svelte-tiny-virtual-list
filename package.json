@@ -1,7 +1,7 @@
 {
-	"name": "svelte-tiny-virtual-list-tailwind",
+	"name": "svelte-tiny-virtual-list",
 	"version": "3.0.5",
-	"description": "A tiny but mighty list virtualization component for svelte 5 & Tailwind",
+	"description": "A tiny but mighty list virtualization component for svelte 5",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
@@ -23,8 +23,7 @@
 		"!dist/**/*.spec.*"
 	],
 	"peerDependencies": {
-		"svelte": "^5.0.0-next.1",
-		"tailwindcss": "^3.4.1"
+		"svelte": "^5.0.0-next.1"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.2.0",
@@ -41,7 +40,6 @@
 		"prettier-plugin-svelte": "^3.2.2",
 		"publint": "^0.2.7",
 		"svelte": "^5.0.0-next.1",
-		"tailwindcss": "^3.4.3",
 		"tslib": "^2.6.2",
 		"typescript": "^5.4.3",
 		"vite": "^5.2.8"
@@ -61,10 +59,10 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/daminski/svelte-tiny-virtual-list-tailwind.git"
+		"url": "git+https://github.com/daminski/svelte-tiny-virtual-list.git"
 	},
 	"bugs": {
-		"url": "https://github.com/daminski/svelte-tiny-virtual-list-tailwind/issues"
+		"url": "https://github.com/daminski/svelte-tiny-virtual-list/issues"
 	},
-	"homepage": "https://github.com/daminski/svelte-tiny-virtual-list-tailwind"
+	"homepage": "https://github.com/daminski/svelte-tiny-virtual-list"
 }

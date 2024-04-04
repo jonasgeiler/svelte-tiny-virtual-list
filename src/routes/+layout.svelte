@@ -1,9 +1,5 @@
-<script>
-    import '$lib/styles/app.css';
-</script>
-
 <svelte:head>
-    <title>Sveltekit-tiny-virtual-list-tailwind</title>
+    <title>Sveltekit-tiny-virtual-list</title>
 </svelte:head>
 
 <slot/>

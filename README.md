@@ -1,5 +1,5 @@
-<h2 align="center">svelte-tiny-virtual-list-tailwind</h2>
-<p align="center">A tiny but mighty list virtualization library for Svelte 5 & Tailwind</p>
+<h2 align="center">svelte-tiny-virtual-list</h2>
+<p align="center">A tiny but mighty list virtualization library for Svelte 5</p>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
@@ -28,7 +28,6 @@ This repo was forked from [skayo/svelte-tiny-virtual-list](https://github.com/sk
 ### Requirements
 
 - **Svelte 5**
-- Tailwind
 
 ### Install svelte 5
 
@@ -42,68 +41,11 @@ cd myapp
 npm install
 ```
 
-### Install Tailwind css
-
-```bash
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
-
-### Install svelte-tiny-virtual-list-tailwind
+### Install svelte-tiny-virtual-list
 
 Clone repo locally and install
 ```bash
 npm install path/to/package
-```
-
-### Update svelte.config.js
-
-```js
-import adapter from '@sveltejs/adapter-auto';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-  kit: {
-    adapter: adapter()
-  },
-  preprocess: vitePreprocess()
-};
-export default config;
-```
-
-### Update tailwind.config.js
-
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    './src/**/*.{html,js,svelte,ts}',
-    './node_modules/svelte-tiny-virtual-list-tailwind/dist/**/*.{html,js,svelte,ts}'
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-```
-
-### Import Tailwind in app.css
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-### Import css in +layout.svelte
-
-```svelte
-<script>
-  import "../app.css";
-</script>
-
-<slot />
 ```
 
 ### 
@@ -252,4 +194,4 @@ You can style the elements of the virtual list like this:
 
 ## License
 
-[MIT License](https://github.com/daminski/svelte-tiny-virtual-list-tailwind/blob/master/LICENSE)
+[MIT License](https://github.com/daminski/svelte-tiny-virtual-list/blob/master/LICENSE)

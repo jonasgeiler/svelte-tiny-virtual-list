@@ -294,3 +294,18 @@
 		{@render footer()}
 	{/if}
 </div>
+
+<style>
+	.overflow-auto {
+		overflow: auto;
+	}
+	.relative {
+		position: relative;
+	}
+	.flex {
+		display: flex;
+	}
+	.w-full {
+		width: 100%;
+	}
+</style>
