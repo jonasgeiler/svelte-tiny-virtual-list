@@ -9,61 +9,61 @@ importers:
   .:
     devDependencies:
       '@playwright/test':
-        specifier: ^1.28.1
+        specifier: 1.41.2
         version: 1.41.2
       '@sveltejs/adapter-auto':
-        specifier: ^3.0.0
+        specifier: 3.1.1
         version: 3.1.1(@sveltejs/kit@2.5.0(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.10)(vite@5.1.1))(svelte@4.2.10)(vite@5.1.1))
       '@sveltejs/kit':
-        specifier: ^2.0.0
+        specifier: 2.5.0
         version: 2.5.0(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.10)(vite@5.1.1))(svelte@4.2.10)(vite@5.1.1)
       '@sveltejs/package':
-        specifier: ^2.0.0
+        specifier: 2.2.6
         version: 2.2.6(svelte@4.2.10)(typescript@5.3.3)
       '@sveltejs/vite-plugin-svelte':
-        specifier: ^3.0.0
+        specifier: 3.0.2
         version: 3.0.2(svelte@4.2.10)(vite@5.1.1)
       '@types/eslint':
-        specifier: ^8.56.0
+        specifier: 8.56.0
         version: 8.56.0
       eslint:
-        specifier: ^8.56.0
+        specifier: 8.56.0
         version: 8.56.0
       eslint-config-prettier:
-        specifier: ^9.1.0
+        specifier: 9.1.0
         version: 9.1.0(eslint@8.56.0)
       eslint-plugin-svelte:
-        specifier: ^2.35.1
+        specifier: 2.35.1
         version: 2.35.1(eslint@8.56.0)(svelte@4.2.10)
       prettier:
-        specifier: ^3.1.1
+        specifier: 3.2.5
         version: 3.2.5
       prettier-plugin-svelte:
-        specifier: ^3.1.2
+        specifier: 3.1.2
         version: 3.1.2(prettier@3.2.5)(svelte@4.2.10)
       publint:
-        specifier: ^0.1.9
+        specifier: 0.1.16
         version: 0.1.16
       svelte:
-        specifier: ^4.2.7
+        specifier: 4.2.10
         version: 4.2.10
       svelte-check:
-        specifier: ^3.6.0
+        specifier: 3.6.4
         version: 3.6.4(postcss-load-config@3.1.4(postcss@8.4.35))(postcss@8.4.35)(svelte@4.2.10)
       svelte-infinite-loading:
-        specifier: ^1.3.8
+        specifier: 1.3.8
         version: 1.3.8
       tslib:
-        specifier: ^2.4.1
+        specifier: 2.6.2
         version: 2.6.2
       typescript:
-        specifier: ^5.0.0
+        specifier: 5.3.3
         version: 5.3.3
       vite:
-        specifier: ^5.0.11
+        specifier: 5.1.1
         version: 5.1.1
       vitest:
-        specifier: ^1.2.0
+        specifier: 1.2.2
         version: 1.2.2
 
 packages:
