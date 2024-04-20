@@ -28,24 +28,25 @@
 	</ul>
 </div>
 
-
 <style>
-	:global(body), :global(html) {
-		height                 : 100%;
-		margin                 : 0;
-		background-color       : rgb(249, 249, 249);
-		font-family            : -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-		color                  : #333;
-		-webkit-font-smoothing : antialiased;
+	:global(body),
+	:global(html) {
+		height: 100%;
+		margin: 0;
+		background-color: rgb(249, 249, 249);
+		font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+		color: #333;
+		-webkit-font-smoothing: antialiased;
 	}
 
 	.container {
-		max-width : 600px;
-		margin    : 0 auto;
-		padding   : 20px;
+		max-width: 600px;
+		margin: 0 auto;
+		padding: 20px;
 	}
 
-	:global(input::-moz-focus-inner), :global(input::-moz-focus-outer) {
-		border : 0;
+	:global(input::-moz-focus-inner),
+	:global(input::-moz-focus-outer) {
+		border: 0;
 	}
 </style>

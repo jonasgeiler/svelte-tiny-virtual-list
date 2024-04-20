@@ -10,9 +10,7 @@
 		let newRowHeights = [];
 
 		for (let i = 0; i < 10000; i++) {
-			newRowHeights.push(Math.random() * (
-				155 - 50
-			) + 50);
+			newRowHeights.push(Math.random() * (155 - 50) + 50);
 		}
 
 		rowHeights = newRowHeights;
@@ -46,80 +44,87 @@
 </div>
 
 <style>
-	:global(body), :global(html) {
-		height           : 100%;
-		margin           : 0;
-		background-color : rgb(249, 249, 249);
+	:global(body),
+	:global(html) {
+		height: 100%;
+		margin: 0;
+		background-color: rgb(249, 249, 249);
 	}
 
 	:global(.virtual-list-wrapper) {
-		margin                 : 20px;
-		background             : #fff;
-		border-radius          : 2px;
-		box-shadow             : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-		background             : #fafafa;
-		font-family            : -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-		color                  : #333;
-		-webkit-font-smoothing : antialiased;
+		margin: 20px;
+		background: #fff;
+		border-radius: 2px;
+		box-shadow:
+			0 2px 2px 0 rgba(0, 0, 0, 0.14),
+			0 3px 1px -2px rgba(0, 0, 0, 0.2),
+			0 1px 5px 0 rgba(0, 0, 0, 0.12);
+		background: #fafafa;
+		font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+		color: #333;
+		-webkit-font-smoothing: antialiased;
 	}
 
 	.row {
-		padding       : 0 15px;
-		border-bottom : 1px solid #eee;
-		box-sizing    : border-box;
-		line-height   : 50px;
-		font-weight   : 500;
-		background    : #fff;
+		padding: 0 15px;
+		border-bottom: 1px solid #eee;
+		box-sizing: border-box;
+		line-height: 50px;
+		font-weight: 500;
+		background: #fff;
 	}
 
 	.actions {
-		display          : -webkit-box;
-		display          : -ms-flexbox;
-		display          : flex;
-		-ms-flex-wrap    : wrap;
-		flex-wrap        : wrap;
-		padding          : 0 20px;
-		padding-top      : 15px;
-		-webkit-box-pack : justify;
-		-ms-flex-pack    : justify;
-		justify-content  : space-between;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+		padding: 0 20px;
+		padding-top: 15px;
+		-webkit-box-pack: justify;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
 	}
 
 	.actions .button {
-		margin-bottom : 10px;
-		margin-left   : auto;
+		margin-bottom: 10px;
+		margin-left: auto;
 	}
 
 	.button {
-		font-family         : -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-		display             : -webkit-box;
-		display             : -ms-flexbox;
-		display             : flex;
-		-webkit-box-align   : center;
-		-ms-flex-align      : center;
-		align-items         : center;
-		height              : 36px;
-		padding             : 0 16px;
-		background          : #fff;
-		border-radius       : 3px;
-		text-transform      : uppercase;
-		font-weight         : 500;
-		font-size           : 15px;
-		color               : #111;
-		background-color    : #fafafa;
-		box-shadow          : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-		cursor              : pointer;
-		-webkit-user-select : none;
-		-moz-user-select    : none;
-		-ms-user-select     : none;
-		user-select         : none;
+		font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		height: 36px;
+		padding: 0 16px;
+		background: #fff;
+		border-radius: 3px;
+		text-transform: uppercase;
+		font-weight: 500;
+		font-size: 15px;
+		color: #111;
+		background-color: #fafafa;
+		box-shadow:
+			0 2px 2px 0 rgba(0, 0, 0, 0.14),
+			0 3px 1px -2px rgba(0, 0, 0, 0.2),
+			0 1px 5px 0 rgba(0, 0, 0, 0.12);
+		cursor: pointer;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 
 	.button:active {
-		background-color : #f0f0f0;
+		background-color: #f0f0f0;
 	}
 
 	.button svg {
-		margin-right : 8px;
+		margin-right: 8px;
 	}
 </style>
