@@ -2,10 +2,8 @@
   "name": "svelte-tiny-virtual-list",
   "version": "2.0.5",
   "description": "A tiny but mighty list virtualization component for svelte, with zero dependencies 💪",
-  "svelte": "src/index.js",
-  "main": "dist/svelte-tiny-virtual-list.js",
-  "module": "dist/svelte-tiny-virtual-list.mjs",
-  "types": "types/index.d.ts",
+  "svelte": "src/VirtualList.svelte",
+  "main": "src/VirtualList.svelte",
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint src/** test/**",
@@ -29,8 +27,7 @@
   },
   "files": [
     "src",
-    "dist",
-    "types"
+    "dist"
   ],
   "exports": {
     ".": {
