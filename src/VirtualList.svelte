@@ -197,10 +197,10 @@
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			wrapperStyle = `height:${height}px;width:${width};`;
+			wrapperStyle = `height:${height};width:${width};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			wrapperStyle = `height:${height};width:${width}px`;
+			wrapperStyle = `height:${height};width:${width}`;
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
