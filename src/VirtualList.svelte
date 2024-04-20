@@ -197,10 +197,12 @@
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			wrapperStyle = `height:${height};width:${width};`;
+			const unit = typeof height === 'number' ? 'px' : '';
+			wrapperStyle = `height:${height}${unit};width:${width};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			wrapperStyle = `height:${height};width:${width}`;
+			const unit = typeof width === 'number' ? 'px' : '';
+			wrapperStyle = `height:${height};width:${width}${unit}`;
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
