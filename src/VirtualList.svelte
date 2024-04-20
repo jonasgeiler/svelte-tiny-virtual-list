@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script context="module">
 	/**
 	 * the third argument for event bundler
