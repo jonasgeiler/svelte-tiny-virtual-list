@@ -1,10 +1,10 @@
 /// <reference types="svelte" />
 import { SvelteComponentTyped } from 'svelte';
 
-export type Alignment = "auto" | "start" | "center" | "end";
-export type ScrollBehaviour = "auto" | "smooth" | "instant";
+export type Alignment = 'auto' | 'start' | 'center' | 'end';
+export type ScrollBehaviour = 'auto' | 'smooth' | 'instant';
 
-export type Direction = "horizontal" | "vertical";
+export type Direction = 'horizontal' | 'vertical';
 
 export type ItemSizeGetter = (index: number) => number;
 export type ItemSize = number | number[] | ItemSizeGetter;
@@ -99,7 +99,6 @@ export interface VirtualListProps {
 	getKey?: (index: number) => any;
 }
 
-
 /**
  * VirtualList slots
  */
@@ -111,12 +110,12 @@ export interface VirtualListSlots {
 		/**
 		 * Item index
 		 */
-		index: number,
+		index: number;
 
 		/**
 		 * Item style, must be applied to the slot (look above for example)
 		 */
-		style: string
+		style: string;
 	};
 
 	/**
@@ -130,7 +129,6 @@ export interface VirtualListSlots {
 	footer: {};
 }
 
-
 export interface ItemsUpdatedDetail {
 	/**
 	 * Index of the first visible item
@@ -143,9 +141,7 @@ export interface ItemsUpdatedDetail {
 	end: number;
 }
 
-export interface ItemsUpdatedEvent extends CustomEvent<ItemsUpdatedDetail> {
-}
-
+export interface ItemsUpdatedEvent extends CustomEvent<ItemsUpdatedDetail> {}
 
 export interface AfterScrollDetail {
 	/**
@@ -159,9 +155,7 @@ export interface AfterScrollDetail {
 	offset: number;
 }
 
-export interface AfterScrollEvent extends CustomEvent<AfterScrollDetail> {
-}
-
+export interface AfterScrollEvent extends CustomEvent<AfterScrollDetail> {}
 
 /**
  * VirtualList events
@@ -178,9 +172,11 @@ export interface VirtualListEvents {
 	afterScroll: AfterScrollEvent;
 }
 
-
 /**
  * VirtualList component
  */
-export default class VirtualList extends SvelteComponentTyped<VirtualListProps, VirtualListEvents, VirtualListSlots> {
-}
+export default class VirtualList extends SvelteComponentTyped<
+	VirtualListProps,
+	VirtualListEvents,
+	VirtualListSlots
+> {}

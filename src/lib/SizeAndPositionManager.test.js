@@ -1,11 +1,11 @@
-import SizeAndPositionManager from '../src/SizeAndPositionManager';
-import { ALIGNMENT } from '../src/constants';
+import SizeAndPositionManager from '$lib/SizeAndPositionManager.js';
+import { ALIGNMENT } from '$lib/constants.js';
+import { describe, expect, it } from 'vitest';
 
 const ITEM_SIZE = 10;
-const range = N => Array.from({ length: N }, (_, k) => k + 1);
+const range = (N) => Array.from({ length: N }, (_, k) => k + 1);
 
 describe('SizeAndPositionManager', () => {
-
 	/**
 	 * @param {number} itemCount
 	 * @param {number} estimatedItemSize
@@ -21,12 +21,12 @@ describe('SizeAndPositionManager', () => {
 				itemSizeGetterCalls.push(index);
 				return ITEM_SIZE;
 			},
-			estimatedItemSize,
+			estimatedItemSize
 		});
 
 		return {
 			sizeAndPositionManager,
-			itemSizeGetterCalls,
+			itemSizeGetterCalls
 		};
 	}
 
@@ -38,13 +38,13 @@ describe('SizeAndPositionManager', () => {
 	function getItemSizeAndPositionManagerNumber(itemCount = 100, itemSize = 50) {
 		const sizeAndPositionManager = new SizeAndPositionManager({
 			itemCount,
-			itemSize,
+			itemSize
 		});
 
 		return {
 			sizeAndPositionManager,
 			itemSize,
-			totalSize: itemSize * itemCount,
+			totalSize: itemSize * itemCount
 		};
 	}
 
@@ -59,7 +59,7 @@ describe('SizeAndPositionManager', () => {
 
 		const sizeAndPositionManager = new SizeAndPositionManager({
 			itemCount,
-			itemSize,
+			itemSize
 		});
 
 		return {
@@ -67,7 +67,7 @@ describe('SizeAndPositionManager', () => {
 			itemSize,
 			totalSize: itemSize.reduce((acc, curr) => {
 				return acc + curr;
-			}, 0),
+			}, 0)
 		};
 	}
 
@@ -109,53 +109,32 @@ describe('SizeAndPositionManager', () => {
 	describe('getSizeAndPositionForIndex when itemSize is a function', () => {
 		it('should error if an invalid index is specified', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
-			expect(() =>
-				sizeAndPositionManager.getSizeAndPositionForIndex(-1),
-			).toThrow();
-			expect(() =>
-				sizeAndPositionManager.getSizeAndPositionForIndex(100),
-			).toThrow();
+			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(-1)).toThrow();
+			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(100)).toThrow();
 		});
 
 		it('should return the correct size and position information for the requested item', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(0).offset,
-			).toEqual(0);
-			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).size).toEqual(
-				10,
-			);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(1).offset,
-			).toEqual(10);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(2).offset,
-			).toEqual(20);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).offset).toEqual(0);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).size).toEqual(10);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(1).offset).toEqual(10);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(2).offset).toEqual(20);
 		});
 
 		it('should only measure the necessary items to return the information requested', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSizeGetterCalls,
-			      } = getItemSizeAndPositionManager();
+			const { sizeAndPositionManager, itemSizeGetterCalls } = getItemSizeAndPositionManager();
 			sizeAndPositionManager.getSizeAndPositionForIndex(0);
 			expect(itemSizeGetterCalls).toEqual([0]);
 		});
 
 		it('should just-in-time measure all items up to the requested item if no items have yet been measured', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSizeGetterCalls,
-			      } = getItemSizeAndPositionManager();
+			const { sizeAndPositionManager, itemSizeGetterCalls } = getItemSizeAndPositionManager();
 			sizeAndPositionManager.getSizeAndPositionForIndex(5);
 			expect(itemSizeGetterCalls).toEqual([0, 1, 2, 3, 4, 5]);
 		});
 
 		it('should just-in-time measure items up to the requested item if some but not all items have been measured', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSizeGetterCalls,
-			      } = getItemSizeAndPositionManager();
+			const { sizeAndPositionManager, itemSizeGetterCalls } = getItemSizeAndPositionManager();
 			sizeAndPositionManager.getSizeAndPositionForIndex(5);
 			itemSizeGetterCalls.splice(0);
 			sizeAndPositionManager.getSizeAndPositionForIndex(10);
@@ -163,10 +142,7 @@ describe('SizeAndPositionManager', () => {
 		});
 
 		it('should return cached size and position data if item has already been measured', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSizeGetterCalls,
-			      } = getItemSizeAndPositionManager();
+			const { sizeAndPositionManager, itemSizeGetterCalls } = getItemSizeAndPositionManager();
 			sizeAndPositionManager.getSizeAndPositionForIndex(5);
 			itemSizeGetterCalls.splice(0);
 			sizeAndPositionManager.getSizeAndPositionForIndex(5);
@@ -177,84 +153,52 @@ describe('SizeAndPositionManager', () => {
 	describe('getSizeAndPositionForIndex when itemSize is a number', () => {
 		it('should error if an invalid index is specified', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManagerNumber();
-			expect(() =>
-				sizeAndPositionManager.getSizeAndPositionForIndex(-1),
-			).toThrow();
-			expect(() =>
-				sizeAndPositionManager.getSizeAndPositionForIndex(100),
-			).toThrow();
+			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(-1)).toThrow();
+			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(100)).toThrow();
 		});
 
 		it('should return the correct size and position information for the requested item', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSize,
-			      } = getItemSizeAndPositionManagerNumber();
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(0).offset,
-			).toEqual(0);
-			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).size).toEqual(
-				itemSize,
-			);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(1).offset,
-			).toEqual(itemSize);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(2).offset,
-			).toEqual(itemSize * 2);
+			const { sizeAndPositionManager, itemSize } = getItemSizeAndPositionManagerNumber();
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).offset).toEqual(0);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).size).toEqual(itemSize);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(1).offset).toEqual(itemSize);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(2).offset).toEqual(itemSize * 2);
 		});
 	});
 
 	describe('getSizeAndPositionForIndex when itemSize is an array', () => {
 		it('should error if an invalid index is specified', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManagerArray();
-			expect(() =>
-				sizeAndPositionManager.getSizeAndPositionForIndex(-1),
-			).toThrow();
-			expect(() =>
-				sizeAndPositionManager.getSizeAndPositionForIndex(100),
-			).toThrow();
+			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(-1)).toThrow();
+			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(100)).toThrow();
 		});
 
 		it('should return the correct size and position information for the requested item', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSize,
-			      } = getItemSizeAndPositionManagerArray();
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(0).offset,
-			).toEqual(0);
-			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).size).toEqual(
-				itemSize[0],
+			const { sizeAndPositionManager, itemSize } = getItemSizeAndPositionManagerArray();
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).offset).toEqual(0);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).size).toEqual(itemSize[0]);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(1).offset).toEqual(itemSize[0]);
+			expect(sizeAndPositionManager.getSizeAndPositionForIndex(2).offset).toEqual(
+				itemSize[0] + itemSize[1]
 			);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(1).offset,
-			).toEqual(itemSize[0]);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionForIndex(2).offset,
-			).toEqual(itemSize[0] + itemSize[1]);
 		});
 	});
 
 	describe('getSizeAndPositionOfLastMeasuredItem', () => {
 		it('should return an empty object if no cached items are present', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
-			expect(
-				sizeAndPositionManager.getSizeAndPositionOfLastMeasuredItem(),
-			).toEqual({
+			expect(sizeAndPositionManager.getSizeAndPositionOfLastMeasuredItem()).toEqual({
 				offset: 0,
-				size:   0,
+				size: 0
 			});
 		});
 
 		it('should return size and position data for the highest/last measured item', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
 			sizeAndPositionManager.getSizeAndPositionForIndex(5);
-			expect(
-				sizeAndPositionManager.getSizeAndPositionOfLastMeasuredItem(),
-			).toEqual({
+			expect(sizeAndPositionManager.getSizeAndPositionOfLastMeasuredItem()).toEqual({
 				offset: 50,
-				size:   10,
+				size: 10
 			});
 		});
 	});
@@ -280,26 +224,19 @@ describe('SizeAndPositionManager', () => {
 
 	describe('getTotalSize when itemSize is a number', () => {
 		it('should calculate total size by multiplying the itemCount with the itemSize', () => {
-			const {
-				      sizeAndPositionManager,
-				      totalSize,
-			      } = getItemSizeAndPositionManagerNumber();
+			const { sizeAndPositionManager, totalSize } = getItemSizeAndPositionManagerNumber();
 			expect(sizeAndPositionManager.getTotalSize()).toEqual(totalSize);
 		});
 	});
 
 	describe('getTotalSize when itemSize is an array', () => {
 		it('should calculate total size by counting together all of the itemSize items', () => {
-			const {
-				      sizeAndPositionManager,
-				      totalSize,
-			      } = getItemSizeAndPositionManagerArray();
+			const { sizeAndPositionManager, totalSize } = getItemSizeAndPositionManagerArray();
 			expect(sizeAndPositionManager.getTotalSize()).toEqual(totalSize);
 		});
 	});
 
 	describe('getUpdatedOffsetForIndex', () => {
-
 		/**
 		 * @param {'auto' | 'start' | 'center' | 'end'} align
 		 * @param {number} itemCount
@@ -311,25 +248,25 @@ describe('SizeAndPositionManager', () => {
 		 * @return {number}
 		 */
 		function getUpdatedOffsetForIndexHelper({
-			                                        align = ALIGNMENT.START,
-			                                        itemCount = 10,
-			                                        itemSize = ITEM_SIZE,
-			                                        containerSize = 50,
-			                                        currentOffset = 0,
-			                                        estimatedItemSize = 15,
-			                                        targetIndex = 0,
-		                                        }) {
+			align = ALIGNMENT.START,
+			itemCount = 10,
+			itemSize = ITEM_SIZE,
+			containerSize = 50,
+			currentOffset = 0,
+			estimatedItemSize = 15,
+			targetIndex = 0
+		}) {
 			const sizeAndPositionManager = new SizeAndPositionManager({
 				itemCount,
 				itemSize: () => itemSize,
-				estimatedItemSize,
+				estimatedItemSize
 			});
 
 			return sizeAndPositionManager.getUpdatedOffsetForIndex({
 				align,
 				containerSize,
 				currentOffset,
-				targetIndex,
+				targetIndex
 			});
 		}
 
@@ -337,8 +274,8 @@ describe('SizeAndPositionManager', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
 					currentOffset: 100,
-					targetIndex:   0,
-				}),
+					targetIndex: 0
+				})
 			).toEqual(0);
 		});
 
@@ -346,8 +283,8 @@ describe('SizeAndPositionManager', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
 					currentOffset: 0,
-					targetIndex:   9,
-				}),
+					targetIndex: 9
+				})
 			).toEqual(50);
 		});
 
@@ -357,8 +294,8 @@ describe('SizeAndPositionManager', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
 					currentOffset: 0,
-					targetIndex,
-				}),
+					targetIndex
+				})
 			).toEqual(ITEM_SIZE * targetIndex);
 		});
 
@@ -366,8 +303,8 @@ describe('SizeAndPositionManager', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
 					currentOffset: 50,
-					targetIndex:   2,
-				}),
+					targetIndex: 2
+				})
 			).toEqual(20);
 		});
 
@@ -378,56 +315,56 @@ describe('SizeAndPositionManager', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
 					currentOffset,
-					targetIndex,
-				}),
+					targetIndex
+				})
 			).toEqual(currentOffset);
 		});
 
 		it('should honor specified :align values', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.START,
+					align: ALIGNMENT.START,
 					currentOffset: 0,
-					targetIndex:   5,
-				}),
+					targetIndex: 5
+				})
 			).toEqual(50);
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.END,
+					align: ALIGNMENT.END,
 					currentOffset: 50,
-					targetIndex:   5,
-				}),
+					targetIndex: 5
+				})
 			).toEqual(10);
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.CENTER,
+					align: ALIGNMENT.CENTER,
 					currentOffset: 50,
-					targetIndex:   5,
-				}),
+					targetIndex: 5
+				})
 			).toEqual(30);
 		});
 
 		it('should not scroll past the safe bounds even if the specified :align requests it', () => {
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.END,
+					align: ALIGNMENT.END,
 					currentOffset: 50,
-					targetIndex:   0,
-				}),
+					targetIndex: 0
+				})
 			).toEqual(0);
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.CENTER,
+					align: ALIGNMENT.CENTER,
 					currentOffset: 50,
-					targetIndex:   1,
-				}),
+					targetIndex: 1
+				})
 			).toEqual(0);
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.START,
+					align: ALIGNMENT.START,
 					currentOffset: 0,
-					targetIndex:   9,
-				}),
+					targetIndex: 9
+				})
 			).toEqual(50);
 
 			// TRICKY: We would expect this to be positioned at 50.
@@ -436,10 +373,10 @@ describe('SizeAndPositionManager', () => {
 			// Not sure if this edge case is worth "fixing" or just acknowledging...
 			expect(
 				getUpdatedOffsetForIndexHelper({
-					align:         ALIGNMENT.CENTER,
+					align: ALIGNMENT.CENTER,
 					currentOffset: 0,
-					targetIndex:   8,
-				}),
+					targetIndex: 8
+				})
 			).toEqual(55);
 		});
 
@@ -448,8 +385,8 @@ describe('SizeAndPositionManager', () => {
 				getUpdatedOffsetForIndexHelper({
 					containerSize: 0,
 					currentOffset: 50,
-					targetIndex:   2,
-				}),
+					targetIndex: 2
+				})
 			).toEqual(0);
 		});
 	});
@@ -459,8 +396,8 @@ describe('SizeAndPositionManager', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager(0);
 			const { start, stop } = sizeAndPositionManager.getVisibleRange({
 				containerSize: 50,
-				offset:        0,
-				overscanCount: 0,
+				offset: 0,
+				overscanCount: 0
 			});
 			expect(start).toBeUndefined();
 			expect(stop).toBeUndefined();
@@ -470,8 +407,8 @@ describe('SizeAndPositionManager', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
 			const { start, stop } = sizeAndPositionManager.getVisibleRange({
 				containerSize: 50,
-				offset:        0,
-				overscanCount: 0,
+				offset: 0,
+				overscanCount: 0
 			});
 			expect(start).toEqual(0);
 			expect(stop).toEqual(4);
@@ -481,8 +418,8 @@ describe('SizeAndPositionManager', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
 			const { start, stop } = sizeAndPositionManager.getVisibleRange({
 				containerSize: 50,
-				offset:        425,
-				overscanCount: 0,
+				offset: 425,
+				overscanCount: 0
 			});
 			// 42 and 47 are partially visible
 			expect(start).toEqual(42);
@@ -493,8 +430,8 @@ describe('SizeAndPositionManager', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
 			const { start, stop } = sizeAndPositionManager.getVisibleRange({
 				containerSize: 50,
-				offset:        950,
-				overscanCount: 0,
+				offset: 950,
+				overscanCount: 0
 			});
 			expect(start).toEqual(95);
 			expect(stop).toEqual(99);
@@ -512,10 +449,7 @@ describe('SizeAndPositionManager', () => {
 		});
 
 		it('should not clear size and position metadata for items before the specified index', () => {
-			const {
-				      sizeAndPositionManager,
-				      itemSizeGetterCalls,
-			      } = getItemSizeAndPositionManager();
+			const { sizeAndPositionManager, itemSizeGetterCalls } = getItemSizeAndPositionManager();
 			sizeAndPositionManager.getSizeAndPositionForIndex(5);
 			itemSizeGetterCalls.splice(0);
 			sizeAndPositionManager.resetItem(3);

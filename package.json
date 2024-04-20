@@ -1,67 +1,77 @@
 {
-  "name": "svelte-tiny-virtual-list",
-  "version": "2.0.5",
-  "description": "A tiny but mighty list virtualization component for svelte, with zero dependencies 💪",
-  "svelte": "src/index.js",
-  "main": "dist/svelte-tiny-virtual-list.js",
-  "module": "dist/svelte-tiny-virtual-list.mjs",
-  "types": "types/index.d.ts",
-  "scripts": {
-    "build": "rollup -c",
-    "lint": "eslint src/** test/**",
-    "test": "jest test",
-    "test:watch": "npm run test -- --watch",
-    "prepublishOnly": "npm run build"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
-    "@rollup/plugin-node-resolve": "^11.0.0",
-    "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/svelte": "^3.0.0",
-    "eslint": "^7.15.0",
-    "eslint-plugin-svelte3": "^2.7.3",
-    "jest": "^26.6.3",
-    "rollup": "^2.34.2",
-    "rollup-plugin-svelte": "^7.0.0",
-    "svelte": "^3.31.0",
-    "svelte-jester": "^1.3.0"
-  },
-  "files": [
-    "src",
-    "dist",
-    "types"
-  ],
-  "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "svelte": "./src/index.js",
-      "default": "./dist/svelte-tiny-virtual-list.js"
-    }
-  },
-  "keywords": [
-    "svelte",
-    "virtual",
-    "list",
-    "scroll",
-    "infinite",
-    "loading",
-    "component",
-    "plugin",
-    "svelte-components"
-  ],
-  "author": {
-    "name": "Skayo",
-    "email": "contact@skayo.dev",
-    "url": "https://skayo.dev"
-  },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Skayo/svelte-tiny-virtual-list.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Skayo/svelte-tiny-virtual-list/issues"
-  },
-  "homepage": "https://github.com/Skayo/svelte-tiny-virtual-list"
+	"name": "svelte-tiny-virtual-list",
+	"version": "3.0.0-alpha.0",
+	"description": "A tiny but mighty list virtualization component for svelte, with zero dependencies 💪",
+	"homepage": "https://github.com/jonasgeiler/svelte-tiny-virtual-list#readme",
+	"bugs": "https://github.com/jonasgeiler/svelte-tiny-virtual-list/issues",
+	"license": "MIT",
+	"author": "Jonas Geiler <npm@jonasgeiler.com> (https://jonasgeiler.com)",
+	"repository": "github:jonasgeiler/svelte-tiny-virtual-list",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build && npm run package",
+		"preview": "vite preview",
+		"package": "svelte-kit sync && svelte-package && publint",
+		"prepublishOnly": "npm run package",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
+		"test": "npm run test:integration && npm run test:unit",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test:integration": "playwright test",
+		"test:unit": "vitest"
+	},
+	"peerDependencies": {
+		"svelte": "^4.0.0"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.28.1",
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/package": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/eslint": "^8.56.0",
+		"eslint": "^8.56.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.35.1",
+		"prettier": "^3.1.1",
+		"prettier-plugin-svelte": "^3.1.2",
+		"publint": "^0.1.9",
+		"svelte": "^4.2.7",
+		"svelte-check": "^3.6.0",
+		"svelte-infinite-loading": "^1.3.8",
+		"tslib": "^2.4.1",
+		"typescript": "^5.0.0",
+		"vite": "^5.0.11",
+		"vitest": "^1.2.0"
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"type": "module",
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "pnpm@9.0.4+sha256.caa915eaae9d9aefccf50ee8aeda25a2f8684d8f9d5c6e367eaf176d97c1f89e",
+	"keywords": [
+		"svelte",
+		"virtual",
+		"list",
+		"scroll",
+		"infinite",
+		"loading",
+		"component",
+		"plugin",
+		"svelte-components"
+	]
 }

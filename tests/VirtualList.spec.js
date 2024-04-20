@@ -10,7 +10,12 @@ test('renders successfully', () => {
 });
 
 test('scrollToIndexTest', () => {
-	const { container } = render(VirtualList, { height: 600, itemCount: 1000, itemSize: 50, scrollToIndex: 20 });
+	const { container } = render(VirtualList, {
+		height: 600,
+		itemCount: 1000,
+		itemSize: 50,
+		scrollToIndex: 20
+	});
 	expect(container).toBeInTheDocument();
 });
 

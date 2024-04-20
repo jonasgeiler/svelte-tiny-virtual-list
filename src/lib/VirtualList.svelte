@@ -13,12 +13,13 @@
 				get() {
 					result = { passive: true };
 					return true;
-				},
+				}
 			});
 
 			window.addEventListener('testpassive', arg, arg);
 			window.remove('testpassive', arg, arg);
-		} catch (e) { /* */
+		} catch (e) {
+			/* */
 		}
 
 		return result;
@@ -28,12 +29,7 @@
 <script>
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import SizeAndPositionManager from './SizeAndPositionManager';
-	import {
-		DIRECTION,
-		SCROLL_CHANGE_REASON,
-		SCROLL_PROP,
-		SCROLL_PROP_LEGACY,
-	} from './constants';
+	import { DIRECTION, SCROLL_CHANGE_REASON, SCROLL_PROP, SCROLL_PROP_LEGACY } from './constants';
 
 	export let height;
 	export let width = '100%';
@@ -57,7 +53,7 @@
 	const sizeAndPositionManager = new SizeAndPositionManager({
 		itemCount,
 		itemSize,
-		estimatedItemSize: getEstimatedItemSize(),
+		estimatedItemSize: getEstimatedItemSize()
 	});
 
 	let mounted = false;
@@ -65,8 +61,11 @@
 	let items = [];
 
 	let state = {
-		offset:             scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0,
-		scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED,
+		offset:
+			scrollOffset ||
+			(scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) ||
+			0,
+		scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
 	};
 
 	let prevState = state;
@@ -76,7 +75,7 @@
 		scrollOffset,
 		itemCount,
 		itemSize,
-		estimatedItemSize,
+		estimatedItemSize
 	};
 
 	let styleCache = {};
@@ -84,18 +83,24 @@
 	let innerStyle = '';
 
 	$: {
-		/* listen to updates: */ scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize;
+		// listen to updates:
+		scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize;
+		// on update:
 		propsUpdated();
 	}
 
 	$: {
-		/* listen to updates: */ state;
+		// listen to updates:
+		state;
+		// on update:
 		stateUpdated();
 	}
 
 	$: {
-		/* listen to updates: */ height, width, stickyIndices;
-		if (mounted) recomputeSizes(0); // call scroll.reset;
+		// listen to updates:
+		height, width, stickyIndices;
+		// on update:
+		if (mounted) recomputeSizes(0); // call scroll.reset
 	}
 
 	refresh(); // Initial Load
@@ -116,23 +121,22 @@
 		if (mounted) wrapper.removeEventListener('scroll', handleScroll);
 	});
 
-
 	function propsUpdated() {
 		if (!mounted) return;
 
 		const scrollPropsHaveChanged =
-			      prevProps.scrollToIndex !== scrollToIndex ||
-			      prevProps.scrollToAlignment !== scrollToAlignment;
+			prevProps.scrollToIndex !== scrollToIndex ||
+			prevProps.scrollToAlignment !== scrollToAlignment;
 		const itemPropsHaveChanged =
-			      prevProps.itemCount !== itemCount ||
-			      prevProps.itemSize !== itemSize ||
-			      prevProps.estimatedItemSize !== estimatedItemSize;
+			prevProps.itemCount !== itemCount ||
+			prevProps.itemSize !== itemSize ||
+			prevProps.estimatedItemSize !== estimatedItemSize;
 
 		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig({
 				itemSize,
 				itemCount,
-				estimatedItemSize: getEstimatedItemSize(),
+				estimatedItemSize: getEstimatedItemSize()
 			});
 
 			recomputeSizes();
@@ -140,21 +144,17 @@
 
 		if (prevProps.scrollOffset !== scrollOffset) {
 			state = {
-				offset:             scrollOffset || 0,
-				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED,
+				offset: scrollOffset || 0,
+				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
 			};
 		} else if (
 			typeof scrollToIndex === 'number' &&
 			(scrollPropsHaveChanged || itemPropsHaveChanged)
 		) {
 			state = {
-				offset: getOffsetForIndex(
-					scrollToIndex,
-					scrollToAlignment,
-					itemCount,
-				),
+				offset: getOffsetForIndex(scrollToIndex, scrollToAlignment, itemCount),
 
-				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED,
+				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
 			};
 		}
 
@@ -164,7 +164,7 @@
 			scrollOffset,
 			itemCount,
 			itemSize,
-			estimatedItemSize,
+			estimatedItemSize
 		};
 	}
 
@@ -173,10 +173,7 @@
 
 		const { offset, scrollChangeReason } = state;
 
-		if (
-			prevState.offset !== offset ||
-			prevState.scrollChangeReason !== scrollChangeReason
-		) {
+		if (prevState.offset !== offset || prevState.scrollChangeReason !== scrollChangeReason) {
 			refresh();
 		}
 
@@ -192,7 +189,7 @@
 		const { start, stop } = sizeAndPositionManager.getVisibleRange({
 			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
 			offset,
-			overscanCount,
+			overscanCount
 		});
 
 		let updatedItems = [];
@@ -214,7 +211,7 @@
 				const index = stickyIndices[i];
 				updatedItems.push({
 					index,
-					style: getStyle(index, true),
+					style: getStyle(index, true)
 				});
 			}
 		}
@@ -227,25 +224,24 @@
 
 				updatedItems.push({
 					index,
-					style: getStyle(index, false),
+					style: getStyle(index, false)
 				});
 			}
 
 			dispatchEvent('itemsUpdated', {
 				start,
-				end: stop,
+				end: stop
 			});
 		}
 
 		items = updatedItems;
 	}
 
-
 	function scrollTo(value) {
 		if ('scroll' in wrapper) {
 			wrapper.scroll({
 				[SCROLL_PROP[scrollDirection]]: value,
-				behavior:                       scrollToBehaviour,
+				behavior: scrollToBehaviour
 			});
 		} else {
 			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
@@ -267,7 +263,7 @@
 			align,
 			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
 			currentOffset: state.offset || 0,
-			targetIndex:   index,
+			targetIndex: index
 		});
 	}
 
@@ -278,12 +274,12 @@
 
 		state = {
 			offset,
-			scrollChangeReason: SCROLL_CHANGE_REASON.OBSERVED,
+			scrollChangeReason: SCROLL_CHANGE_REASON.OBSERVED
 		};
 
 		dispatchEvent('afterScroll', {
 			offset,
-			event,
+			event
 		});
 	}
 
@@ -292,11 +288,7 @@
 	}
 
 	function getEstimatedItemSize() {
-		return (
-			estimatedItemSize ||
-			(typeof itemSize === 'number' && itemSize) ||
-			50
-		);
+		return estimatedItemSize || (typeof itemSize === 'number' && itemSize) || 50;
 	}
 
 	function getStyle(index, sticky) {
@@ -324,7 +316,7 @@
 			}
 		}
 
-		return styleCache[index] = style;
+		return (styleCache[index] = style);
 	}
 </script>
 
@@ -342,14 +334,14 @@
 
 <style>
 	.virtual-list-wrapper {
-		overflow:                   auto;
-		will-change:                transform;
+		overflow: auto;
+		will-change: transform;
 		-webkit-overflow-scrolling: touch;
 	}
 
 	.virtual-list-inner {
-		position:   relative;
-		display:    flex;
-		width:      100%;
+		position: relative;
+		display: flex;
+		width: 100%;
 	}
 </style>
