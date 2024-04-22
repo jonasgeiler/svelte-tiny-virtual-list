@@ -52,6 +52,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Hacker News | svelte-tiny-virtual-list</title>
+</svelte:head>
+
 <header class="hacker-news-header">
 	<a target="_blank" href="https://news.ycombinator.com/">
 		<img src="https://news.ycombinator.com/y18.svg" alt="Logo" />
