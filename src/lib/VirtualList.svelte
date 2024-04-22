@@ -195,13 +195,13 @@
 		let updatedItems = [];
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
+		const heightUnit = typeof height === 'number' ? 'px' : '';
+		const widthUnit = typeof width === 'number' ? 'px' : '';
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			const unit = typeof height === 'number' ? 'px' : '';
-			wrapperStyle = `height:${height}${unit};width:${width};`;
+			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			const unit = typeof width === 'number' ? 'px' : '';
-			wrapperStyle = `height:${height};width:${width}${unit}`;
+			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
