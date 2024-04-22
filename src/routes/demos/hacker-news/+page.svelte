@@ -1,6 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 	import InfiniteLoading from 'svelte-infinite-loading';
+	import { base } from '$app/paths';
 
 	const api =
 		'https://hn.algolia.com/api/v1/search_by_date' +
@@ -32,6 +33,7 @@
 	}
 
 	const dateFormatter = new Intl.RelativeTimeFormat('en', { style: 'long' });
+
 	function formatCreatedAt(createdAt) {
 		const seconds = Math.floor((new Date() - new Date(createdAt)) / 1000);
 		if (seconds <= 60) {
@@ -56,128 +58,163 @@
 	<title>Hacker News | svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<header class="hacker-news-header">
-	<a target="_blank" href="https://news.ycombinator.com/">
-		<img src="https://news.ycombinator.com/y18.svg" alt="Logo" />
-		<span>Hacker News</span>
-	</a>
-</header>
+<div id="hacker-news-demo" class="demo-page flex-1 flex flex-column">
+	<header class="primary">
+		<nav>
+			<i class="border white-border" aria-hidden="true">
+				<img src="{base}/y18.svg" alt="Hacker News Logo" />
+			</i>
+			<h5>Hacker News</h5>
+		</nav>
+	</header>
 
-<div class="hacker-news-list" bind:offsetHeight={listHeight} style="height:100%">
-	<VirtualList height={listHeight} itemSize={42} itemCount={list.length}>
-		<div slot="item" let:index let:style {style} class="hacker-news-item" data-num={index + 1}>
-			<a
-				href={list[index].url || `https://news.ycombinator.com/item?id=${list[index].story_id}`}
-				target="_blank">{list[index].title}</a
-			>
-			{#if list[index].url}
-				<span>
-					(<a
-						href="https://news.ycombinator.com/from?site={formatSite(list[index].url)}"
-						target="_blank">{formatSite(list[index].url)}</a
-					>)</span
-				>
-			{/if}
-			<p>
-				{list[index].points} points by
-				<a href="https://news.ycombinator.com/user?id={list[index].author}" target="_blank"
-					>{list[index].author}</a
-				>
-				<a
-					title={list[index].created_at}
-					href="https://news.ycombinator.com/item?id={list[index].story_id}"
-					target="_blank">{formatCreatedAt(list[index].created_at)}</a
-				>
-				|
-				<a target="_blank" href="https://news.ycombinator.com/item?id={list[index].story_id}"
-					>{list[index].num_comments} comments</a
-				>
-			</p>
-		</div>
+	<div class="flex-1" bind:clientHeight={listHeight}>
+		<VirtualList height={listHeight} itemSize={90} itemCount={list.length}>
+			<div slot="item" let:index let:style {style}>
+				<article class="hacker-news-item margin" data-num={index + 1}>
+					<div class="truncate">
+						<a
+							class="inline link"
+							href={list[index].url ||
+								`https://news.ycombinator.com/item?id=${list[index].story_id}`}
+							target="_blank"
+						>
+							{list[index].title}
+						</a>
+						{#if list[index].url}
+							(<a
+								class="hacker-news-link"
+								href="https://news.ycombinator.com/from?site={formatSite(list[index].url)}"
+								target="_blank">{formatSite(list[index].url)}</a
+							>)
+						{/if}
+					</div>
+					<div class="truncate">
+						{list[index].points} points by
+						<a
+							class="hacker-news-link"
+							href="https://news.ycombinator.com/user?id={list[index].author}"
+							target="_blank">{list[index].author}</a
+						>
+						<a
+							class="hacker-news-link"
+							title={list[index].created_at}
+							href="https://news.ycombinator.com/item?id={list[index].story_id}"
+							target="_blank">{formatCreatedAt(list[index].created_at)}</a
+						>
+						|
+						<a
+							class="hacker-news-link"
+							target="_blank"
+							href="https://news.ycombinator.com/item?id={list[index].story_id}"
+							>{list[index].num_comments} comments</a
+						>
+					</div>
+				</article>
+			</div>
 
-		<div slot="footer">
-			<InfiniteLoading on:infinite={infiniteHandler} />
-		</div>
-	</VirtualList>
+			<div slot="footer">
+				<InfiniteLoading on:infinite={infiniteHandler} />
+			</div>
+		</VirtualList>
+	</div>
 </div>
 
 <style>
-	:global(html),
-	:global(body),
-	:global(#app) {
-		height: 100%;
+	:global(body) #hacker-news-demo {
+		--primary: #a33e00;
+		--on-primary: #ffffff;
+		--primary-container: #ffdbcd;
+		--on-primary-container: #360f00;
+		--secondary: #77574a;
+		--on-secondary: #ffffff;
+		--secondary-container: #ffdbcd;
+		--on-secondary-container: #2c160c;
+		--tertiary: #675f30;
+		--on-tertiary: #ffffff;
+		--tertiary-container: #efe3a9;
+		--on-tertiary-container: #201c00;
+		--error: #ba1a1a;
+		--on-error: #ffffff;
+		--error-container: #ffdad6;
+		--on-error-container: #410002;
+		--background: #fffbff;
+		--on-background: #201a18;
+		--surface: #fff8f6;
+		--on-surface: #201a18;
+		--surface-variant: #f5ded5;
+		--on-surface-variant: #53443d;
+		--outline: #85736c;
+		--outline-variant: #d8c2ba;
+		--shadow: #000000;
+		--scrim: #000000;
+		--inverse-surface: #362f2c;
+		--inverse-on-surface: #fbeeea;
+		--inverse-primary: #ffb596;
+		--surface-dim: #e4d7d3;
+		--surface-bright: #fff8f6;
+		--surface-container-lowest: #ffffff;
+		--surface-container-low: #fef1ec;
+		--surface-container: #f8ebe7;
+		--surface-container-high: #f2e5e1;
+		--surface-container-highest: #ede0db;
 	}
-	:global(body) {
-		font-family: Verdana, Geneva, sans-serif;
-		font-size: 14px;
-		padding: 28px 0 0 0;
-		background-color: #f6f6ef;
+
+	:global(body.dark) #hacker-news-demo {
+		--primary: #ffb596;
+		--on-primary: #581e00;
+		--primary-container: #7c2e00;
+		--on-primary-container: #ffdbcd;
+		--secondary: #e6bead;
+		--on-secondary: #442a1f;
+		--secondary-container: #5d4034;
+		--on-secondary-container: #ffdbcd;
+		--tertiary: #d2c78f;
+		--on-tertiary: #373106;
+		--tertiary-container: #4e471b;
+		--on-tertiary-container: #efe3a9;
+		--error: #ffb4ab;
+		--on-error: #690005;
+		--error-container: #93000a;
+		--on-error-container: #ffb4ab;
+		--background: #201a18;
+		--on-background: #ede0db;
+		--surface: #181210;
+		--on-surface: #ede0db;
+		--surface-variant: #53443d;
+		--on-surface-variant: #d8c2ba;
+		--outline: #a08d85;
+		--outline-variant: #53443d;
+		--shadow: #000000;
+		--scrim: #000000;
+		--inverse-surface: #ede0db;
+		--inverse-on-surface: #362f2c;
+		--inverse-primary: #a33e00;
+		--surface-dim: #181210;
+		--surface-bright: #3f3835;
+		--surface-container-lowest: #120d0b;
+		--surface-container-low: #201a18;
+		--surface-container: #251e1c;
+		--surface-container-high: #2f2926;
+		--surface-container-highest: #3a3330;
 	}
-	.hacker-news-list {
-		flex-grow: 1;
-	}
-	.hacker-news-list :global(.virtual-list-wrapper) {
-		overflow: visible;
-		overflow-x: hidden;
-		white-space: nowrap;
-	}
-	.hacker-news-header {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		padding: 4px 20px;
-		line-height: 14px;
-		background-color: #f60;
-	}
-	.hacker-news-header > a {
-		text-decoration: none;
-	}
-	.hacker-news-header > a > img {
-		border: 1px solid #fff;
-		vertical-align: middle;
-	}
-	.hacker-news-header > a > span {
-		font-weight: bold;
-		vertical-align: middle;
-		color: #fff;
-	}
+
 	.hacker-news-item {
-		padding: 10px 10px 10px 40px;
-		line-height: 16px;
-		font-size: 14px;
+		---padding: 0.5rem;
+		--number-width: 2.5rem;
+		padding-left: calc(var(---padding) + var(--number-width)) !important;
 	}
+
 	.hacker-news-item::before {
-		content: attr(data-num) '.';
+		content: attr(data-num) '. ';
+		margin-left: calc(-1 * var(--number-width));
+		width: calc(var(--number-width) - var(---padding));
+		color: var(--on-surface);
 		float: left;
-		margin-left: -40px;
-		width: 32px;
-		color: #888;
 		text-align: right;
 	}
-	.hacker-news-item > a {
-		color: #333;
-	}
-	.hacker-news-item > a:hover,
-	.hacker-news-item > a:active {
-		color: #000;
-	}
-	.hacker-news-item > a:visited {
-		color: #888;
-	}
-	.hacker-news-item > p {
-		margin: 0;
-		font-size: 12px;
-	}
-	.hacker-news-item > span,
-	.hacker-news-item > span > a,
-	.hacker-news-item > p,
-	.hacker-news-item > p > a {
-		color: #888;
-	}
-	.hacker-news-item > a:not(:hover):not(:active),
-	.hacker-news-item > span > a:not(:hover):not(:active),
-	.hacker-news-item > p > a:not(:hover):not(:active) {
-		text-decoration: none;
+
+	.hacker-news-link:hover {
+		text-decoration: underline;
 	}
 </style>

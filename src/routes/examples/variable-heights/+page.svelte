@@ -20,7 +20,7 @@
 	<title>Variable heights | svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<div class="example" id="variable-heights-example">
+<div id="variable-heights-example" class="example-page">
 	<h3>Variable heights</h3>
 
 	<button class="responsive margin" on:click={randomize}>
@@ -30,7 +30,7 @@
 
 	<article>
 		<VirtualList height={500} width="auto" itemCount={10000} itemSize={rowHeights}>
-			<div slot="item" let:index let:style {style} class="row">
+			<div slot="item" let:index let:style {style} class="virtual-list-row">
 				Item #{index}
 			</div>
 		</VirtualList>

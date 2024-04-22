@@ -25,7 +25,7 @@
 	<title>Scroll to index | svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<div class="example" id="scroll-to-index-example">
+<div id="scroll-to-index-example" class="example-page">
 	<h3>Scroll to index</h3>
 
 	<div class="field label border">
@@ -70,7 +70,7 @@
 				let:index
 				let:style
 				{style}
-				class="row"
+				class="virtual-list-row"
 				class:highlighted={index === scrollToIndex}
 			>
 				Item #{index}

@@ -2,19 +2,38 @@
 	import 'beercss';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
+
+	let darkMode = true;
+
+	function handleSwitchDarkMode() {
+		darkMode = !darkMode;
+
+		localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+
+		darkMode ? document.body.classList.add('dark') : document.body.classList.remove('dark');
+	}
+
+	if (browser) {
+		if (
+			localStorage.theme === 'dark' ||
+			(!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+		) {
+			document.body.classList.add('dark');
+			darkMode = true;
+		} else {
+			document.body.classList.remove('dark');
+			darkMode = false;
+		}
+	}
 </script>
 
 <nav class="left drawer">
 	<header class="fixed">
 		<nav>
-			<img
-				src="{base}/logo.svg"
-				srcset="{base}/logo.svg 2x"
-				aria-hidden="true"
-				alt="Logo"
-				height="24"
-				width="24"
-			/>
+			<i>
+				<img src="{base}/logo.svg" srcset="{base}/logo.svg 2x" aria-hidden="true" alt="Logo" />
+			</i>
 			<h6>svelte-tiny-virtual-list</h6>
 		</nav>
 	</header>
@@ -36,7 +55,6 @@
 	<a href="https://npmjs.com/package/svelte-tiny-virtual-list" target="_blank">
 		<i aria-hidden="true">
 			<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-				<title>npm</title>
 				<path
 					d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z"
 				/>
@@ -83,71 +101,17 @@
 		<i aria-hidden="true">newspaper</i>
 		<div>Hacker News</div>
 	</a>
+
+	<div class="max"></div>
+	<button class="circle border" on:click={handleSwitchDarkMode}>
+		<i aria-hidden="true">{darkMode ? 'light_mode' : 'dark_mode'}</i>
+	</button>
 </nav>
 
-<main id="content" class="responsive">
+<main id="content" class="responsive flex flex-column">
 	<slot />
 </main>
 
-<style>
-	:global(body) {
-		--primary: #ffb5a0 !important;
-		--on-primary: #5f1500 !important;
-		--primary-container: #862200 !important;
-		--on-primary-container: #ffdbd1 !important;
-		--secondary: #e7bdb2 !important;
-		--on-secondary: #442a22 !important;
-		--secondary-container: #5d4037 !important;
-		--on-secondary-container: #ffdbd1 !important;
-		--tertiary: #d8c58d !important;
-		--on-tertiary: #3b2f05 !important;
-		--tertiary-container: #534619 !important;
-		--on-tertiary-container: #f5e1a7 !important;
-		--error: #ffb4ab !important;
-		--on-error: #690005 !important;
-		--error-container: #93000a !important;
-		--on-error-container: #ffb4ab !important;
-		--background: #201a18 !important;
-		--on-background: #ede0dc !important;
-		--surface: #181210 !important;
-		--on-surface: #ede0dc !important;
-		--surface-variant: #53433f !important;
-		--on-surface-variant: #d8c2bc !important;
-		--outline: #a08c87 !important;
-		--outline-variant: #53433f !important;
-		--shadow: #000000 !important;
-		--scrim: #000000 !important;
-		--inverse-surface: #ede0dc !important;
-		--inverse-on-surface: #362f2d !important;
-		--inverse-primary: #b02f00 !important;
-		--surface-dim: #181210 !important;
-		--surface-bright: #3f3735 !important;
-		--surface-container-lowest: #120d0b !important;
-		--surface-container-low: #201a18 !important;
-		--surface-container: #251e1c !important;
-		--surface-container-high: #2f2827 !important;
-		--surface-container-highest: #3b3331 !important;
-	}
-
-	:global(#content > *) {
-		padding: 2rem;
-	}
-
-	:global(.range-field) {
-		margin-top: 1rem;
-		margin-bottom: 2rem;
-	}
-
-	:global(article .virtual-list-inner .row),
-	:global(article .virtual-list-inner .col) {
-		padding: 1rem;
-	}
-
-	:global(article .virtual-list-inner .row:not(:last-child)) {
-		border-bottom: 0.0625rem solid var(--outline);
-	}
-
-	:global(article .virtual-list-inner .col:not(:last-child)) {
-		border-right: 0.0625rem solid var(--outline);
-	}
+<style global>
+	@import '../app.css';
 </style>

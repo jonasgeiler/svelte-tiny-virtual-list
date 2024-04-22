@@ -19,7 +19,7 @@
 	<title>svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<div id="readme" class="markdown-body">
+<div id="readme" class="docs-page markdown-body">
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html readmeHtml}
 </div>

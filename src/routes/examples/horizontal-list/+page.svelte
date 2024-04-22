@@ -8,7 +8,7 @@
 	<title>Horizontal list | svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<div class="example" id="horizontal-list-example">
+<div id="horizontal-list-example" class="example-page">
 	<h3>Horizontal list</h3>
 
 	<article>
@@ -20,7 +20,7 @@
 				itemCount={100000}
 				itemSize={150}
 			>
-				<div slot="item" let:index let:style {style} class="col">
+				<div slot="item" let:index let:style {style} class="virtual-list-col">
 					Item #{index}
 				</div>
 			</VirtualList>

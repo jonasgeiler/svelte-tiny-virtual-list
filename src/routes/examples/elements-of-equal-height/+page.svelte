@@ -8,7 +8,7 @@
 	<title>Elements of equal height | svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<div class="example" id="elements-of-equal-height-example">
+<div id="elements-of-equal-height-example" class="example-page">
 	<h3>Elements of equal height</h3>
 
 	<div class="range-field">
@@ -21,7 +21,7 @@
 
 	<article>
 		<VirtualList height={500} width="auto" itemCount={100000} {itemSize}>
-			<div slot="item" let:index let:style {style} class="row">
+			<div slot="item" let:index let:style {style} class="virtual-list-row">
 				Item #{index}
 			</div>
 		</VirtualList>

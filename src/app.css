@@ -1,0 +1,132 @@
+body {
+	--primary: #b42900 !important;
+	--on-primary: #ffffff !important;
+	--primary-container: #ffdad2 !important;
+	--on-primary-container: #3c0700 !important;
+	--secondary: #77574f !important;
+	--on-secondary: #ffffff !important;
+	--secondary-container: #ffdad2 !important;
+	--on-secondary-container: #2c1510 !important;
+	--tertiary: #6d5d2e !important;
+	--on-tertiary: #ffffff !important;
+	--tertiary-container: #f7e1a6 !important;
+	--on-tertiary-container: #231a00 !important;
+	--error: #ba1a1a !important;
+	--on-error: #ffffff !important;
+	--error-container: #ffdad6 !important;
+	--on-error-container: #410002 !important;
+	--background: #fffbff !important;
+	--on-background: #201a19 !important;
+	--surface: #fff8f6 !important;
+	--on-surface: #201a19 !important;
+	--surface-variant: #f5ddd8 !important;
+	--on-surface-variant: #534340 !important;
+	--outline: #85736f !important;
+	--outline-variant: #d8c2bd !important;
+	--shadow: #000000 !important;
+	--scrim: #000000 !important;
+	--inverse-surface: #362f2d !important;
+	--inverse-on-surface: #fbeeeb !important;
+	--inverse-primary: #ffb4a2 !important;
+	--surface-dim: #e4d7d4 !important;
+	--surface-bright: #fff8f6 !important;
+	--surface-container-lowest: #ffffff !important;
+	--surface-container-low: #fef1ee !important;
+	--surface-container: #f8ebe8 !important;
+	--surface-container-high: #f3e5e2 !important;
+	--surface-container-highest: #ede0dd !important;
+}
+
+body.dark {
+	--primary: #ffb4a2 !important;
+	--on-primary: #611200 !important;
+	--primary-container: #891d00 !important;
+	--on-primary-container: #ffdad2 !important;
+	--secondary: #e7bdb3 !important;
+	--on-secondary: #442a23 !important;
+	--secondary-container: #5d4038 !important;
+	--on-secondary-container: #ffdad2 !important;
+	--tertiary: #dac58d !important;
+	--on-tertiary: #3c2f04 !important;
+	--tertiary-container: #544519 !important;
+	--on-tertiary-container: #f7e1a6 !important;
+	--error: #ffb4ab !important;
+	--on-error: #690005 !important;
+	--error-container: #93000a !important;
+	--on-error-container: #ffb4ab !important;
+	--background: #201a19 !important;
+	--on-background: #ede0dd !important;
+	--surface: #181211 !important;
+	--on-surface: #ede0dd !important;
+	--surface-variant: #534340 !important;
+	--on-surface-variant: #d8c2bd !important;
+	--outline: #a08c88 !important;
+	--outline-variant: #534340 !important;
+	--shadow: #000000 !important;
+	--scrim: #000000 !important;
+	--inverse-surface: #ede0dd !important;
+	--inverse-on-surface: #362f2d !important;
+	--inverse-primary: #b42900 !important;
+	--surface-dim: #181211 !important;
+	--surface-bright: #3f3736 !important;
+	--surface-container-lowest: #120d0c !important;
+	--surface-container-low: #201a19 !important;
+	--surface-container: #251e1d !important;
+	--surface-container-high: #2f2827 !important;
+	--surface-container-highest: #3b3331 !important;
+}
+
+/* Fix for elements inside <article> elements that inherit border radius */
+article * {
+	border-radius: 0;
+}
+
+/* Like field but for range inputs */
+.range-field {
+	margin-top: 1rem;
+	margin-bottom: 2rem;
+}
+
+/* Helper class to use inline display */
+.inline {
+	display: inline;
+}
+
+/* Helper class to use flex display */
+.flex {
+	display: flex;
+}
+
+/* Helper class to set flex direction to column */
+.flex-column {
+	flex-direction: column;
+}
+
+/* Helper class to make an element fill the available flex space */
+.flex-1 {
+	flex: 1;
+}
+
+/* Outer padding for some pages */
+.docs-page,
+.example-page {
+	padding: 2rem;
+}
+
+/* Center content of virtual list items on example pages */
+.example-page .virtual-list-row,
+.example-page .virtual-list-col {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Add bottom borders to virtual list rows on example pages */
+.example-page .virtual-list-row:not(:last-child) {
+	border-bottom: 0.0625rem solid var(--outline);
+}
+
+/* Add right borders to virtual list columns on example pages */
+.example-page .virtual-list-col:not(:last-child) {
+	border-right: 0.0625rem solid var(--outline);
+}

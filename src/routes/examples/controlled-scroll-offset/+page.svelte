@@ -22,7 +22,7 @@
 	<title>Controlled scroll offset | svelte-tiny-virtual-list</title>
 </svelte:head>
 
-<div class="example" id="controlled-scroll-offset-example">
+<div id="controlled-scroll-offset-example" class="example-page">
 	<h3>Controlled scroll offset</h3>
 
 	<div class="field label border">
@@ -38,7 +38,7 @@
 			itemSize={(index) => rowHeights[index]}
 			{scrollOffset}
 		>
-			<div slot="item" let:index let:style {style} class="row">
+			<div slot="item" let:index let:style {style} class="virtual-list-row">
 				Item #{index}
 			</div>
 		</VirtualList>
