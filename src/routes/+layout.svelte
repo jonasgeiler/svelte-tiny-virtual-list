@@ -43,8 +43,7 @@
 		<i aria-hidden="true">description</i>
 		<div>README</div>
 	</a>
-	<a href="https://github.com/jonasgeiler/svelte-tiny-virtual-list"
-		 target="_blank">
+	<a href="https://github.com/jonasgeiler/svelte-tiny-virtual-list" target="_blank">
 		<i aria-hidden="true">
 			<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 				<path
@@ -81,13 +80,11 @@
 		<i aria-hidden="true">view_day</i>
 		<div>Variable heights</div>
 	</a>
-	<a href="/examples/horizontal-list"
-		 class:active={$page.route.id === '/examples/horizontal-list'}>
+	<a href="/examples/horizontal-list" class:active={$page.route.id === '/examples/horizontal-list'}>
 		<i aria-hidden="true">view_week</i>
 		<div>Horizontal list</div>
 	</a>
-	<a href="/examples/scroll-to-index"
-		 class:active={$page.route.id === '/examples/scroll-to-index'}>
+	<a href="/examples/scroll-to-index" class:active={$page.route.id === '/examples/scroll-to-index'}>
 		<i aria-hidden="true">pin</i>
 		<div>Scroll to index</div>
 	</a>
@@ -101,8 +98,7 @@
 
 	<div class="small-divider"></div>
 	<label for="">Demos</label>
-	<a href="/demos/hacker-news"
-		 class:active={$page.route.id === '/demos/hacker-news'}>
+	<a href="/demos/hacker-news" class:active={$page.route.id === '/demos/hacker-news'}>
 		<i aria-hidden="true">newspaper</i>
 		<div>Hacker News</div>
 	</a>
@@ -114,7 +110,7 @@
 </nav>
 
 <nav class="top s m left-align">
-	<button class="circle transparent" on:click={() => mobileMenuOpen = true}>
+	<button class="circle transparent" on:click={() => (mobileMenuOpen = true)}>
 		<i aria-hidden="true">menu</i>
 	</button>
 	<i aria-hidden="true">
@@ -134,19 +130,18 @@
 			</i>
 			<h6 class="m">svelte-tiny-virtual-list</h6>
 			<div class="max"></div>
-			<button class="transparent circle" on:click={() => mobileMenuOpen = false}>
+			<button class="transparent circle" on:click={() => (mobileMenuOpen = false)}>
 				<i aria-hidden="true">close</i>
 			</button>
 		</nav>
 	</header>
 
 	<nav class="drawer no-padding no-margin">
-		<a href="/" class:active={$page.route.id === '/'} on:click={() => mobileMenuOpen = false}>
+		<a href="/" class:active={$page.route.id === '/'} on:click={() => (mobileMenuOpen = false)}>
 			<i aria-hidden="true">description</i>
 			<div>README</div>
 		</a>
-		<a href="https://github.com/jonasgeiler/svelte-tiny-virtual-list"
-			 target="_blank">
+		<a href="https://github.com/jonasgeiler/svelte-tiny-virtual-list" target="_blank">
 			<i aria-hidden="true">
 				<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 					<path
@@ -172,7 +167,7 @@
 		<a
 			href="/examples/elements-of-equal-height"
 			class:active={$page.route.id === '/examples/elements-of-equal-height'}
-			on:click={() => mobileMenuOpen = false}
+			on:click={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">view_headline</i>
 			<div>Elements of equal height</div>
@@ -180,23 +175,23 @@
 		<a
 			href="/examples/variable-heights"
 			class:active={$page.route.id === '/examples/variable-heights'}
-			on:click={() => mobileMenuOpen = false}
+			on:click={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">view_day</i>
 			<div>Variable heights</div>
 		</a>
 		<a
 			href="/examples/horizontal-list"
-			 class:active={$page.route.id === '/examples/horizontal-list'}
-			 on:click={() => mobileMenuOpen = false}
+			class:active={$page.route.id === '/examples/horizontal-list'}
+			on:click={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">view_week</i>
 			<div>Horizontal list</div>
 		</a>
 		<a
 			href="/examples/scroll-to-index"
-			 class:active={$page.route.id === '/examples/scroll-to-index'}
-			on:click={() => mobileMenuOpen = false}
+			class:active={$page.route.id === '/examples/scroll-to-index'}
+			on:click={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">pin</i>
 			<div>Scroll to index</div>
@@ -204,7 +199,7 @@
 		<a
 			href="/examples/controlled-scroll-offset"
 			class:active={$page.route.id === '/examples/controlled-scroll-offset'}
-			on:click={() => mobileMenuOpen = false}
+			on:click={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">unfold_more</i>
 			<div>Controlled scroll offset</div>
@@ -214,8 +209,8 @@
 		<label for="">Demos</label>
 		<a
 			href="/demos/hacker-news"
-			 class:active={$page.route.id === '/demos/hacker-news'}
-			 on:click={() => mobileMenuOpen = false}
+			class:active={$page.route.id === '/demos/hacker-news'}
+			on:click={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">newspaper</i>
 			<div>Hacker News</div>
