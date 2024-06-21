@@ -135,29 +135,20 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 | stickyIndices     | `number[]`                                        |           | An array of indexes (eg. `[0, 10, 25, 30]`) to make certain items in the list sticky (`position: sticky`)                                                                                                                                                                                                                                                                                                                             |
 | overscanCount     | `number`                                          |           | Number of extra buffer items to render above/below the visible items. Tweaking this can help reduce scroll flickering on certain browsers/devices.                                                                                                                                                                                                                                                                                    |
 | estimatedItemSize | `number`                                          |           | Used to estimate the total size of the list before all of its items have actually been measured. The estimated total height is progressively adjusted as items are rendered.                                                                                                                                                                                                                                                          |
-| getKey            | `(index: number) => any`                          |           | Function that returns the key of an item in the list, which is used to uniquely identify an item. This is useful for dynamic data coming from a database or similar. By default, it's using the item's index.                                                                                                                                                                                                                         |
+| getKey            | `(index: number) => any`                          |           | Function that returns the key of an item in the list, which is used to uniquely identify an item. This is useful for dynamic data coming from a database or similar. By default, it's using the item's index.           
+| onAfterScroll     | `({ event: ScrollEvent, offset: number }) => any`                          |           | Function that fires after handling the scroll event. Props: `event: ScrollEvent` - The original scroll event, `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
+| onListItemsUpdate | `({ start: number, end: number }) => any`                          |           | Function that fires when the visible items are updated. Props: `start: number` - Index of the first visible item, `end: number` - Index of the last visible item.                                                                                                                                                                                         |
 
 _\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly, `width` must be a number if `scrollDirection` is `'horizontal'`_
 
-### Slots
+### Snippets
 
-- `item` - Slot for each item
-  - Props:
+- `children` - Snippet for each item
+  - Prop: `{ index, style }`
     - `index: number` - Item index
-    - `style: string` - Item style, must be applied to the slot (look above for example)
-- `header` - Slot for the elements that should appear at the top of the list
-- `footer` - Slot for the elements that should appear at the bottom of the list (e.g. `InfiniteLoading` component from `svelte-infinite-loading`)
-
-### Events
-
-- `afterScroll` - Fired after handling the scroll event
-  - `detail` Props:
-    - `event: ScrollEvent` - The original scroll event
-    - `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
-- `itemsUpdated` - Fired when the visible items are updated
-  - `detail` Props:
-    - `start: number` - Index of the first visible item
-    - `end: number` - Index of the last visible item
+    - `style: string` - Item style, must be applied to the snippet (look above for example)
+- `header` - Snippet for the elements that should appear at the top of the list
+- `footer` - Snippet for the elements that should appear at the bottom of the list (e.g. `InfiniteLoading` component from `svelte-infinite-loading`)
 
 ### Methods
 
