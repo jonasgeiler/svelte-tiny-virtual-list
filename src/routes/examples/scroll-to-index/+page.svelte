@@ -2,11 +2,11 @@
 	import VirtualList from '$lib/VirtualList.svelte';
 
 	let virtualList;
-	let rowHeights = [];
+	let rowHeights = $state([]);
 
-	let scrollToIndex;
-	let scrollToAlignment = 'start';
-	let scrollToBehaviour = 'instant';
+	let scrollToIndex = $state();
+	let scrollToAlignment = $state('start');
+	let scrollToBehaviour = $state('instant');
 
 	randomize();
 
@@ -65,16 +65,15 @@
 			{scrollToAlignment}
 			{scrollToBehaviour}
 		>
-			<div
-				slot="item"
-				let:index
-				let:style
-				{style}
-				class="virtual-list-row"
-				class:highlighted={index === scrollToIndex}
-			>
-				Item #{index}
-			</div>
+			{#snippet children({ style, index })}
+				<div
+					{style}
+					class="virtual-list-row"
+					class:highlighted={index === scrollToIndex}
+				>
+					Item #{index}
+				</div>
+			{/snippet}
 		</VirtualList>
 	</article>
 
