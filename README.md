@@ -73,9 +73,11 @@ From CDN (via [unpkg](https://unpkg.com/)):
 </script>
 
 <VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-	<div slot="item" let:index let:style {style}>
-		Letter: {data[index]}, Row: #{index}
-	</div>
+	{#snippet children({ style, index })}
+		<div {style}>
+			Letter: {data[index]}, Row: #{index}
+		</div>
+	{/snippet}
 </VirtualList>
 ```
 
@@ -86,7 +88,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import InfiniteLoading from 'svelte-infinite-loading';
 
-	let data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
+	let data = $state(['A', 'B', 'C', 'D', 'E', 'F' /* ... */]);
 
 	function infiniteHandler({ detail: { complete, error } }) {
 		try {
@@ -103,13 +105,17 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 </script>
 
 <VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-	<div slot="item" let:index let:style {style}>
-		Letter: {data[index]}, Row: #{index}
-	</div>
+	{#snippet children({ style, index })}
+		<div {style}>
+			Letter: {data[index]}, Row: #{index}
+		</div>
+	{/snippet}
 
-	<div slot="footer">
-		<InfiniteLoading on:infinite={infiniteHandler} />
-	</div>
+	{#snippet footer()}
+		<div>
+			<InfiniteLoading on:infinite={infiniteHandler} />
+		</div>
+	{/snippet}
 </VirtualList>
 ```
 
@@ -185,9 +191,11 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 	itemCount={data.length}
 	itemSize={50}
 >
-	<div slot="item" let:index let:style {style}>
-		Letter: {data[index]}, Row: #{index}
-	</div>
+	{#snippet children({ style, index })}
+		<div {style}>
+			Letter: {data[index]}, Row: #{index}
+		</div>
+	{/snippet}
 </VirtualList>
 ```
 
@@ -204,9 +212,11 @@ You can style the elements of the virtual list like this:
 
 <div class="list">
 	<VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-		<div slot="item" let:index let:style {style}>
-			Letter: {data[index]}, Row: #{index}
-		</div>
+		{#snippet children({ style, index })}
+			<div {style}>
+				Letter: {data[index]}, Row: #{index}
+			</div>
+		{/snippet}
 	</VirtualList>
 </div>
 
