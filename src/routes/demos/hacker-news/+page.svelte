@@ -8,9 +8,9 @@
 		'?tags=story' +
 		`&numericFilters=created_at_i<=${Math.floor(Date.now() / 1000)}`;
 
-	let page = 1;
-	let listHeight = 0;
-	let list = [];
+	let page = $state(1);
+	let listHeight = $state(0);
+	let list = $state([]);
 
 	function infiniteHandler({ detail: { loaded, complete, error } }) {
 		fetch(`${api}&page=${page}`)
@@ -70,52 +70,57 @@
 
 	<div class="flex-1" bind:clientHeight={listHeight}>
 		<VirtualList height={listHeight} itemSize={90} itemCount={list.length}>
-			<div slot="item" let:index let:style {style}>
-				<article class="hacker-news-item margin" data-num={index + 1}>
-					<div class="truncate">
-						<a
-							class="inline link"
-							href={list[index].url ||
-								`https://news.ycombinator.com/item?id=${list[index].story_id}`}
-							target="_blank"
-						>
-							{list[index].title}
-						</a>
-						{#if list[index].url}
-							(<a
-								class="hacker-news-link"
-								href="https://news.ycombinator.com/from?site={formatSite(list[index].url)}"
-								target="_blank">{formatSite(list[index].url)}</a
-							>)
-						{/if}
-					</div>
-					<div class="truncate">
-						{list[index].points} points by
-						<a
-							class="hacker-news-link"
-							href="https://news.ycombinator.com/user?id={list[index].author}"
-							target="_blank">{list[index].author}</a
-						>
-						<a
-							class="hacker-news-link"
-							title={list[index].created_at}
-							href="https://news.ycombinator.com/item?id={list[index].story_id}"
-							target="_blank">{formatCreatedAt(list[index].created_at)}</a
-						>
-						|
-						<a
-							class="hacker-news-link"
-							target="_blank"
-							href="https://news.ycombinator.com/item?id={list[index].story_id}"
-							>{list[index].num_comments} comments</a
-						>
-					</div>
-				</article>
-			</div>
 
-			<div slot="footer">
-				<InfiniteLoading on:infinite={infiniteHandler} />
-			</div>
+			{#snippet children({ style, index })}
+				<div {style}>
+					<article class="hacker-news-item margin" data-num={index + 1}>
+						<div class="truncate">
+							<a
+								class="inline link"
+								href={list[index].url ||
+									`https://news.ycombinator.com/item?id=${list[index].story_id}`}
+								target="_blank"
+							>
+								{list[index].title}
+							</a>
+							{#if list[index].url}
+								(<a
+									class="hacker-news-link"
+									href="https://news.ycombinator.com/from?site={formatSite(list[index].url)}"
+									target="_blank">{formatSite(list[index].url)}</a
+								>)
+							{/if}
+						</div>
+						<div class="truncate">
+							{list[index].points} points by
+							<a
+								class="hacker-news-link"
+								href="https://news.ycombinator.com/user?id={list[index].author}"
+								target="_blank">{list[index].author}</a
+							>
+							<a
+								class="hacker-news-link"
+								title={list[index].created_at}
+								href="https://news.ycombinator.com/item?id={list[index].story_id}"
+								target="_blank">{formatCreatedAt(list[index].created_at)}</a
+							>
+							|
+							<a
+								class="hacker-news-link"
+								target="_blank"
+								href="https://news.ycombinator.com/item?id={list[index].story_id}"
+								>{list[index].num_comments} comments</a
+							>
+						</div>
+					</article>
+				</div>
+			{/snippet}
+
+			{#snippet footer()}
+				<div>
+					<InfiniteLoading on:infinite={infiniteHandler} />
+				</div>
+			{/snippet}
 		</VirtualList>
 	</div>
 </div>
