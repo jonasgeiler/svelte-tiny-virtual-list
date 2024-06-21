@@ -77,7 +77,7 @@ export class ListProps {
         if (typeof itemCount === "number")
             this.itemCount = itemCount;
 
-        if (typeof itemSize === "number")
+        if (typeof itemSize === "number" || typeof itemSize === "function" || Array.isArray(itemSize))
             this.itemSize = itemSize;
 
         if (typeof estimatedItemSize === "number")
