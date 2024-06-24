@@ -27,8 +27,8 @@ importers:
         specifier: 8.56.10
         version: 8.56.10
       beercss:
-        specifier: 3.5.6
-        version: 3.5.6
+        specifier: 3.5.8
+        version: 3.5.8
       eslint:
         specifier: 8.56.0
         version: 8.56.0
@@ -824,8 +824,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  beercss@3.5.6:
-    resolution: {integrity: sha512-yDOo8vsv0M+AH9YWy17n5lSWwj6dvzRk0QOFexUo+q4KfH+mLVtB4xsQ5mCbvU5mDOwztql7QzoXs783PpeY/w==}
+  beercss@3.5.8:
+    resolution: {integrity: sha512-NZEyV1IhvYXwvQ8JvkOJYe4iLh7YONpcTKhCEvn9DM8xHbAywfE/fpFxeDgkFuaU+rTlwNUxa6DY2feljKVI1g==}
 
   binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -1309,8 +1309,8 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  material-dynamic-colors@1.1.0:
-    resolution: {integrity: sha512-Uez8I/VykAc03u/07AJ7OOC59+9shllbEvnMDZdYcNI4qzhxPGJwAiOang2CudgkWx+lp0QT2Oc8DxxX8RHJkQ==}
+  material-dynamic-colors@1.1.2:
+    resolution: {integrity: sha512-8KD0jrPTFs2x06UJWbvkg6E0HyzFjrvS5oOc2DsXzIEOqZTbb3ruLMUhNuPSl8WeHA/O/RTAlTLcxqYXJzYwPA==}
     hasBin: true
 
   mdn-data@2.0.30:
@@ -2519,9 +2519,9 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  beercss@3.5.6:
+  beercss@3.5.8:
     dependencies:
-      material-dynamic-colors: 1.1.0
+      material-dynamic-colors: 1.1.2
 
   binary-extensions@2.2.0: {}
 
@@ -3079,7 +3079,7 @@ snapshots:
 
   marked@12.0.2: {}
 
-  material-dynamic-colors@1.1.0:
+  material-dynamic-colors@1.1.2:
     dependencies:
       '@material/material-color-utilities': 0.2.7
 
