@@ -30,14 +30,14 @@ importers:
         specifier: 3.5.8
         version: 3.5.8
       eslint:
-        specifier: 8.56.0
-        version: 8.56.0
+        specifier: 8.57.0
+        version: 8.57.0
       eslint-config-prettier:
         specifier: 9.1.0
-        version: 9.1.0(eslint@8.56.0)
+        version: 9.1.0(eslint@8.57.0)
       eslint-plugin-svelte:
         specifier: 2.35.1
-        version: 2.35.1(eslint@8.56.0)(svelte@4.2.18)
+        version: 2.35.1(eslint@8.57.0)(svelte@4.2.18)
       marked:
         specifier: 12.0.2
         version: 12.0.2
@@ -560,8 +560,8 @@ packages:
     resolution: {integrity: sha512-269Z39MS6wVJtsoUl10L60WdkhJVdPG24Q4eZTH3nnF6lpvSShEK3wQjDX9JRWAUPvPh7COouPpU9IrqaZFvtQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  '@eslint/js@8.56.0':
-    resolution: {integrity: sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==}
+  '@eslint/js@8.57.0':
+    resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
   '@fastify/busboy@2.1.1':
@@ -1008,8 +1008,8 @@ packages:
     resolution: {integrity: sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  eslint@8.56.0:
-    resolution: {integrity: sha512-Go19xM6T9puCOWntie1/P997aXxFsOi37JIHRWI514Hc6ZnaHGKY9xFhrU65RT6CcBEzZoGG1e6Nq+DT04ZtZQ==}
+  eslint@8.57.0:
+    resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     hasBin: true
 
@@ -2237,9 +2237,9 @@ snapshots:
   '@esbuild/win32-x64@0.20.2':
     optional: true
 
-  '@eslint-community/eslint-utils@4.4.0(eslint@8.56.0)':
+  '@eslint-community/eslint-utils@4.4.0(eslint@8.57.0)':
     dependencies:
-      eslint: 8.56.0
+      eslint: 8.57.0
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.10.0': {}
@@ -2258,7 +2258,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint/js@8.56.0': {}
+  '@eslint/js@8.57.0': {}
 
   '@fastify/busboy@2.1.1': {}
 
@@ -2728,21 +2728,21 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-compat-utils@0.1.2(eslint@8.56.0):
+  eslint-compat-utils@0.1.2(eslint@8.57.0):
     dependencies:
-      eslint: 8.56.0
+      eslint: 8.57.0
 
-  eslint-config-prettier@9.1.0(eslint@8.56.0):
+  eslint-config-prettier@9.1.0(eslint@8.57.0):
     dependencies:
-      eslint: 8.56.0
+      eslint: 8.57.0
 
-  eslint-plugin-svelte@2.35.1(eslint@8.56.0)(svelte@4.2.18):
+  eslint-plugin-svelte@2.35.1(eslint@8.57.0)(svelte@4.2.18):
     dependencies:
-      '@eslint-community/eslint-utils': 4.4.0(eslint@8.56.0)
+      '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.0)
       '@jridgewell/sourcemap-codec': 1.4.15
       debug: 4.3.4
-      eslint: 8.56.0
-      eslint-compat-utils: 0.1.2(eslint@8.56.0)
+      eslint: 8.57.0
+      eslint-compat-utils: 0.1.2(eslint@8.57.0)
       esutils: 2.0.3
       known-css-properties: 0.29.0
       postcss: 8.4.35
@@ -2764,12 +2764,12 @@ snapshots:
 
   eslint-visitor-keys@3.4.3: {}
 
-  eslint@8.56.0:
+  eslint@8.57.0:
     dependencies:
-      '@eslint-community/eslint-utils': 4.4.0(eslint@8.56.0)
+      '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.0)
       '@eslint-community/regexpp': 4.10.0
       '@eslint/eslintrc': 2.1.4
-      '@eslint/js': 8.56.0
+      '@eslint/js': 8.57.0
       '@humanwhocodes/config-array': 0.11.14
       '@humanwhocodes/module-importer': 1.0.1
       '@nodelib/fs.walk': 1.2.8
