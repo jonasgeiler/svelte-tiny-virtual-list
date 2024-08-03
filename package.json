@@ -22,32 +22,32 @@
 		"test:unit": "vitest"
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0-next.162"
+		"svelte": "^5.0.0-next.208"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.45.1",
-		"@sveltejs/adapter-cloudflare": "^4.6.1",
-		"@sveltejs/kit": "^2.5.18",
+		"@playwright/test": "^1.45.3",
+		"@sveltejs/adapter-cloudflare": "^4.7.0",
+		"@sveltejs/kit": "^2.5.20",
 		"@sveltejs/package": "2.3.2",
 		"@sveltejs/vite-plugin-svelte": "3.1.1",
-		"@types/eslint": "8.56.10",
-		"beercss": "^3.6.5",
-		"eslint": "^9.6.0",
+		"@types/eslint": "^9.6.0",
+		"beercss": "^3.6.12",
+		"eslint": "^9.8.0",
 		"eslint-config-prettier": "9.1.0",
-		"eslint-plugin-svelte": "^2.41.0",
-		"marked": "^13.0.2",
+		"eslint-plugin-svelte": "^2.43.0",
+		"marked": "^13.0.3",
 		"marked-base-url": "^1.1.4",
 		"marked-gfm-heading-id": "^4.0.0",
-		"prettier": "^3.3.2",
-		"prettier-plugin-svelte": "^3.2.5",
-		"publint": "^0.2.8",
+		"prettier": "^3.3.3",
+		"prettier-plugin-svelte": "^3.2.6",
+		"publint": "^0.2.9",
 		"svelte": "^5.0.0-next.162",
-		"svelte-check": "^3.8.4",
+		"svelte-check": "^3.8.5",
 		"svelte-infinite-loading": "^1.4.0",
 		"tslib": "2.6.3",
-		"typescript": "^5.5.3",
-		"vite": "^5.3.3",
-		"vitest": "^1.6.0"
+		"typescript": "^5.5.4",
+		"vite": "^5.3.5",
+		"vitest": "^2.0.5"
 	},
 	"files": [
 		"dist",
