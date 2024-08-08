@@ -54,8 +54,8 @@ importers:
         specifier: 3.2.6
         version: 3.2.6(prettier@3.3.3)(svelte@4.2.18)
       publint:
-        specifier: 0.1.16
-        version: 0.1.16
+        specifier: 0.2.9
+        version: 0.2.9
       svelte:
         specifier: 4.2.18
         version: 4.2.18
@@ -1555,8 +1555,8 @@ packages:
   printable-characters@1.0.42:
     resolution: {integrity: sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==}
 
-  publint@0.1.16:
-    resolution: {integrity: sha512-wJgk7HnXDT5Ap0DjFYbGz78kPkN44iQvDiaq8P63IEEyNU9mYXvaMd2cAyIM6OgqXM/IA3CK6XWIsRq+wjNpgw==}
+  publint@0.2.9:
+    resolution: {integrity: sha512-nITKS1NSwD68PQlts0ntryhxrWObep6P0CCycwi1lgXI+K7uKyacMYRRCQi7hTae8imkI3FCi0FlgnwLxjM8yA==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -3322,10 +3322,10 @@ snapshots:
 
   printable-characters@1.0.42: {}
 
-  publint@0.1.16:
+  publint@0.2.9:
     dependencies:
       npm-packlist: 5.1.3
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       sade: 1.8.1
 
   punycode@2.3.1: {}
@@ -3624,7 +3624,7 @@ snapshots:
       cac: 6.7.14
       debug: 4.3.4
       pathe: 1.1.2
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       vite: 5.1.7(@types/node@20.12.7)
     transitivePeerDependencies:
       - '@types/node'
