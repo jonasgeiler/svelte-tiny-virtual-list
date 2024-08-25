@@ -5,7 +5,7 @@ export class ListState {
     offset = $state(0);
     scrollChangeReason = $state("");
 
-    previous_state = $state.frozen({
+    previous_state = $state.raw({
         offset: 0,
         scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
     });

@@ -18,7 +18,7 @@
 		}
 
 		rowHeights = newRowHeights;
-	}
+	};
 </script>
 
 <svelte:head>
@@ -29,7 +29,7 @@
 	<h3>Scroll to index</h3>
 
 	<div class="field label border">
-		<input id="scroll-to-index" type="number" bind:value={scrollToIndex} />
+		<input id="scroll-to-index" type="number" bind:value={scrollToIndex}/>
 		<label for="scroll-to-index">Scroll to index...</label>
 	</div>
 
