@@ -1,5 +1,5 @@
 <script>
-	import { onMount, onDestroy, untrack } from 'svelte';
+	import { untrack } from 'svelte';
 	import SizeAndPositionManager from './SizeAndPositionManager.js';
 	import { DIRECTION, SCROLL_CHANGE_REASON, SCROLL_PROP, SCROLL_PROP_LEGACY } from './constants';
 	import { ListState } from './utils/listState.svelte.js';
@@ -29,7 +29,7 @@
 	} = $props();
 
 	let wrapper = $state();
-	let items = $state.frozen([]);
+	let items = $state.raw([]);
 
 	const _state = new ListState(scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0);
 

@@ -11,7 +11,7 @@ export class ListProps {
     stickyIndices = $state([]);
 
     // Default values
-    previous_state = $state.frozen({
+    previous_state = $state.raw({
         scrollToIndex: -1,
         scrollToAlignment: "start",
         scrollOffset: 0,
