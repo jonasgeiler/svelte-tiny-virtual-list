@@ -22,7 +22,7 @@
 		"test:unit": "vitest"
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0-next.208"
+		"svelte": "^5.0.0-next.257"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.47.2",
