@@ -32,7 +32,7 @@
 		"@sveltejs/vite-plugin-svelte": "3.1.2",
 		"@types/eslint": "8.56.12",
 		"beercss": "3.6.13",
-		"eslint": "8.57.0",
+		"eslint": "8.57.1",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-svelte": "2.43.0",
 		"marked": "12.0.2",
