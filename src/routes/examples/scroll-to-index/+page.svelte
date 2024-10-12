@@ -2,23 +2,24 @@
 	import VirtualList from '$lib/VirtualList.svelte';
 
 	let virtualList;
-	let rowHeights = $state([]);
+	let rowHeights = $state.raw([]);
 
 	let scrollToIndex = $state();
 	let scrollToAlignment = $state('start');
 	let scrollToBehaviour = $state('instant');
 
-	randomize();
+	const NUM_ROWS = 10000;
 
 	function randomize() {
-		let newRowHeights = [];
+		const newRowHeights = [];
 
-		for (let i = 0; i < 10000; i++) {
+		for (let i = 0; i < NUM_ROWS; i++)
 			newRowHeights.push(Math.random() * (155 - 50) + 50);
-		}
 
 		rowHeights = newRowHeights;
 	};
+
+	randomize();
 </script>
 
 <svelte:head>

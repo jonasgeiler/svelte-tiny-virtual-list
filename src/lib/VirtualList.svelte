@@ -28,10 +28,13 @@
 		children
 	} = $props();
 
-	let wrapper = $state();
-	let items = $state.raw([]);
+	let wrapper = $state.raw();
 
-	const _state = new ListState(scrollOffset || (scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) || 0);
+	let styleCache = $state({});
+	let wrapperStyle = $state.raw('');
+	let innerStyle = $state.raw('');
+
+	let items = $state.raw([]);
 
 	const _props = new ListProps(
 		scrollToIndex,
@@ -45,9 +48,7 @@
 		stickyIndices
 	);
 
-	let styleCache = $state({});
-	let wrapperStyle = $state('');
-	let innerStyle = $state('');
+	const _state = new ListState(scrollOffset || 0);
 
 	const sizeAndPositionManager = new SizeAndPositionManager({
 		itemCount,
@@ -63,52 +64,44 @@
 		};
 	});
 
-	// Effect 1: Updates props from user provided vars
+	// Effect 1: Update props from user provided props
 	$effect(() => {
 		_props.listen(scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize, height, width, stickyIndices);
 
 		untrack(() => {
+			let doRecomputeSizes = false;
+
 			if (_props.haveSizesChanged) {
 				sizeAndPositionManager.updateConfig({
 					itemSize,
 					itemCount,
 					estimatedItemSize: _props.estimatedItemSize
 				});
-				recomputeSizes();
+				doRecomputeSizes = true;
 			}
-
 			
-			if (_props.hasScrollOffsetChanged) {
+			if (_props.hasScrollOffsetChanged)
 				_state.listen(_props.scrollOffset, SCROLL_CHANGE_REASON.REQUESTED);
-			} else if (_props.hasScrollIndexChanged) {
-				_state.listen(getOffsetForIndex(scrollToIndex, scrollToAlignment, itemCount), SCROLL_CHANGE_REASON.REQUESTED);
-			}
+			else if (_props.hasScrollIndexChanged)
+				_state.listen(getOffsetForIndex(scrollToIndex, scrollToAlignment), SCROLL_CHANGE_REASON.REQUESTED);
 
-			if (_props.haveDimsOrStickyIndicesChanged) {
-				recomputeSizes(0);
-			}
+			if (_props.haveDimsOrStickyIndicesChanged || doRecomputeSizes)
+				recomputeSizes();
 
 			_props.update();
 		});
 	});
 
-	// Effect 2: Update state offset from props scrollOffset
-	$effect(() => {
-		_state.listen(_props.scrollOffset);
-	})
-
-	// Effect 3: Update UI from state
+	// Effect 2: Update UI from state
 	$effect(() => {
 		_state.offset;
 		
 		untrack(() => {
-			if (_state.doRefresh) {
+			if (_state.doRefresh)
 				refresh();
-			}
 
-			if (_state.doScrollToOffset) {
+			if (_state.doScrollToOffset)
 				scrollTo(_state.offset);
-			}
 
 			_state.update();
 		});
@@ -121,11 +114,12 @@
 			overscanCount
 		});
 
-		const updatedItems = [];
+		const visibleItems = [];
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		const heightUnit = typeof height === 'number' ? 'px' : '';
 		const widthUnit = typeof width === 'number' ? 'px' : '';
+		
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
@@ -134,11 +128,11 @@
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
-		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
+		const hasStickyIndices = Array.isArray(stickyIndices) && stickyIndices.length > 0;
 		if (hasStickyIndices) {
 			for (let i = 0; i < stickyIndices.length; i++) {
 				const index = stickyIndices[i];
-				updatedItems.push({
+				visibleItems.push({
 					index,
 					style: getStyle(index, true)
 				});
@@ -147,11 +141,10 @@
 
 		if (start !== undefined && stop !== undefined) {
 			for (let index = start; index <= stop; index++) {
-				if (hasStickyIndices && stickyIndices.includes(index)) {
+				if (hasStickyIndices && stickyIndices.includes(index))
 					continue;
-				}
 
-				updatedItems.push({
+				visibleItems.push({
 					index,
 					style: getStyle(index, false)
 				});
@@ -160,30 +153,29 @@
 			onListItemsUpdate({ start, end: stop });
 		}
 
-		items = updatedItems;
+		items = visibleItems;
 	};
 
 	const scrollTo = (value) => {
-		if ('scroll' in wrapper) {
+		if ('scroll' in wrapper)
 			wrapper.scroll({
 				[SCROLL_PROP[scrollDirection]]: value,
 				behavior: scrollToBehaviour
 			});
-		} else {
+		else
 			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
-		}
 	};
 
-	export const recomputeSizes = (startIndex = 0) => {
+	export const recomputeSizes = (startIndex = scrollToIndex) => {
 		styleCache = {};
-		sizeAndPositionManager.resetItem(startIndex);
+		if (startIndex >= 0)
+			sizeAndPositionManager.resetItem(startIndex);
 		refresh();
 	};
 
-	const getOffsetForIndex = (index, align = scrollToAlignment, _itemCount = itemCount) => {
-		if (index < 0 || index >= _itemCount) {
+	const getOffsetForIndex = (index, align = scrollToAlignment) => {
+		if (index < 0 || index >= itemCount)
 			index = 0;
-		}
 
 		return sizeAndPositionManager.getUpdatedOffsetForIndex({
 			align,
@@ -219,22 +211,22 @@
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			style = `left:0;width:100%;height:${size}px;`;
 
-			if (sticky) {
+			if (sticky)
 				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
-			} else {
+			else
 				style += `position:absolute;top:${offset}px;`;
-			}
 		} else {
 			style = `top:0;width:${size}px;`;
 
-			if (sticky) {
+			if (sticky)
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
-			} else {
+			else
 				style += `position:absolute;height:100%;left:${offset}px;`;
-			}
 		}
 
-		return (styleCache[index] = style);
+		styleCache[index] = style;
+
+		return styleCache[index];
 	};
 </script>
 

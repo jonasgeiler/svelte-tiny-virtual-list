@@ -24,7 +24,7 @@ export class ListState {
     };
 
     listen (offset, scrollChangeReason) {
-        if (typeof offset === "number")
+        if (typeof offset === "number" && offset >= 0)
             this.offset = offset;
 
         if (typeof scrollChangeReason === "string")
