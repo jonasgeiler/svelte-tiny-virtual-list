@@ -1,202 +1,125 @@
-<svelte:options accessors />
-
-<script context="module">
-	/**
-	 * the third argument for event bundler
-	 * @see https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
-	 */
-	const thirdEventArg = (() => {
-		let result = false;
-
-		try {
-			const arg = Object.defineProperty({}, 'passive', {
-				get() {
-					result = { passive: true };
-					return true;
-				}
-			});
-
-			window.addEventListener('testpassive', arg, arg);
-			window.remove('testpassive', arg, arg);
-		} catch (e) {
-			/* */
-		}
-
-		return result;
-	})();
-</script>
-
 <script>
-	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-	import SizeAndPositionManager from './SizeAndPositionManager';
+	import { untrack } from 'svelte';
+	import SizeAndPositionManager from './SizeAndPositionManager.js';
 	import { DIRECTION, SCROLL_CHANGE_REASON, SCROLL_PROP, SCROLL_PROP_LEGACY } from './constants';
+	import { ListState } from './utils/listState.svelte.js';
+	import { ListProps } from './utils/listProps.svelte.js';
 
-	export let height;
-	export let width = '100%';
+	let {
+		height = '100%',
+		width = '100%',
+		itemCount = 0,
+		itemSize = 0,
+		estimatedItemSize = 0,
+		stickyIndices = [],
+		getKey = null,
+		scrollDirection = DIRECTION.VERTICAL,
+		scrollOffset = 0,
+		scrollToIndex = -1,
+		scrollToAlignment = 'start',
+		scrollToBehaviour = 'instant',
+		overscanCount = 3,
 
-	export let itemCount;
-	export let itemSize;
-	export let estimatedItemSize = null;
-	export let stickyIndices = null;
-	export let getKey = null;
+		onListItemsUpdate = () => null,
+		onAfterScroll = () => null,
 
-	export let scrollDirection = DIRECTION.VERTICAL;
-	export let scrollOffset = null;
-	export let scrollToIndex = null;
-	export let scrollToAlignment = null;
-	export let scrollToBehaviour = 'instant';
+		header,
+		footer,
+		children
+	} = $props();
 
-	export let overscanCount = 3;
+	let wrapper = $state.raw();
 
-	const dispatchEvent = createEventDispatcher();
+	let styleCache = $state({});
+	let wrapperStyle = $state.raw('');
+	let innerStyle = $state.raw('');
 
-	const sizeAndPositionManager = new SizeAndPositionManager({
-		itemCount,
-		itemSize,
-		estimatedItemSize: getEstimatedItemSize()
-	});
+	let items = $state.raw([]);
 
-	let mounted = false;
-	let wrapper;
-	let items = [];
-
-	let state = {
-		offset:
-			scrollOffset ||
-			(scrollToIndex != null && items.length && getOffsetForIndex(scrollToIndex)) ||
-			0,
-		scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
-	};
-
-	let prevState = state;
-	let prevProps = {
+	const _props = new ListProps(
 		scrollToIndex,
 		scrollToAlignment,
 		scrollOffset,
 		itemCount,
 		itemSize,
-		estimatedItemSize
-	};
+		estimatedItemSize,
+		height,
+		width,
+		stickyIndices
+	);
 
-	let styleCache = {};
-	let wrapperStyle = '';
-	let innerStyle = '';
+	const _state = new ListState(scrollOffset || 0);
 
-	$: {
-		// listen to updates:
-		scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize;
-		// on update:
-		propsUpdated();
-	}
-
-	$: {
-		// listen to updates:
-		state;
-		// on update:
-		stateUpdated();
-	}
-
-	$: {
-		// listen to updates:
-		height, width, stickyIndices;
-		// on update:
-		if (mounted) recomputeSizes(0); // call scroll.reset
-	}
-
-	refresh(); // Initial Load
-
-	onMount(() => {
-		mounted = true;
-
-		wrapper.addEventListener('scroll', handleScroll, thirdEventArg);
-
-		if (scrollOffset != null) {
-			scrollTo(scrollOffset);
-		} else if (scrollToIndex != null) {
-			scrollTo(getOffsetForIndex(scrollToIndex));
-		}
+	const sizeAndPositionManager = new SizeAndPositionManager({
+		itemCount,
+		itemSize,
+		estimatedItemSize: _props.estimatedItemSize
 	});
 
-	onDestroy(() => {
-		if (mounted) wrapper.removeEventListener('scroll', handleScroll);
-	});
-
-	function propsUpdated() {
-		if (!mounted) return;
-
-		const scrollPropsHaveChanged =
-			prevProps.scrollToIndex !== scrollToIndex ||
-			prevProps.scrollToAlignment !== scrollToAlignment;
-		const itemPropsHaveChanged =
-			prevProps.itemCount !== itemCount ||
-			prevProps.itemSize !== itemSize ||
-			prevProps.estimatedItemSize !== estimatedItemSize;
-
-		if (itemPropsHaveChanged) {
-			sizeAndPositionManager.updateConfig({
-				itemSize,
-				itemCount,
-				estimatedItemSize: getEstimatedItemSize()
-			});
-
-			recomputeSizes();
-		}
-
-		if (prevProps.scrollOffset !== scrollOffset) {
-			state = {
-				offset: scrollOffset || 0,
-				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
-			};
-		} else if (
-			typeof scrollToIndex === 'number' &&
-			(scrollPropsHaveChanged || itemPropsHaveChanged)
-		) {
-			state = {
-				offset: getOffsetForIndex(scrollToIndex, scrollToAlignment, itemCount),
-
-				scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
-			};
-		}
-
-		prevProps = {
-			scrollToIndex,
-			scrollToAlignment,
-			scrollOffset,
-			itemCount,
-			itemSize,
-			estimatedItemSize
+	// Effect 0: Event listener
+	$effect(() => {
+		wrapper.addEventListener('scroll', handleScroll, { passive: true });
+		return () => {
+			wrapper.removeEventListener('scroll', handleScroll);
 		};
-	}
+	});
 
-	function stateUpdated() {
-		if (!mounted) return;
+	// Effect 1: Update props from user provided props
+	$effect(() => {
+		_props.listen(scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize, height, width, stickyIndices);
 
-		const { offset, scrollChangeReason } = state;
+		untrack(() => {
+			let doRecomputeSizes = false;
 
-		if (prevState.offset !== offset || prevState.scrollChangeReason !== scrollChangeReason) {
-			refresh();
-		}
+			if (_props.haveSizesChanged) {
+				sizeAndPositionManager.updateConfig({
+					itemSize,
+					itemCount,
+					estimatedItemSize: _props.estimatedItemSize
+				});
+				doRecomputeSizes = true;
+			}
+			
+			if (_props.hasScrollOffsetChanged)
+				_state.listen(_props.scrollOffset, SCROLL_CHANGE_REASON.REQUESTED);
+			else if (_props.hasScrollIndexChanged)
+				_state.listen(getOffsetForIndex(scrollToIndex, scrollToAlignment), SCROLL_CHANGE_REASON.REQUESTED);
 
-		if (prevState.offset !== offset && scrollChangeReason === SCROLL_CHANGE_REASON.REQUESTED) {
-			scrollTo(offset);
-		}
+			if (_props.haveDimsOrStickyIndicesChanged || doRecomputeSizes)
+				recomputeSizes();
 
-		prevState = state;
-	}
+			_props.update();
+		});
+	});
 
-	function refresh() {
-		const { offset } = state;
+	// Effect 2: Update UI from state
+	$effect(() => {
+		_state.offset;
+		
+		untrack(() => {
+			if (_state.doRefresh)
+				refresh();
+
+			if (_state.doScrollToOffset)
+				scrollTo(_state.offset);
+
+			_state.update();
+		});
+	});
+
+	const refresh = () => {
 		const { start, stop } = sizeAndPositionManager.getVisibleRange({
 			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
-			offset,
+			offset: _state.offset,
 			overscanCount
 		});
 
-		let updatedItems = [];
+		const visibleItems = [];
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		const heightUnit = typeof height === 'number' ? 'px' : '';
 		const widthUnit = typeof width === 'number' ? 'px' : '';
+		
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
@@ -205,11 +128,11 @@
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
-		const hasStickyIndices = stickyIndices != null && stickyIndices.length !== 0;
+		const hasStickyIndices = Array.isArray(stickyIndices) && stickyIndices.length > 0;
 		if (hasStickyIndices) {
 			for (let i = 0; i < stickyIndices.length; i++) {
 				const index = stickyIndices[i];
-				updatedItems.push({
+				visibleItems.push({
 					index,
 					style: getStyle(index, true)
 				});
@@ -218,81 +141,68 @@
 
 		if (start !== undefined && stop !== undefined) {
 			for (let index = start; index <= stop; index++) {
-				if (hasStickyIndices && stickyIndices.includes(index)) {
+				if (hasStickyIndices && stickyIndices.includes(index))
 					continue;
-				}
 
-				updatedItems.push({
+				visibleItems.push({
 					index,
 					style: getStyle(index, false)
 				});
 			}
 
-			dispatchEvent('itemsUpdated', {
-				start,
-				end: stop
-			});
+			onListItemsUpdate({ start, end: stop });
 		}
 
-		items = updatedItems;
-	}
+		items = visibleItems;
+	};
 
-	function scrollTo(value) {
-		if ('scroll' in wrapper) {
+	const scrollTo = (value) => {
+		if ('scroll' in wrapper)
 			wrapper.scroll({
 				[SCROLL_PROP[scrollDirection]]: value,
 				behavior: scrollToBehaviour
 			});
-		} else {
+		else
 			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
-		}
-	}
+	};
 
-	export function recomputeSizes(startIndex = 0) {
+	export const recomputeSizes = (startIndex = scrollToIndex) => {
 		styleCache = {};
-		sizeAndPositionManager.resetItem(startIndex);
+		if (startIndex >= 0)
+			sizeAndPositionManager.resetItem(startIndex);
 		refresh();
-	}
+	};
 
-	function getOffsetForIndex(index, align = scrollToAlignment, _itemCount = itemCount) {
-		if (index < 0 || index >= _itemCount) {
+	const getOffsetForIndex = (index, align = scrollToAlignment) => {
+		if (index < 0 || index >= itemCount)
 			index = 0;
-		}
 
 		return sizeAndPositionManager.getUpdatedOffsetForIndex({
 			align,
 			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
-			currentOffset: state.offset || 0,
+			currentOffset: _state.offset || 0,
 			targetIndex: index
 		});
-	}
+	};
 
-	function handleScroll(event) {
+	const handleScroll = (event) => {
 		const offset = getWrapperOffset();
 
-		if (offset < 0 || state.offset === offset || event.target !== wrapper) return;
+		if (offset < 0 || _state.offset === offset || event.target !== wrapper)
+			return null;
 
-		state = {
-			offset,
-			scrollChangeReason: SCROLL_CHANGE_REASON.OBSERVED
-		};
+		_state.listen(offset, SCROLL_CHANGE_REASON.OBSERVED);
 
-		dispatchEvent('afterScroll', {
-			offset,
-			event
-		});
-	}
+		onAfterScroll({ offset, event});
+	};
 
-	function getWrapperOffset() {
+	const getWrapperOffset = () => {
 		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
-	}
+	};
 
-	function getEstimatedItemSize() {
-		return estimatedItemSize || (typeof itemSize === 'number' && itemSize) || 50;
-	}
-
-	function getStyle(index, sticky) {
-		if (styleCache[index]) return styleCache[index];
+	const getStyle = (index, sticky) => {
+		if (styleCache[index])
+			return styleCache[index];
 
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
@@ -301,35 +211,48 @@
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			style = `left:0;width:100%;height:${size}px;`;
 
-			if (sticky) {
+			if (sticky)
 				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
-			} else {
+			else
 				style += `position:absolute;top:${offset}px;`;
-			}
 		} else {
 			style = `top:0;width:${size}px;`;
 
-			if (sticky) {
+			if (sticky)
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
-			} else {
+			else
 				style += `position:absolute;height:100%;left:${offset}px;`;
-			}
 		}
 
-		return (styleCache[index] = style);
-	}
+		styleCache[index] = style;
+
+		return styleCache[index];
+	};
 </script>
 
-<div bind:this={wrapper} class="virtual-list-wrapper" style={wrapperStyle}>
-	<slot name="header" />
+<div
+	bind:this={wrapper}
+	class="virtual-list-wrapper"
+	style={wrapperStyle}
+>
+	{#if header}
+		{@render header()}
+	{/if}
 
-	<div class="virtual-list-inner" style={innerStyle}>
-		{#each items as item (getKey ? getKey(item.index) : item.index)}
-			<slot name="item" style={item.style} index={item.index} />
-		{/each}
-	</div>
+	{#if children}
+		<div
+			class="virtual-list-inner"
+			style={innerStyle}
+		>
+			{#each items as item (getKey ? getKey(item.index) : item.index)}
+				{@render children({ style: item.style, index: item.index })}
+			{/each}
+		</div>
+	{/if}
 
-	<slot name="footer" />
+	{#if footer}
+		{@render footer()}
+	{/if}
 </div>
 
 <style>
