@@ -28,7 +28,7 @@
 		"@playwright/test": "1.47.2",
 		"@sveltejs/adapter-cloudflare": "4.7.3",
 		"@sveltejs/kit": "2.5.28",
-		"@sveltejs/package": "2.3.5",
+		"@sveltejs/package": "2.3.7",
 		"@sveltejs/vite-plugin-svelte": "3.1.2",
 		"@types/eslint": "8.56.12",
 		"beercss": "3.6.13",
