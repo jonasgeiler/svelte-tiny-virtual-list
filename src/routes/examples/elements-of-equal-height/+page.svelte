@@ -20,10 +20,17 @@
 	</div>
 
 	<article>
-		<VirtualList height={500} width="auto" itemCount={100000} {itemSize}>
-			<div slot="item" let:index let:style {style} class="virtual-list-row">
-				Item #{index}
-			</div>
+		<VirtualList
+			height={500}
+			width="auto"
+			itemCount={100000}
+			{itemSize}
+		>
+			{#snippet children({ style, index })}
+				<div {style} class="virtual-list-row">
+					Item #{index}
+				</div>
+			{/snippet}
 		</VirtualList>
 	</article>
 
