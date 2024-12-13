@@ -25,7 +25,7 @@
 		"svelte": "^4.2.19"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.47.2",
+		"@playwright/test": "1.49.1",
 		"@sveltejs/adapter-cloudflare": "4.7.4",
 		"@sveltejs/kit": "2.5.28",
 		"@sveltejs/package": "2.3.7",
