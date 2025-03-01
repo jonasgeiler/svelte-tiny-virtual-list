@@ -22,17 +22,17 @@
 		"test:unit": "vitest"
 	},
 	"peerDependencies": {
-		"svelte": "^4.2.19"
+		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.47.2",
-		"@sveltejs/adapter-cloudflare": "4.7.4",
-		"@sveltejs/kit": "2.5.28",
-		"@sveltejs/package": "2.3.7",
-		"@sveltejs/vite-plugin-svelte": "3.1.2",
-		"@types/eslint": "8.56.12",
-		"beercss": "3.6.13",
-		"eslint": "8.57.1",
+		"@playwright/test": "^1.50.1",
+		"@sveltejs/adapter-cloudflare": "^5.0.3",
+		"@sveltejs/kit": "^2.17.3",
+		"@sveltejs/package": "^2.3.10",
+		"@sveltejs/vite-plugin-svelte": "^5.0.3",
+		"@types/eslint": "^9.6.1",
+		"beercss": "^3.8.0",
+		"eslint": "^9.17.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-svelte": "2.46.0",
 		"marked": "12.0.2",

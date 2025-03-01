@@ -1,7 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 
-	let rowHeights = [];
+	let rowHeights = $state([]);
 
 	randomize();
 
@@ -29,10 +29,17 @@
 	</button>
 
 	<article>
-		<VirtualList height={500} width="auto" itemCount={10000} itemSize={rowHeights}>
-			<div slot="item" let:index let:style {style} class="virtual-list-row">
-				Item #{index}
-			</div>
+		<VirtualList
+			height={500}
+			width="auto"
+			itemCount={10000}
+			itemSize={rowHeights}
+		>
+			{#snippet children({ style, index })}
+				<div {style} class="virtual-list-row">
+					Item #{index}
+				</div>
+			{/snippet}
 		</VirtualList>
 	</article>
 

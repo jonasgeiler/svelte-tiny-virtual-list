@@ -1,11 +1,14 @@
 <script>
-	import 'beercss';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 
-	let darkMode = true;
-	let mobileMenuOpen = false;
+	if (browser) {
+		import('beercss');
+	}
+
+	let darkMode = $state(true);
+	let mobileMenuOpen = $state(false);
 
 	function handleSwitchDarkMode() {
 		darkMode = !darkMode;
@@ -13,7 +16,7 @@
 		localStorage.setItem('theme', darkMode ? 'dark' : 'light');
 
 		darkMode ? document.body.classList.add('dark') : document.body.classList.remove('dark');
-	}
+	};
 
 	if (browser) {
 		if (

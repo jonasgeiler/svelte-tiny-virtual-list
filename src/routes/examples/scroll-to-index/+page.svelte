@@ -2,23 +2,24 @@
 	import VirtualList from '$lib/VirtualList.svelte';
 
 	let virtualList;
-	let rowHeights = [];
+	let rowHeights = $state.raw([]);
 
-	let scrollToIndex;
-	let scrollToAlignment = 'start';
-	let scrollToBehaviour = 'instant';
+	let scrollToIndex = $state();
+	let scrollToAlignment = $state('start');
+	let scrollToBehaviour = $state('instant');
 
-	randomize();
+	const NUM_ROWS = 10000;
 
 	function randomize() {
-		let newRowHeights = [];
+		const newRowHeights = [];
 
-		for (let i = 0; i < 10000; i++) {
+		for (let i = 0; i < NUM_ROWS; i++)
 			newRowHeights.push(Math.random() * (155 - 50) + 50);
-		}
 
 		rowHeights = newRowHeights;
-	}
+	};
+
+	randomize();
 </script>
 
 <svelte:head>
@@ -29,7 +30,7 @@
 	<h3>Scroll to index</h3>
 
 	<div class="field label border">
-		<input id="scroll-to-index" type="number" bind:value={scrollToIndex} />
+		<input id="scroll-to-index" type="number" bind:value={scrollToIndex}/>
 		<label for="scroll-to-index">Scroll to index...</label>
 	</div>
 
@@ -65,16 +66,15 @@
 			{scrollToAlignment}
 			{scrollToBehaviour}
 		>
-			<div
-				slot="item"
-				let:index
-				let:style
-				{style}
-				class="virtual-list-row"
-				class:highlighted={index === scrollToIndex}
-			>
-				Item #{index}
-			</div>
+			{#snippet children({ style, index })}
+				<div
+					{style}
+					class="virtual-list-row"
+					class:highlighted={index === scrollToIndex}
+				>
+					Item #{index}
+				</div>
+			{/snippet}
 		</VirtualList>
 	</article>
 
