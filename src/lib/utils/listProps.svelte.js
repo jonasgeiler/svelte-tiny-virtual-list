@@ -6,8 +6,8 @@ export class ListProps {
     itemCount = $state(0);
     itemSize = $state(0);
     estimatedItemSize = $state(0);
-    height = $state(0);
-    width = $state(0);
+    height = $state(400);
+    width = $state(400);
     stickyIndices = $state([]);
 
     // Default values
@@ -18,8 +18,8 @@ export class ListProps {
         itemCount: 0,
         itemSize: 0,
         estimatedItemSize: 50,
-        height: 600,
-        width: "100%",
+        height: 400,
+        width: 400,
         stickyIndices: []
     });
 
@@ -49,7 +49,7 @@ export class ListProps {
             this.previous_state.stickyIndices.toString() !== $state.snapshot(this.stickyIndices).toString()
     };
 
-    constructor (scrollToIndex = -1, scrollToAlignment = "start", scrollOffset = 0, itemCount = 0, itemSize = 0, estimatedItemSize = 50, height = 600, width = "100%", stickyIndices = []) {
+    constructor (scrollToIndex = -1, scrollToAlignment = "start", scrollOffset = 0, itemCount = 0, itemSize = 0, estimatedItemSize = 50, height = 400, width = 400, stickyIndices = []) {
         this.scrollToIndex = scrollToIndex;
 		this.scrollToAlignment = scrollToAlignment;
 		this.scrollOffset = scrollOffset;
@@ -83,10 +83,10 @@ export class ListProps {
         if (typeof estimatedItemSize === "number")
             this.estimatedItemSize = estimatedItemSize || this.itemSize || 50;
 
-        if (typeof height === "number" || typeof height === "string")
+        if (typeof height === "number")
             this.height = height;
 
-        if (typeof width === "number" || typeof width === "string")
+        if (typeof width === "number")
             this.width = width;
 
         if (Array.isArray(stickyIndices))

@@ -1,11 +1,14 @@
 <script>
 	import { base } from '$app/paths';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 
-	if (browser) {
+	if (browser)
 		import('beercss');
-	}
+
+	let {
+		children
+	} = $props();
 
 	let darkMode = $state(true);
 	let mobileMenuOpen = $state(false);
@@ -42,7 +45,7 @@
 		</nav>
 	</header>
 
-	<a href="/" class:active={$page.route.id === '/'}>
+	<a href="/" class:active={page.route.id === '/'}>
 		<i aria-hidden="true">description</i>
 		<div>README</div>
 	</a>
@@ -71,29 +74,29 @@
 	<label for="">Examples</label>
 	<a
 		href="/examples/elements-of-equal-height"
-		class:active={$page.route.id === '/examples/elements-of-equal-height'}
+		class:active={page.route.id === '/examples/elements-of-equal-height'}
 	>
 		<i aria-hidden="true">view_headline</i>
 		<div>Elements of equal height</div>
 	</a>
 	<a
 		href="/examples/variable-heights"
-		class:active={$page.route.id === '/examples/variable-heights'}
+		class:active={page.route.id === '/examples/variable-heights'}
 	>
 		<i aria-hidden="true">view_day</i>
 		<div>Variable heights</div>
 	</a>
-	<a href="/examples/horizontal-list" class:active={$page.route.id === '/examples/horizontal-list'}>
+	<a href="/examples/horizontal-list" class:active={page.route.id === '/examples/horizontal-list'}>
 		<i aria-hidden="true">view_week</i>
 		<div>Horizontal list</div>
 	</a>
-	<a href="/examples/scroll-to-index" class:active={$page.route.id === '/examples/scroll-to-index'}>
+	<a href="/examples/scroll-to-index" class:active={page.route.id === '/examples/scroll-to-index'}>
 		<i aria-hidden="true">pin</i>
 		<div>Scroll to index</div>
 	</a>
 	<a
 		href="/examples/controlled-scroll-offset"
-		class:active={$page.route.id === '/examples/controlled-scroll-offset'}
+		class:active={page.route.id === '/examples/controlled-scroll-offset'}
 	>
 		<i aria-hidden="true">unfold_more</i>
 		<div>Controlled scroll offset</div>
@@ -101,19 +104,19 @@
 
 	<div class="small-divider"></div>
 	<label for="">Demos</label>
-	<a href="/demos/hacker-news" class:active={$page.route.id === '/demos/hacker-news'}>
+	<a href="/demos/hacker-news" class:active={page.route.id === '/demos/hacker-news'}>
 		<i aria-hidden="true">newspaper</i>
 		<div>Hacker News</div>
 	</a>
 
 	<div class="max"></div>
-	<button class="circle border" on:click={handleSwitchDarkMode}>
+	<button class="circle border" onclick={handleSwitchDarkMode}>
 		<i aria-hidden="true">{darkMode ? 'light_mode' : 'dark_mode'}</i>
 	</button>
 </nav>
 
 <nav class="top s m left-align">
-	<button class="circle transparent" on:click={() => (mobileMenuOpen = true)}>
+	<button class="circle transparent" onclick={() => (mobileMenuOpen = true)}>
 		<i aria-hidden="true">menu</i>
 	</button>
 	<i aria-hidden="true">
@@ -121,7 +124,7 @@
 	</i>
 	<h6 class="m">svelte-tiny-virtual-list</h6>
 	<div class="max"></div>
-	<button class="circle border" on:click={handleSwitchDarkMode}>
+	<button class="circle border" onclick={handleSwitchDarkMode}>
 		<i aria-hidden="true">{darkMode ? 'light_mode' : 'dark_mode'}</i>
 	</button>
 </nav>
@@ -133,14 +136,14 @@
 			</i>
 			<h6 class="m">svelte-tiny-virtual-list</h6>
 			<div class="max"></div>
-			<button class="transparent circle" on:click={() => (mobileMenuOpen = false)}>
+			<button class="transparent circle" onclick={() => (mobileMenuOpen = false)}>
 				<i aria-hidden="true">close</i>
 			</button>
 		</nav>
 	</header>
 
 	<nav class="drawer no-padding no-margin">
-		<a href="/" class:active={$page.route.id === '/'} on:click={() => (mobileMenuOpen = false)}>
+		<a href="/" class:active={page.route.id === '/'} onclick={() => (mobileMenuOpen = false)}>
 			<i aria-hidden="true">description</i>
 			<div>README</div>
 		</a>
@@ -169,40 +172,40 @@
 		<label for="">Examples</label>
 		<a
 			href="/examples/elements-of-equal-height"
-			class:active={$page.route.id === '/examples/elements-of-equal-height'}
-			on:click={() => (mobileMenuOpen = false)}
+			class:active={page.route.id === '/examples/elements-of-equal-height'}
+			onclick={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">view_headline</i>
 			<div>Elements of equal height</div>
 		</a>
 		<a
 			href="/examples/variable-heights"
-			class:active={$page.route.id === '/examples/variable-heights'}
-			on:click={() => (mobileMenuOpen = false)}
+			class:active={page.route.id === '/examples/variable-heights'}
+			onclick={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">view_day</i>
 			<div>Variable heights</div>
 		</a>
 		<a
 			href="/examples/horizontal-list"
-			class:active={$page.route.id === '/examples/horizontal-list'}
-			on:click={() => (mobileMenuOpen = false)}
+			class:active={page.route.id === '/examples/horizontal-list'}
+			onclick={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">view_week</i>
 			<div>Horizontal list</div>
 		</a>
 		<a
 			href="/examples/scroll-to-index"
-			class:active={$page.route.id === '/examples/scroll-to-index'}
-			on:click={() => (mobileMenuOpen = false)}
+			class:active={page.route.id === '/examples/scroll-to-index'}
+			onclick={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">pin</i>
 			<div>Scroll to index</div>
 		</a>
 		<a
 			href="/examples/controlled-scroll-offset"
-			class:active={$page.route.id === '/examples/controlled-scroll-offset'}
-			on:click={() => (mobileMenuOpen = false)}
+			class:active={page.route.id === '/examples/controlled-scroll-offset'}
+			onclick={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">unfold_more</i>
 			<div>Controlled scroll offset</div>
@@ -212,8 +215,8 @@
 		<label for="">Demos</label>
 		<a
 			href="/demos/hacker-news"
-			class:active={$page.route.id === '/demos/hacker-news'}
-			on:click={() => (mobileMenuOpen = false)}
+			class:active={page.route.id === '/demos/hacker-news'}
+			onclick={() => (mobileMenuOpen = false)}
 		>
 			<i aria-hidden="true">newspaper</i>
 			<div>Hacker News</div>
@@ -222,7 +225,7 @@
 </dialog>
 
 <main id="content" class="responsive flex flex-column">
-	<slot />
+	{@render children()}
 </main>
 
 <style global>

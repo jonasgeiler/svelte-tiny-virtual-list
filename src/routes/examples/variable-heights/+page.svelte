@@ -23,7 +23,7 @@
 <div id="variable-heights-example" class="example-page">
 	<h3>Variable heights</h3>
 
-	<button class="responsive margin" on:click={randomize}>
+	<button class="responsive margin" onclick={randomize}>
 		<i aria-hidden="true">shuffle</i>
 		<span>Randomize heights</span>
 	</button>

@@ -1,7 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 
-	let width = $state(1);
+	let width = $state(500);// TODO no effect, width is always 100%
 </script>
 
 <svelte:head>

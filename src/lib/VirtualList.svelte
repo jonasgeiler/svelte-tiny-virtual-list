@@ -34,6 +34,9 @@
 	let wrapperStyle = $state.raw('');
 	let innerStyle = $state.raw('');
 
+	let wrapperHeight = $state(400);
+	let wrapperWidth = $state(400);
+
 	let items = $state.raw([]);
 
 	const _props = new ListProps(
@@ -43,8 +46,8 @@
 		itemCount,
 		itemSize,
 		estimatedItemSize,
-		height,
-		width,
+		Number.isFinite(height) ? height : 400,
+		Number.isFinite(width) ? width : 400,
 		stickyIndices
 	);
 
@@ -66,7 +69,7 @@
 
 	// Effect 1: Update props from user provided props
 	$effect(() => {
-		_props.listen(scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize, height, width, stickyIndices);
+		_props.listen(scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize, Number.isFinite(height) ? height : wrapperHeight, Number.isFinite(width) ? width : wrapperWidth, stickyIndices);
 
 		untrack(() => {
 			let doRecomputeSizes = false;
@@ -109,7 +112,7 @@
 
 	const refresh = () => {
 		const { start, stop } = sizeAndPositionManager.getVisibleRange({
-			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
+			containerSize: scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
 			offset: _state.offset,
 			overscanCount
 		});
@@ -179,7 +182,7 @@
 
 		return sizeAndPositionManager.getUpdatedOffsetForIndex({
 			align,
-			containerSize: scrollDirection === DIRECTION.VERTICAL ? height : width,
+			containerSize: scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
 			currentOffset: _state.offset || 0,
 			targetIndex: index
 		});
@@ -232,6 +235,8 @@
 
 <div
 	bind:this={wrapper}
+	bind:offsetHeight={wrapperHeight}
+	bind:offsetWidth={wrapperWidth}
 	class="virtual-list-wrapper"
 	style={wrapperStyle}
 >

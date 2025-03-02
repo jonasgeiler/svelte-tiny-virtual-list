@@ -1,7 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 
-	let virtualList;
+	let virtualList = $state.raw();
 	let rowHeights = $state.raw([]);
 
 	let scrollToIndex = $state();

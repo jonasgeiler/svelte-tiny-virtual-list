@@ -173,7 +173,7 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 	}
 </script>
 
-<button on:click={handleClick}>Recompute Sizes</button>
+<button onclick={handleClick}>Recompute Sizes</button>
 
 <VirtualList
 	bind:this={virtualList}
