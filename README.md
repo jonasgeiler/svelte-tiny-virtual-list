@@ -2,9 +2,9 @@
 <h2 align="center">svelte-tiny-virtual-list</h2>
 <p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
 <p align="center">
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
+  <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
+  <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
+  <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
 </p>
 <p align="center">
   <a href="#about">About</a> •
@@ -19,6 +19,9 @@
 
 Instead of rendering all your data in a huge list, the virtual list component just renders the items that are visible, keeping your page nice and light.  
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
+
+Forked from [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tiny-virtual-list) (inactive).
+I am not the original author.
 
 ### Features
 
@@ -37,37 +40,37 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 With npm:
 
 ```shell
-$ npm install svelte-tiny-virtual-list
+$ npm install @tutorlatin/svelte-tiny-virtual-list
 ```
 
 With yarn:
 
 ```shell
-$ yarn add svelte-tiny-virtual-list
+$ yarn add @tutorlatin/svelte-tiny-virtual-list
 ```
 
 With [pnpm](https://pnpm.js.org/) (recommended):
 
 ```shell
 $ npm i -g pnpm
-$ pnpm install svelte-tiny-virtual-list
+$ pnpm install @tutorlatin/svelte-tiny-virtual-list
 ```
 
 From CDN (via [unpkg](https://unpkg.com/)):
 
 ```html
 <!-- UMD -->
-<script src="https://unpkg.com/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.js"></script>
+<script src="https://unpkg.com/@tutorlatin/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.js"></script>
 
 <!-- ES Module -->
-<script src="https://unpkg.com/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.mjs"></script>
+<script src="https://unpkg.com/@tutorlatin/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.mjs"></script>
 ```
 
 ## Usage
 
 ```svelte
 <script>
-	import VirtualList from 'svelte-tiny-virtual-list';
+	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
 
 	const data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
 </script>
@@ -85,7 +88,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 
 ```svelte
 <script>
-	import VirtualList from 'svelte-tiny-virtual-list';
+	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
 	import InfiniteLoading from 'svelte-infinite-loading';
 
 	let data = $state(['A', 'B', 'C', 'D', 'E', 'F' /* ... */]);
@@ -139,8 +142,6 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 | onAfterScroll     | `({ event: ScrollEvent, offset: number }) => any`                          |           | Function that fires after handling the scroll event. Props: `event: ScrollEvent` - The original scroll event, `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
 | onListItemsUpdate | `({ start: number, end: number }) => any`                          |           | Function that fires when the visible items are updated. Props: `start: number` - Index of the first visible item, `end: number` - Index of the last visible item.                                                                                                                                                                                         |
 
-_\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly, `width` must be a number if `scrollDirection` is `'horizontal'`_
-
 ### Snippets
 
 - `children` - Snippet for each item
@@ -162,7 +163,7 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 ```svelte
 <script>
 	import { onMount } from 'svelte';
-	import VirtualList from 'svelte-tiny-virtual-list';
+	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
 
 	const data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
 
@@ -196,7 +197,7 @@ You can style the elements of the virtual list like this:
 
 ```svelte
 <script>
-	import VirtualList from 'svelte-tiny-virtual-list';
+	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
 
 	const data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
 </script>
