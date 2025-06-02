@@ -1,5 +1,5 @@
 <p align="center"><img src="./static/logo.svg" alt="Logo" width="225"></p>
-<h2 align="center">svelte-tiny-virtual-list</h2>
+<h2 align="center">@tutorlatin/svelte-tiny-virtual-list</h2>
 <p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
 <p align="center">
   <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
@@ -20,8 +20,7 @@
 Instead of rendering all your data in a huge list, the virtual list component just renders the items that are visible, keeping your page nice and light.  
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
 
-Forked from [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tiny-virtual-list) (inactive).
-I am not the original author.
+Forked from [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tiny-virtual-list) (inactive) and updated to Svelte 5.
 
 ### Features
 
@@ -34,7 +33,7 @@ I am not the original author.
 
 ## Installation
 
-> If you're using this component in a Sapper application, make sure to install the package to `devDependencies`!  
+> If you're using this component in a Sapper application, make sure to install the package to `devDependencies`!
 > [More Details](https://github.com/sveltejs/sapper-template#using-external-components)
 
 With npm:
@@ -54,16 +53,6 @@ With [pnpm](https://pnpm.js.org/) (recommended):
 ```shell
 $ npm i -g pnpm
 $ pnpm install @tutorlatin/svelte-tiny-virtual-list
-```
-
-From CDN (via [unpkg](https://unpkg.com/)):
-
-```html
-<!-- UMD -->
-<script src="https://unpkg.com/@tutorlatin/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.js"></script>
-
-<!-- ES Module -->
-<script src="https://unpkg.com/@tutorlatin/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.mjs"></script>
 ```
 
 ## Usage
@@ -126,8 +115,8 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 
 | Property          | Type                                              | Required? | Description                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ----------------- | ------------------------------------------------- | :-------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| width             | `number \| string`\*                              |     ✓     | Width of List. This property will determine the number of rendered items when scrollDirection is `'horizontal'`.                                                                                                                                                                                                                                                                                                                      |
-| height            | `number \| string`\*                              |     ✓     | Height of List. This property will determine the number of rendered items when scrollDirection is `'vertical'`.                                                                                                                                                                                                                                                                                                                       |
+| width             | `number \| string`                              |     ✓     | Width of List. This property will determine the number of rendered items when scrollDirection is `'horizontal'`.                                                                                                                                                                                                                                                                                                                      |
+| height            | `number \| string`                              |     ✓     | Height of List. This property will determine the number of rendered items when scrollDirection is `'vertical'`.                                                                                                                                                                                                                                                                                                                       |
 | itemCount         | `number`                                          |     ✓     | The number of items you want to render                                                                                                                                                                                                                                                                                                                                                                                                |
 | itemSize          | `number \| number[] \| (index: number) => number` |     ✓     | Either a fixed height/width (depending on the scrollDirection), an array containing the heights of all the items in your list, or a function that returns the height of an item given its index: `(index: number): number`                                                                                                                                                                                                            |
 | scrollDirection   | `string`                                          |           | Whether the list should scroll vertically or horizontally. One of `'vertical'` (default) or `'horizontal'`.                                                                                                                                                                                                                                                                                                                           |
@@ -225,7 +214,7 @@ You can style the elements of the virtual list like this:
 </style>
 ```
 
-## Examples / Demo
+## Examples / Demo (OUTDATED)
 
 - **Basic setup**
   - [Elements of equal height](https://svelte.dev/playground/e3811b44f311461dbbc7c2df830cde68)
