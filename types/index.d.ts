@@ -1,4 +1,4 @@
-import type { Snippet, SvelteComponent } from "svelte";
+import type { Snippet, Component } from "svelte";
 
 export type Alignment = 'auto' | 'start' | 'center' | 'end';
 export type ScrollBehaviour = 'auto' | 'smooth' | 'instant';
@@ -97,57 +97,32 @@ export interface VirtualListProps {
 	 */
 	getKey?: (index: number) => any;
 
+	/** Called when visible items range updates */
 	onListItemsUpdate?: (obj: { start: number, end: number }) => any;
 
+	/** Called after scroll */
 	onAfterScroll?: (obj: { offset: number, event: Event }) => any;
-}
-
-/**
- * VirtualList children
- */
-export interface VirtualListChildren {
-	/**
-	 * Item
-	 */
-	item: {
-		/**
-		 * Item index
-		 */
-		index: number;
-
-		/**
-		 * Item style, must be applied to the slot (look above for example)
-		 */
-		style: string;
-	};
 
 	/**
-	 * Header
+	 * Snippet to render a list item.
+	 * Called like: `children({ index, style })`
 	 */
-	header: Snippet;
+	children: Snippet<[{ index: number; style: string }]>;
 
-	/**
-	 * Footer
-	 */
-	footer: Snippet;
+	/** Optional header snippet — used like `{@render header()}` */
+	header?: Snippet;
+
+	/** Optional footer snippet — used like `{@render footer()}` */
+	footer?: Snippet;
 }
 
 export interface ItemsUpdatedDetail {
-	/**
-	 * Index of the first visible item
-	 */
 	start: number;
-
-	/**
-	 * Index of the last visible item
-	 */
 	end: number;
 }
 
 /**
  * VirtualList component
  */
-export default class VirtualList extends SvelteComponent<
-	VirtualListProps,
-	VirtualListChildren
-> {}
+declare const VirtualList: Component<VirtualListProps>;
+export default VirtualList;

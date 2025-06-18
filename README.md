@@ -48,7 +48,7 @@ With yarn:
 $ yarn add @tutorlatin/svelte-tiny-virtual-list
 ```
 
-With [pnpm](https://pnpm.js.org/) (recommended):
+With [pnpm](https://pnpm.js.org/):
 
 ```shell
 $ npm i -g pnpm
