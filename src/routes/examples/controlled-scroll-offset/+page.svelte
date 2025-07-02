@@ -1,9 +1,9 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 
-	let rowHeights = [];
+	let rowHeights = $state([]);
 
-	let scrollOffset;
+	let scrollOffset = $state();
 
 	randomize();
 
@@ -38,9 +38,11 @@
 			itemSize={(index) => rowHeights[index]}
 			{scrollOffset}
 		>
-			<div slot="item" let:index let:style {style} class="virtual-list-row">
-				Item #{index}
-			</div>
+			{#snippet children({ style, index })}
+				<div {style} class="virtual-list-row">
+					Item #{index}
+				</div>
+			{/snippet}
 		</VirtualList>
 	</article>
 

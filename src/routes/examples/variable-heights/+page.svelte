@@ -1,7 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 
-	let rowHeights = [];
+	let rowHeights = $state([]);
 
 	randomize();
 
@@ -23,16 +23,23 @@
 <div id="variable-heights-example" class="example-page">
 	<h3>Variable heights</h3>
 
-	<button class="responsive margin" on:click={randomize}>
+	<button class="responsive margin" onclick={randomize}>
 		<i aria-hidden="true">shuffle</i>
 		<span>Randomize heights</span>
 	</button>
 
 	<article>
-		<VirtualList height={500} width="auto" itemCount={10000} itemSize={rowHeights}>
-			<div slot="item" let:index let:style {style} class="virtual-list-row">
-				Item #{index}
-			</div>
+		<VirtualList
+			height={500}
+			width="auto"
+			itemCount={10000}
+			itemSize={rowHeights}
+		>
+			{#snippet children({ style, index })}
+				<div {style} class="virtual-list-row">
+					Item #{index}
+				</div>
+			{/snippet}
 		</VirtualList>
 	</article>
 

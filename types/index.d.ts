@@ -1,5 +1,4 @@
-/// <reference types="svelte" />
-import { SvelteComponentTyped } from 'svelte';
+import type { Snippet, Component } from "svelte";
 
 export type Alignment = 'auto' | 'start' | 'center' | 'end';
 export type ScrollBehaviour = 'auto' | 'smooth' | 'instant';
@@ -97,86 +96,33 @@ export interface VirtualListProps {
 	 * @return - Anything that uniquely identifies the item.
 	 */
 	getKey?: (index: number) => any;
-}
 
-/**
- * VirtualList slots
- */
-export interface VirtualListSlots {
-	/**
-	 * Slot for each item
-	 */
-	item: {
-		/**
-		 * Item index
-		 */
-		index: number;
+	/** Called when visible items range updates */
+	onListItemsUpdate?: (obj: { start: number, end: number }) => any;
 
-		/**
-		 * Item style, must be applied to the slot (look above for example)
-		 */
-		style: string;
-	};
+	/** Called after scroll */
+	onAfterScroll?: (obj: { offset: number, event: Event }) => any;
 
 	/**
-	 * Slot for the elements that should appear at the top of the list
+	 * Snippet to render a list item.
+	 * Called like: `children({ index, style })`
 	 */
-	header: {};
+	children: Snippet<[{ index: number; style: string }]>;
 
-	/**
-	 * Slot for the elements that should appear at the bottom of the list (e.g. `VirtualList` component from `svelte-infinite-loading`)
-	 */
-	footer: {};
+	/** Optional header snippet — used like `{@render header()}` */
+	header?: Snippet;
+
+	/** Optional footer snippet — used like `{@render footer()}` */
+	footer?: Snippet;
 }
 
 export interface ItemsUpdatedDetail {
-	/**
-	 * Index of the first visible item
-	 */
 	start: number;
-
-	/**
-	 * Index of the last visible item
-	 */
 	end: number;
-}
-
-export interface ItemsUpdatedEvent extends CustomEvent<ItemsUpdatedDetail> {}
-
-export interface AfterScrollDetail {
-	/**
-	 * The original scroll event
-	 */
-	event: Event;
-
-	/**
-	 * Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
-	 */
-	offset: number;
-}
-
-export interface AfterScrollEvent extends CustomEvent<AfterScrollDetail> {}
-
-/**
- * VirtualList events
- */
-export interface VirtualListEvents {
-	/**
-	 * Fired when the visible items are updated
-	 */
-	itemsUpdated: ItemsUpdatedEvent;
-
-	/**
-	 * Fired after handling the scroll event
-	 */
-	afterScroll: AfterScrollEvent;
 }
 
 /**
  * VirtualList component
  */
-export default class VirtualList extends SvelteComponentTyped<
-	VirtualListProps,
-	VirtualListEvents,
-	VirtualListSlots
-> {}
+declare const VirtualList: Component<VirtualListProps>;
+export default VirtualList;
