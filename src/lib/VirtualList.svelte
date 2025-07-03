@@ -2,8 +2,8 @@
 	import { untrack } from 'svelte';
 	import SizeAndPositionManager from './SizeAndPositionManager.js';
 	import { DIRECTION, SCROLL_CHANGE_REASON, SCROLL_PROP, SCROLL_PROP_LEGACY } from './constants';
-	import { ListState } from './utils/listState.svelte.js';
-	import { ListProps } from './utils/listProps.svelte.js';
+	import { ListState } from './utils/ListState.svelte.js';
+	import { ListProps } from './utils/ListProps.svelte.js';
 
 	let {
 		height = 400,
