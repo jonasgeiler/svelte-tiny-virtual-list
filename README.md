@@ -27,7 +27,7 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 - **Scroll to index** or **set the initial scroll offset**
 - **Supports fixed** or **variable** heights/widths
 - **Vertical** or **Horizontal** lists
-- [`svelte-infinite-loading`](https://github.com/Skayo/svelte-infinite-loading) compatibility
+- [`svelte-infinite-loading`](https://github.com/jonasgeiler/svelte-infinite-loading) compatibility
 
 ## Installation
 
@@ -67,7 +67,7 @@ $ pnpm install svelte-tiny-virtual-list
 </VirtualList>
 ```
 
-Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo/svelte-infinite-loading):
+Also works pretty well with [`svelte-infinite-loading`](https://github.com/jonasgeiler/svelte-infinite-loading):
 
 ```svelte
 <script>
@@ -221,4 +221,4 @@ You can style the elements of the virtual list like this:
 
 ## License
 
-[MIT License](https://github.com/Skayo/svelte-tiny-virtual-list/blob/master/LICENSE)
+[MIT License](./LICENSE.md)
