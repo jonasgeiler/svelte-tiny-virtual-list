@@ -11,7 +11,7 @@ export class ListProps {
     stickyIndices = $state([]);
 
     // Default values
-    previous_state = $state.raw({
+    previousState = $state.raw({
         scrollToIndex: -1,
         scrollToAlignment: "start",
         scrollOffset: 0,
@@ -24,44 +24,64 @@ export class ListProps {
     });
 
     get hasScrollOffsetChanged () {
-        return this.previous_state.scrollOffset !== this.scrollOffset;
-    };
+        return this.previousState.scrollOffset !== this.scrollOffset;
+    }
 
     get haveScrollPropsChanged () {
-        return this.previous_state.scrollToIndex !== this.scrollToIndex ||
-            this.previous_state.scrollToAlignment !== this.scrollToAlignment;
-    };
+        return this.previousState.scrollToIndex !== this.scrollToIndex ||
+            this.previousState.scrollToAlignment !== this.scrollToAlignment;
+    }
 
     get haveSizesChanged () {
-        return this.previous_state.itemCount !== this.itemCount ||
-            this.previous_state.itemSize !== this.itemSize ||
-            this.previous_state.estimatedItemSize !== this.estimatedItemSize;
-    };
+        return this.previousState.itemCount !== this.itemCount ||
+            this.previousState.itemSize !== this.itemSize ||
+            this.previousState.estimatedItemSize !== this.estimatedItemSize;
+    }
 
     get hasScrollIndexChanged () {
         return this.scrollToIndex > -1 &&
             (this.haveScrollPropsChanged || this.haveSizesChanged);
-    };
+    }
 
     get haveDimsOrStickyIndicesChanged () {
-        return this.previous_state.height !== this.height ||
-            this.previous_state.width !== this.width ||
-            this.previous_state.stickyIndices.toString() !== $state.snapshot(this.stickyIndices).toString()
-    };
+        return this.previousState.height !== this.height ||
+            this.previousState.width !== this.width ||
+            this.previousState.stickyIndices.toString() !== $state.snapshot(this.stickyIndices).toString()
+    }
 
-    constructor (scrollToIndex = -1, scrollToAlignment = "start", scrollOffset = 0, itemCount = 0, itemSize = 0, estimatedItemSize = 50, height = 400, width = 400, stickyIndices = []) {
+    constructor (
+      scrollToIndex = -1,
+      scrollToAlignment = "start",
+      scrollOffset = 0,
+      itemCount = 0,
+      itemSize = 0,
+      estimatedItemSize = 50,
+      height = 400,
+      width = 400,
+      stickyIndices = []
+    ) {
         this.scrollToIndex = scrollToIndex;
-		this.scrollToAlignment = scrollToAlignment;
-		this.scrollOffset = scrollOffset;
-		this.itemCount = itemCount;
-		this.itemSize = itemSize;
-		this.estimatedItemSize = estimatedItemSize;
+        this.scrollToAlignment = scrollToAlignment;
+        this.scrollOffset = scrollOffset;
+        this.itemCount = itemCount;
+        this.itemSize = itemSize;
+        this.estimatedItemSize = estimatedItemSize;
         this.height = height;
         this.width = width;
         this.stickyIndices = stickyIndices;
-    };
+    }
 
-    listen (scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize, height, width, stickyIndices) {
+    listen (
+      scrollToIndex,
+      scrollToAlignment,
+      scrollOffset,
+      itemCount,
+      itemSize,
+      estimatedItemSize,
+      height,
+      width,
+      stickyIndices
+    ) {
         if (typeof scrollToIndex === "number")
             this.scrollToIndex = scrollToIndex;
 
@@ -91,14 +111,14 @@ export class ListProps {
 
         if (Array.isArray(stickyIndices))
             this.stickyIndices = stickyIndices;
-    };
+    }
 
     update () {
-        this.#update_rendered_state_snapshot();
-    };
+        this.#updateRenderedStateSnapshot();
+    }
 
-    #update_rendered_state_snapshot () {
-        this.previous_state = {
+    #updateRenderedStateSnapshot () {
+        this.previousState = {
             scrollToIndex: $state.snapshot(this.scrollToIndex),
             scrollToAlignment: $state.snapshot(this.scrollToAlignment),
             scrollOffset: $state.snapshot(this.scrollOffset),
@@ -106,5 +126,5 @@ export class ListProps {
             itemSize: $state.snapshot(this.itemSize),
             estimatedItemSize: $state.snapshot(this.estimatedItemSize)
         };
-    };
-};
+    }
+}
