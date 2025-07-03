@@ -1,4 +1,14 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["github>jonasgeiler/renovate-config"]
+	"extends": [
+		"config:js-lib",
+		"github>jonasgeiler/renovate-config"
+	],
+	"packageRules": [
+		{
+			"matchDatasources": ["npm"],
+			"matchPackageNames": ["beercss"],
+			"enabled": false
+		}
+	]
 }
