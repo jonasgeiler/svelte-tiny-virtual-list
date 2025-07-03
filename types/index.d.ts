@@ -98,10 +98,10 @@ export interface VirtualListProps {
 	getKey?: (index: number) => any;
 
 	/** Called when visible items range updates */
-	onListItemsUpdate?: (obj: { start: number, end: number }) => any;
+	onListItemsUpdate?: (detail: ItemsUpdatedDetail) => any;
 
 	/** Called after scroll */
-	onAfterScroll?: (obj: { offset: number, event: Event }) => any;
+	onAfterScroll?: (detail: AfterScrollDetail) => any;
 
 	/**
 	 * Snippet to render a list item.
@@ -117,8 +117,27 @@ export interface VirtualListProps {
 }
 
 export interface ItemsUpdatedDetail {
+	/**
+	 * Index of the first visible item
+	 */
 	start: number;
+
+	/**
+	 * Index of the last visible item
+	 */
 	end: number;
+}
+
+export interface AfterScrollDetail {
+	/**
+	 * The original scroll event
+	 */
+	event: Event;
+
+	/**
+	 * Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
+	 */
+	offset: number;
 }
 
 /**
