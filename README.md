@@ -31,22 +31,21 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 
 ## Installation
 
-With npm:
+With [npm](https://www.npmjs.com/):
 
 ```shell
 $ npm install svelte-tiny-virtual-list
 ```
 
-With yarn:
+With [yarn](https://yarnpkg.com/):
 
 ```shell
 $ yarn add svelte-tiny-virtual-list
 ```
 
-With [pnpm](https://pnpm.js.org/):
+With [pnpm](https://pnpm.io/):
 
 ```shell
-$ npm i -g pnpm
 $ pnpm install svelte-tiny-virtual-list
 ```
 
