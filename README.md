@@ -2,9 +2,9 @@
 <h2 align="center">svelte-tiny-virtual-list</h2>
 <p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
 <p align="center">
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
-  <a href="https://npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
+  <a href="https://www.npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
+  <a href="https://www.npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
+  <a href="https://www.npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
 </p>
 <p align="center">
   <a href="#about">About</a> •
@@ -31,36 +31,22 @@ This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauder
 
 ## Installation
 
-> If you're using this component in a Sapper application, make sure to install the package to `devDependencies`!  
-> [More Details](https://github.com/sveltejs/sapper-template#using-external-components)
-
-With npm:
+With [npm](https://www.npmjs.com/):
 
 ```shell
 $ npm install svelte-tiny-virtual-list
 ```
 
-With yarn:
+With [yarn](https://yarnpkg.com/):
 
 ```shell
 $ yarn add svelte-tiny-virtual-list
 ```
 
-With [pnpm](https://pnpm.js.org/) (recommended):
+With [pnpm](https://pnpm.io/):
 
 ```shell
-$ npm i -g pnpm
 $ pnpm install svelte-tiny-virtual-list
-```
-
-From CDN (via [unpkg](https://unpkg.com/)):
-
-```html
-<!-- UMD -->
-<script src="https://unpkg.com/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.js"></script>
-
-<!-- ES Module -->
-<script src="https://unpkg.com/svelte-tiny-virtual-list@^1/dist/svelte-tiny-virtual-list.mjs"></script>
 ```
 
 ## Usage
@@ -73,9 +59,11 @@ From CDN (via [unpkg](https://unpkg.com/)):
 </script>
 
 <VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-	<div slot="item" let:index let:style {style}>
-		Letter: {data[index]}, Row: #{index}
-	</div>
+	{#snippet children({ style, index })}
+		<div {style}>
+			Letter: {data[index]}, Row: #{index}
+		</div>
+	{/snippet}
 </VirtualList>
 ```
 
@@ -86,7 +74,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import InfiniteLoading from 'svelte-infinite-loading';
 
-	let data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
+	let data = $state(['A', 'B', 'C', 'D', 'E', 'F' /* ... */]);
 
 	function infiniteHandler({ detail: { complete, error } }) {
 		try {
@@ -103,13 +91,17 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 </script>
 
 <VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-	<div slot="item" let:index let:style {style}>
-		Letter: {data[index]}, Row: #{index}
-	</div>
+	{#snippet children({ style, index })}
+		<div {style}>
+			Letter: {data[index]}, Row: #{index}
+		</div>
+	{/snippet}
 
-	<div slot="footer">
-		<InfiniteLoading on:infinite={infiniteHandler} />
-	</div>
+	{#snippet footer()}
+		<div>
+			<InfiniteLoading on:infinite={infiniteHandler} />
+		</div>
+	{/snippet}
 </VirtualList>
 ```
 
@@ -117,8 +109,8 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 
 | Property          | Type                                              | Required? | Description                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ----------------- | ------------------------------------------------- | :-------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| width             | `number \| string`\*                              |     ✓     | Width of List. This property will determine the number of rendered items when scrollDirection is `'horizontal'`.                                                                                                                                                                                                                                                                                                                      |
-| height            | `number \| string`\*                              |     ✓     | Height of List. This property will determine the number of rendered items when scrollDirection is `'vertical'`.                                                                                                                                                                                                                                                                                                                       |
+| width             | `number \| string`                              |     ✓     | Width of List. This property will determine the number of rendered items when scrollDirection is `'horizontal'`.                                                                                                                                                                                                                                                                                                                      |
+| height            | `number \| string`                              |     ✓     | Height of List. This property will determine the number of rendered items when scrollDirection is `'vertical'`.                                                                                                                                                                                                                                                                                                                       |
 | itemCount         | `number`                                          |     ✓     | The number of items you want to render                                                                                                                                                                                                                                                                                                                                                                                                |
 | itemSize          | `number \| number[] \| (index: number) => number` |     ✓     | Either a fixed height/width (depending on the scrollDirection), an array containing the heights of all the items in your list, or a function that returns the height of an item given its index: `(index: number): number`                                                                                                                                                                                                            |
 | scrollDirection   | `string`                                          |           | Whether the list should scroll vertically or horizontally. One of `'vertical'` (default) or `'horizontal'`.                                                                                                                                                                                                                                                                                                                           |
@@ -129,29 +121,18 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 | stickyIndices     | `number[]`                                        |           | An array of indexes (eg. `[0, 10, 25, 30]`) to make certain items in the list sticky (`position: sticky`)                                                                                                                                                                                                                                                                                                                             |
 | overscanCount     | `number`                                          |           | Number of extra buffer items to render above/below the visible items. Tweaking this can help reduce scroll flickering on certain browsers/devices.                                                                                                                                                                                                                                                                                    |
 | estimatedItemSize | `number`                                          |           | Used to estimate the total size of the list before all of its items have actually been measured. The estimated total height is progressively adjusted as items are rendered.                                                                                                                                                                                                                                                          |
-| getKey            | `(index: number) => any`                          |           | Function that returns the key of an item in the list, which is used to uniquely identify an item. This is useful for dynamic data coming from a database or similar. By default, it's using the item's index.                                                                                                                                                                                                                         |
+| getKey            | `(index: number) => any`                          |           | Function that returns the key of an item in the list, which is used to uniquely identify an item. This is useful for dynamic data coming from a database or similar. By default, it's using the item's index.           
+| onAfterScroll     | `({ event: ScrollEvent, offset: number }) => any`                          |           | Function that fires after handling the scroll event. Props: `event: ScrollEvent` - The original scroll event, `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
+| onListItemsUpdate | `({ start: number, end: number }) => any`                          |           | Function that fires when the visible items are updated. Props: `start: number` - Index of the first visible item, `end: number` - Index of the last visible item.                                                                                                                                                                                         |
 
-_\* `height` must be a number when `scrollDirection` is `'vertical'`. Similarly, `width` must be a number if `scrollDirection` is `'horizontal'`_
+### Snippets
 
-### Slots
-
-- `item` - Slot for each item
-  - Props:
+- `children` - Snippet for each item
+  - Prop: `{ index, style }`
     - `index: number` - Item index
-    - `style: string` - Item style, must be applied to the slot (look above for example)
-- `header` - Slot for the elements that should appear at the top of the list
-- `footer` - Slot for the elements that should appear at the bottom of the list (e.g. `InfiniteLoading` component from `svelte-infinite-loading`)
-
-### Events
-
-- `afterScroll` - Fired after handling the scroll event
-  - `detail` Props:
-    - `event: ScrollEvent` - The original scroll event
-    - `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`
-- `itemsUpdated` - Fired when the visible items are updated
-  - `detail` Props:
-    - `start: number` - Index of the first visible item
-    - `end: number` - Index of the last visible item
+    - `style: string` - Item style, must be applied to the snippet (look above for example)
+- `header` - Snippet for the elements that should appear at the top of the list
+- `footer` - Snippet for the elements that should appear at the bottom of the list (e.g. `InfiniteLoading` component from `svelte-infinite-loading`)
 
 ### Methods
 
@@ -176,7 +157,7 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 	}
 </script>
 
-<button on:click={handleClick}>Recompute Sizes</button>
+<button onclick={handleClick}>Recompute Sizes</button>
 
 <VirtualList
 	bind:this={virtualList}
@@ -185,9 +166,11 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 	itemCount={data.length}
 	itemSize={50}
 >
-	<div slot="item" let:index let:style {style}>
-		Letter: {data[index]}, Row: #{index}
-	</div>
+	{#snippet children({ style, index })}
+		<div {style}>
+			Letter: {data[index]}, Row: #{index}
+		</div>
+	{/snippet}
 </VirtualList>
 ```
 
@@ -204,9 +187,11 @@ You can style the elements of the virtual list like this:
 
 <div class="list">
 	<VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-		<div slot="item" let:index let:style {style}>
-			Letter: {data[index]}, Row: #{index}
-		</div>
+		{#snippet children({ style, index })}
+			<div {style}>
+				Letter: {data[index]}, Row: #{index}
+			</div>
+		{/snippet}
 	</VirtualList>
 </div>
 
@@ -223,7 +208,7 @@ You can style the elements of the virtual list like this:
 </style>
 ```
 
-## Examples / Demo
+## Examples / Demo (OUTDATED)
 
 - **Basic setup**
   - [Elements of equal height](https://svelte.dev/playground/e3811b44f311461dbbc7c2df830cde68)

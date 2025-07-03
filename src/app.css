@@ -1,3 +1,5 @@
+@import 'beercss/dist/cdn/beer.css';
+
 body {
 	--primary: #b42900 !important;
 	--on-primary: #ffffff !important;
