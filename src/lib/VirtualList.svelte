@@ -61,9 +61,11 @@
 
 	// Effect 0: Event listener
 	$effect(() => {
-		wrapper.addEventListener('scroll', handleScroll, { passive: true });
+		const options = { passive: true };
+		wrapper.addEventListener('scroll', handleScroll, options);
+
 		return () => {
-			wrapper.removeEventListener('scroll', handleScroll);
+			wrapper.removeEventListener('scroll', handleScroll, options);
 		};
 	});
 
