@@ -1,12 +1,15 @@
 {
-	"name": "@tutorlatin/svelte-tiny-virtual-list",
+	"name": "svelte-tiny-virtual-list",
 	"version": "3.0.0",
-	"description": "A maintained fork of svelte-tiny-virtual-list",
-	"homepage": "https://github.com/TutorLatin/svelte-tiny-virtual-list#readme",
-	"bugs": "https://github.com/TutorLatin/svelte-tiny-virtual-list/issues",
+	"description": "A tiny but mighty list virtualization component for svelte, with zero dependencies 💪",
+	"homepage": "https://github.com/jonasgeiler/svelte-tiny-virtual-list#readme",
+	"bugs": "https://github.com/jonasgeiler/svelte-tiny-virtual-list/issues",
 	"license": "MIT",
 	"author": "Jonas Geiler <npm@jonasgeiler.com> (https://jonasgeiler.com)",
-	"repository": "github:TutorLatin/svelte-tiny-virtual-list",
+	"contributors": [
+		"TutorLatin <damien.cavaleri@gmail.com>"
+	],
+	"repository": "github:jonasgeiler/svelte-tiny-virtual-list",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
@@ -64,7 +67,7 @@
 		}
 	},
 	"engines": {
-		"node": ">=22"
+		"node": ">=18"
 	},
 	"keywords": [
 		"svelte",
@@ -76,5 +79,6 @@
 		"component",
 		"plugin",
 		"svelte-components"
-	]
+	],
+	"packageManager": "npm@10.9.0+sha512.65a9c38a8172948f617a53619762cd77e12b9950fe1f9239debcb8d62c652f2081824b986fee7c0af6c0a7df615becebe4bf56e17ec27214a87aa29d9e038b4b"
 }

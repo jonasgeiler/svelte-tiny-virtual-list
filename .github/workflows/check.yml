@@ -1,0 +1,57 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - main
+      - 'renovate/**'
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'assets/**'
+      - '.github/**'
+      - '!.github/workflows/check.yml'
+
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'assets/**'
+      - '.github/**'
+      - '!.github/workflows/check.yml'
+
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  lint-check-and-test:
+    name: Lint, Check & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        with:
+          node-version: 18
+          cache: pnpm
+
+      - name: Install Dependencies
+        run: |
+          pnpm install
+          pnpm exec playwright install --with-deps
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Check
+        run: pnpm run check
+
+      - name: Test
+        run: pnpm run test

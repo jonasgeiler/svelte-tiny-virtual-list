@@ -1,10 +1,10 @@
 <p align="center"><img src="./static/logo.svg" alt="Logo" width="225"></p>
-<h2 align="center">@tutorlatin/svelte-tiny-virtual-list</h2>
+<h2 align="center">svelte-tiny-virtual-list</h2>
 <p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
 <p align="center">
-  <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
-  <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
-  <a href="https://www.npmjs.com/package/@tutorlatin/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/@tutorlatin/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
+  <a href="https://www.npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/v/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM VERSION"></a>
+  <a href="https://www.npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/npm/dt/svelte-tiny-virtual-list?style=for-the-badge" alt="NPM DOWNLOADS"></a>
+  <a href="https://www.npmjs.com/package/svelte-tiny-virtual-list"><img src="https://img.shields.io/librariesio/release/npm/svelte-tiny-virtual-list?style=for-the-badge" alt="DEPENDENCIES"></a>
 </p>
 <p align="center">
   <a href="#about">About</a> •
@@ -20,8 +20,6 @@
 Instead of rendering all your data in a huge list, the virtual list component just renders the items that are visible, keeping your page nice and light.  
 This is heavily inspired by [react-tiny-virtual-list](https://github.com/clauderic/react-tiny-virtual-list) and uses most of its code and functionality!
 
-Forked from [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tiny-virtual-list) (inactive) and updated to Svelte 5.
-
 ### Features
 
 - **Tiny & dependency free** – Only ~5kb gzipped
@@ -33,33 +31,30 @@ Forked from [svelte-tiny-virtual-list](https://github.com/jonasgeiler/svelte-tin
 
 ## Installation
 
-> If you're using this component in a Sapper application, make sure to install the package to `devDependencies`!
-> [More Details](https://github.com/sveltejs/sapper-template#using-external-components)
-
 With npm:
 
 ```shell
-$ npm install @tutorlatin/svelte-tiny-virtual-list
+$ npm install svelte-tiny-virtual-list
 ```
 
 With yarn:
 
 ```shell
-$ yarn add @tutorlatin/svelte-tiny-virtual-list
+$ yarn add svelte-tiny-virtual-list
 ```
 
 With [pnpm](https://pnpm.js.org/):
 
 ```shell
 $ npm i -g pnpm
-$ pnpm install @tutorlatin/svelte-tiny-virtual-list
+$ pnpm install svelte-tiny-virtual-list
 ```
 
 ## Usage
 
 ```svelte
 <script>
-	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
+	import VirtualList from 'svelte-tiny-virtual-list';
 
 	const data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
 </script>
@@ -77,7 +72,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/Skayo
 
 ```svelte
 <script>
-	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
+	import VirtualList from 'svelte-tiny-virtual-list';
 	import InfiniteLoading from 'svelte-infinite-loading';
 
 	let data = $state(['A', 'B', 'C', 'D', 'E', 'F' /* ... */]);
@@ -152,7 +147,7 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 ```svelte
 <script>
 	import { onMount } from 'svelte';
-	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
+	import VirtualList from 'svelte-tiny-virtual-list';
 
 	const data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
 
@@ -186,7 +181,7 @@ You can style the elements of the virtual list like this:
 
 ```svelte
 <script>
-	import VirtualList from '@tutorlatin/svelte-tiny-virtual-list';
+	import VirtualList from 'svelte-tiny-virtual-list';
 
 	const data = ['A', 'B', 'C', 'D', 'E', 'F' /* ... */];
 </script>
