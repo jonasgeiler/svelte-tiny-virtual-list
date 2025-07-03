@@ -1,6 +1,6 @@
 {
 	"name": "@tutorlatin/svelte-tiny-virtual-list",
-	"version": "3.0.4",
+	"version": "3.0.0",
 	"description": "A maintained fork of svelte-tiny-virtual-list",
 	"homepage": "https://github.com/TutorLatin/svelte-tiny-virtual-list#readme",
 	"bugs": "https://github.com/TutorLatin/svelte-tiny-virtual-list/issues",
