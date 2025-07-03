@@ -1,5 +1,6 @@
 import { SCROLL_CHANGE_REASON } from "$lib/constants.js";
 
+// TODO: Refactor further
 export class ListState {
 
     offset = $state(0);

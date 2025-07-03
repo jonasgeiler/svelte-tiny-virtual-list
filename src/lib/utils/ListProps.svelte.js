@@ -1,3 +1,4 @@
+// TODO: Refactor further
 export class ListProps {
 
     scrollToIndex = $state(-1);
