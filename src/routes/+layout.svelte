@@ -4,7 +4,7 @@
 	import { browser } from '$app/environment';
 
 	if (browser)
-		import('beercss');
+		import('beercss/dist/cdn/beer');
 
 	let {
 		children
