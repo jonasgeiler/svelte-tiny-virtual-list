@@ -11,7 +11,7 @@
   <a href="#features">Features</a> •
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
-  <a href="#examples--demo-outdated">Examples</a> •
+  <a href="#examples--demo">Examples</a> •
   <a href="#license">License</a>
 </p>
 
@@ -207,9 +207,8 @@ You can style the elements of the virtual list like this:
 	}
 </style>
 ```
-## Examples / Demo
 
-### v4 (Svelte 5)
+## Examples / Demo
 
 - **Basic setup**
   - [Elements of equal height](https://svelte.dev/playground/59a98b2a0b53421e8fce3df8e66f5e3b)
@@ -219,17 +218,6 @@ You can style the elements of the virtual list like this:
   - [Scroll to index](https://svelte.dev/playground/8610d15e77d34667a65d981b9327a7ad)
   - [Controlled scroll offset](https://svelte.dev/playground/39452c8fe30b4f618760a1198f6b9769)
 - [Hacker News using svelte-infinite-loading](https://svelte.dev/playground/6719ab725cfd440b9bd3cfa9b85d9d3a)
-
-### v3 (Svelte 4)
-
-- **Basic setup**
-  - [Elements of equal height](https://svelte.dev/playground/e3811b44f311461dbbc7c2df830cde68)
-  - [Variable heights](https://svelte.dev/playground/93795c812f8d4541b6b942535b2ed855)
-  - [Horizontal list](https://svelte.dev/playground/4cd8acdfc96843b68265a19451b1bf3d)
-- **Controlled props**
-  - [Scroll to index](https://svelte.dev/playground/bdf5ceb63f6e45f7bb14b90dbd2c11d9)
-  - [Controlled scroll offset](https://svelte.dev/playground/68576a3919c44033a74416d4bc4fde7e)
-- [Hacker News using svelte-infinite-loading](https://svelte.dev/playground/2239cc4c861c41d18abbc858248f5a0d)
 
 ## License
 
