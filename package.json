@@ -2,8 +2,9 @@
 	"name": "svelte-tiny-virtual-list",
 	"version": "4.0.0-rc.0",
 	"description": "A tiny but mighty list virtualization component for svelte, with zero dependencies 💪",
-	"homepage": "https://github.com/jonasgeiler/svelte-tiny-virtual-list#readme",
+	"homepage": "https://svelte-tiny-virtual-list.jonasgeiler.com",
 	"bugs": "https://github.com/jonasgeiler/svelte-tiny-virtual-list/issues",
+	"funding": "https://github.com/sponsors/jonasgeiler",
 	"license": "MIT",
 	"author": "Jonas Geiler <npm@jonasgeiler.com> (https://jonasgeiler.com)",
 	"contributors": [
