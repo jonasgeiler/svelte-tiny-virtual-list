@@ -1,13 +1,49 @@
+# Git ignore file
+# See: https://git-scm.com/docs/gitignore
+
+# OS
 .DS_Store
-node_modules
-/build
-/dist
-/.svelte-kit
-/package
-.env
-.env.*
-!.env.example
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+package-lock.json
+yarn.lock
+bun.lock
+bun.lockb
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env
+.env.local
+.env.*.local
+
+# Typescript
+*.tsbuildinfo
+
+# Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-.idea
-test-results
+
+# Output
+.output/
+.vercel/
+.netlify/
+.wrangler/
+.svelte-kit/
+/build/
+/dist/
+/test-results/

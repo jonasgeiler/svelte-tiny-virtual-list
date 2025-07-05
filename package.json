@@ -6,56 +6,69 @@
 	"bugs": "https://github.com/jonasgeiler/svelte-tiny-virtual-list/issues",
 	"license": "MIT",
 	"author": "Jonas Geiler <npm@jonasgeiler.com> (https://jonasgeiler.com)",
-	"contributors": [
+	"maintainers": [
 		"TutorLatin <damien.cavaleri@gmail.com>"
 	],
 	"repository": "github:jonasgeiler/svelte-tiny-virtual-list",
 	"scripts": {
+		"prepare": "git config core.hooksPath .githooks && (svelte-kit sync || echo '')",
 		"dev": "vite dev",
-		"build": "vite build && pnpm run package",
+		"start": "pnpm run dev",
+		"build": "vite build && pnpm run prepack",
 		"preview": "vite preview",
-		"package": "svelte-kit sync && svelte-package && publint",
-		"prepublishOnly": "pnpm run package",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
-		"test": "pnpm run test:integration && pnpm run test:unit",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write .",
-		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"prepack": "svelte-kit sync && svelte-package && publint",
+		"check": "pnpm run '/^check:.*/'",
+		"check:eslint": "eslint .",
+		"check:prettier": "prettier --check .",
+		"check:vitest": "vitest run",
+		"check:playwright": "playwright test",
+		"fix": "pnpm run fix:eslint && pnpm run fix:prettier",
+		"fix:eslint": "eslint --fix .",
+		"fix:prettier": "prettier --write ."
 	},
+	"engines": {
+		"node": ">=18.18.0"
+	},
+	"packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184",
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
+		"@eslint/compat": "^1.2.5",
+		"@eslint/js": "^9.18.0",
 		"@playwright/test": "^1.53.0",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.21.5",
 		"@sveltejs/package": "^2.3.11",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
-		"@types/eslint": "^9.6.1",
+		"@vitest/browser": "^3.2.3",
 		"beercss": "3.6.13",
 		"eslint": "^9.29.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-svelte": "^3.9.2",
+		"globals": "^16.0.0",
+		"lint-staged": "^16.1.2",
 		"marked": "^15.0.12",
 		"marked-base-url": "1.1.6",
 		"marked-gfm-heading-id": "4.1.1",
+		"playwright": "^1.53.0",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.4.0",
 		"publint": "^0.3.12",
 		"svelte": "^5.34.5",
-		"svelte-check": "^4.2.1",
 		"svelte-infinite-loading": "1.4.0",
-		"tslib": "2.8.1",
-		"typescript": "^5.8.3",
+		"typescript": "^5.3.2",
 		"vite": "^6.3.5",
-		"vitest": "^3.2.4"
+		"vitest": "^3.2.4",
+		"vitest-browser-svelte": "^0.1.0"
 	},
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
+	],
+	"sideEffects": [
+		"**/*.css"
 	],
 	"type": "module",
 	"svelte": "./dist/index.js",
@@ -65,9 +78,6 @@
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
 		}
-	},
-	"engines": {
-		"node": ">=18.18.0"
 	},
 	"keywords": [
 		"svelte",
@@ -79,6 +89,5 @@
 		"component",
 		"plugin",
 		"svelte-components"
-	],
-	"packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
+	]
 }

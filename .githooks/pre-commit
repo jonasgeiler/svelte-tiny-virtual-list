@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# Git hook file
+# See: https://git-scm.com/docs/githooks
+IFS="$(printf ' \n\t')"
+export PATH="node_modules/.bin:${PATH}"
+set -o errexit -o xtrace #-o nounset
+
+lint-staged --verbose

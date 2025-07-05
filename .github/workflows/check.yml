@@ -5,30 +5,22 @@ on:
     branches:
       - main
       - 'renovate/**'
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'assets/**'
-      - '.github/**'
-      - '!.github/workflows/check.yml'
 
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'assets/**'
-      - '.github/**'
-      - '!.github/workflows/check.yml'
 
   workflow_dispatch:
   workflow_call:
 
 jobs:
-  lint-check-and-test:
-    name: Lint, Check & Test
+  check:
+    name: Check
+
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout
@@ -40,19 +32,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 18
+          node-version: 18.18.0
           cache: pnpm
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           pnpm install
-          pnpm exec playwright install --with-deps
+          pnpm exec playwright install firefox --with-deps
 
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Check
+      - name: Run check
         run: pnpm run check
-
-      - name: Test
-        run: pnpm run test

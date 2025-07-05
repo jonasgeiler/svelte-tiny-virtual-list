@@ -1,9 +1,15 @@
-build/
+# Prettier ignore file
+# See: https://prettier.io/docs/ignore
 
-# Ignore files for PNPM, NPM and YARN
-pnpm-lock.yaml
+# Package Managers
 package-lock.json
+pnpm-lock.yaml
 yarn.lock
+bun.lock
+bun.lockb
+
+# Miscellaneous
+/static/
 
 # Ignore the license, since prettier breaks license detection
 LICENSE.md
