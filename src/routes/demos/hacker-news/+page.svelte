@@ -70,7 +70,6 @@
 
 	<div class="flex-1" bind:clientHeight={listHeight}>
 		<VirtualList height={listHeight} itemSize={90} itemCount={list.length}>
-
 			{#snippet children({ style, index })}
 				<div {style}>
 					<article class="hacker-news-item margin" data-num={index + 1}>

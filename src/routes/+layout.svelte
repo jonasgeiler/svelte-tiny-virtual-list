@@ -3,12 +3,9 @@
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 
-	if (browser)
-		import('beercss/dist/cdn/beer');
+	if (browser) import('beercss/dist/cdn/beer');
 
-	let {
-		children
-	} = $props();
+	let { children } = $props();
 
 	let darkMode = $state(true);
 	let mobileMenuOpen = $state(false);
@@ -19,7 +16,7 @@
 		localStorage.setItem('theme', darkMode ? 'dark' : 'light');
 
 		darkMode ? document.body.classList.add('dark') : document.body.classList.remove('dark');
-	};
+	}
 
 	if (browser) {
 		if (

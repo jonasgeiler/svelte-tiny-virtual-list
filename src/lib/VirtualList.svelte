@@ -71,7 +71,17 @@
 
 	// Effect 1: Update props from user provided props
 	$effect(() => {
-		_props.listen(scrollToIndex, scrollToAlignment, scrollOffset, itemCount, itemSize, estimatedItemSize, Number.isFinite(height) ? height : wrapperHeight, Number.isFinite(width) ? width : wrapperWidth, stickyIndices);
+		_props.listen(
+			scrollToIndex,
+			scrollToAlignment,
+			scrollOffset,
+			itemCount,
+			itemSize,
+			estimatedItemSize,
+			Number.isFinite(height) ? height : wrapperHeight,
+			Number.isFinite(width) ? width : wrapperWidth,
+			stickyIndices
+		);
 
 		untrack(() => {
 			let doRecomputeSizes = false;
@@ -84,14 +94,16 @@
 				});
 				doRecomputeSizes = true;
 			}
-			
+
 			if (_props.hasScrollOffsetChanged)
 				_state.listen(_props.scrollOffset, SCROLL_CHANGE_REASON.REQUESTED);
 			else if (_props.hasScrollIndexChanged)
-				_state.listen(getOffsetForIndex(scrollToIndex, scrollToAlignment), SCROLL_CHANGE_REASON.REQUESTED);
+				_state.listen(
+					getOffsetForIndex(scrollToIndex, scrollToAlignment),
+					SCROLL_CHANGE_REASON.REQUESTED
+				);
 
-			if (_props.haveDimsOrStickyIndicesChanged || doRecomputeSizes)
-				recomputeSizes();
+			if (_props.haveDimsOrStickyIndicesChanged || doRecomputeSizes) recomputeSizes();
 
 			_props.update();
 		});
@@ -100,13 +112,11 @@
 	// Effect 2: Update UI from state
 	$effect(() => {
 		_state.offset;
-		
-		untrack(() => {
-			if (_state.doRefresh)
-				refresh();
 
-			if (_state.doScrollToOffset)
-				scrollTo(_state.offset);
+		untrack(() => {
+			if (_state.doRefresh) refresh();
+
+			if (_state.doScrollToOffset) scrollTo(_state.offset);
 
 			_state.update();
 		});
@@ -124,7 +134,7 @@
 		const totalSize = sizeAndPositionManager.getTotalSize();
 		const heightUnit = typeof height === 'number' ? 'px' : '';
 		const widthUnit = typeof width === 'number' ? 'px' : '';
-		
+
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
@@ -146,8 +156,7 @@
 
 		if (start !== undefined && stop !== undefined) {
 			for (let index = start; index <= stop; index++) {
-				if (hasStickyIndices && stickyIndices.includes(index))
-					continue;
+				if (hasStickyIndices && stickyIndices.includes(index)) continue;
 
 				visibleItems.push({
 					index,
@@ -167,20 +176,17 @@
 				[SCROLL_PROP[scrollDirection]]: value,
 				behavior: scrollToBehaviour
 			});
-		else
-			wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
+		else wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
 	};
 
 	export const recomputeSizes = (startIndex = scrollToIndex) => {
 		styleCache = {};
-		if (startIndex >= 0)
-			sizeAndPositionManager.resetItem(startIndex);
+		if (startIndex >= 0) sizeAndPositionManager.resetItem(startIndex);
 		refresh();
 	};
 
 	const getOffsetForIndex = (index, align = scrollToAlignment) => {
-		if (index < 0 || index >= itemCount)
-			index = 0;
+		if (index < 0 || index >= itemCount) index = 0;
 
 		return sizeAndPositionManager.getUpdatedOffsetForIndex({
 			align,
@@ -193,12 +199,11 @@
 	const handleScroll = (event) => {
 		const offset = getWrapperOffset();
 
-		if (offset < 0 || _state.offset === offset || event.target !== wrapper)
-			return null;
+		if (offset < 0 || _state.offset === offset || event.target !== wrapper) return null;
 
 		_state.listen(offset, SCROLL_CHANGE_REASON.OBSERVED);
 
-		onAfterScroll({ offset, event});
+		onAfterScroll({ offset, event });
 	};
 
 	const getWrapperOffset = () => {
@@ -206,8 +211,7 @@
 	};
 
 	const getStyle = (index, sticky) => {
-		if (styleCache[index])
-			return styleCache[index];
+		if (styleCache[index]) return styleCache[index];
 
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
@@ -218,15 +222,13 @@
 
 			if (sticky)
 				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
-			else
-				style += `position:absolute;top:${offset}px;`;
+			else style += `position:absolute;top:${offset}px;`;
 		} else {
 			style = `top:0;width:${size}px;`;
 
 			if (sticky)
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
-			else
-				style += `position:absolute;height:100%;left:${offset}px;`;
+			else style += `position:absolute;height:100%;left:${offset}px;`;
 		}
 
 		styleCache[index] = style;
@@ -247,10 +249,7 @@
 	{/if}
 
 	{#if children}
-		<div
-			class="virtual-list-inner"
-			style={innerStyle}
-		>
+		<div class="virtual-list-inner" style={innerStyle}>
 			{#each items as item (getKey ? getKey(item.index) : item.index)}
 				{@render children({ style: item.style, index: item.index })}
 			{/each}

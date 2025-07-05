@@ -13,11 +13,10 @@
 	function randomize() {
 		const newRowHeights = [];
 
-		for (let i = 0; i < NUM_ROWS; i++)
-			newRowHeights.push(Math.random() * (155 - 50) + 50);
+		for (let i = 0; i < NUM_ROWS; i++) newRowHeights.push(Math.random() * (155 - 50) + 50);
 
 		rowHeights = newRowHeights;
-	};
+	}
 
 	randomize();
 </script>
@@ -30,7 +29,7 @@
 	<h3>Scroll to index</h3>
 
 	<div class="field label border">
-		<input id="scroll-to-index" type="number" bind:value={scrollToIndex}/>
+		<input id="scroll-to-index" type="number" bind:value={scrollToIndex} />
 		<label for="scroll-to-index">Scroll to index...</label>
 	</div>
 
@@ -67,11 +66,7 @@
 			{scrollToBehaviour}
 		>
 			{#snippet children({ style, index })}
-				<div
-					{style}
-					class="virtual-list-row"
-					class:highlighted={index === scrollToIndex}
-				>
+				<div {style} class="virtual-list-row" class:highlighted={index === scrollToIndex}>
 					Item #{index}
 				</div>
 			{/snippet}

@@ -1,4 +1,4 @@
-import type { Snippet, Component } from "svelte";
+import type { Snippet, Component } from 'svelte';
 
 export type Alignment = 'auto' | 'start' | 'center' | 'end';
 export type ScrollBehaviour = 'auto' | 'smooth' | 'instant';
