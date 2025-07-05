@@ -6,7 +6,7 @@
 	"bugs": "https://github.com/jonasgeiler/svelte-tiny-virtual-list/issues",
 	"license": "MIT",
 	"author": "Jonas Geiler <npm@jonasgeiler.com> (https://jonasgeiler.com)",
-	"maintainers": [
+	"contributors": [
 		"TutorLatin <damien.cavaleri@gmail.com>"
 	],
 	"repository": "github:jonasgeiler/svelte-tiny-virtual-list",
