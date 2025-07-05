@@ -20,8 +20,8 @@
 		scrollToBehaviour = 'instant',
 		overscanCount = 3,
 
-		onListItemsUpdate = () => null,
-		onAfterScroll = () => null,
+		onListItemsUpdate = () => {},
+		onAfterScroll = () => {},
 
 		header,
 		footer,

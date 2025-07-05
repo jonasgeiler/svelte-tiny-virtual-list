@@ -1,5 +1,5 @@
-import SizeAndPositionManager from '$lib/SizeAndPositionManager.js';
 import { ALIGNMENT } from '$lib/constants.js';
+import SizeAndPositionManager from '$lib/SizeAndPositionManager.js';
 import { describe, expect, it } from 'vitest';
 
 const ITEM_SIZE = 10;
@@ -13,7 +13,7 @@ describe('SizeAndPositionManager', () => {
 	 */
 	function getItemSizeAndPositionManager(itemCount = 100, estimatedItemSize = 15) {
 		/** @type {number[]} */
-		let itemSizeGetterCalls = [];
+		const itemSizeGetterCalls = [];
 
 		const sizeAndPositionManager = new SizeAndPositionManager({
 			itemCount,

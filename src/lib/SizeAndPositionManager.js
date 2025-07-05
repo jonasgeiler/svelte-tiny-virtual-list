@@ -181,7 +181,7 @@ export default class SizeAndPositionManager {
 			for (let i = this.lastMeasuredIndex + 1; i <= index; i++) {
 				const size = this.getSize(i);
 
-				if (size == null || isNaN(size)) {
+				if (size == null || Number.isNaN(size)) {
 					throw Error(`Invalid size returned for index ${i} of value ${size}`);
 				}
 
@@ -328,7 +328,7 @@ export default class SizeAndPositionManager {
 	 * @param {number} offset
 	 */
 	findNearestItem(offset) {
-		if (isNaN(offset)) {
+		if (Number.isNaN(offset)) {
 			throw Error(`Invalid offset ${offset} specified`);
 		}
 

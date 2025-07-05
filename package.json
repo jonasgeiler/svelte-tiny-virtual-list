@@ -18,13 +18,17 @@
 		"preview": "vite preview",
 		"prepack": "svelte-kit sync && svelte-package && publint",
 		"check": "pnpm run '/^check:.*/'",
+		"check:biome": "biome check",
 		"check:eslint": "eslint .",
 		"check:prettier": "prettier --check .",
 		"check:vitest": "vitest run",
 		"check:playwright": "playwright test",
-		"fix": "pnpm run fix:eslint && pnpm run fix:prettier",
+		"fix": "pnpm run fix:biome && pnpm run fix:eslint && pnpm run fix:prettier",
+		"fix:biome": "biome check --fix",
 		"fix:eslint": "eslint --fix .",
-		"fix:prettier": "prettier --write ."
+		"fix:prettier": "prettier --write .",
+		"fix-unsafe": "pnpm run fix-unsafe:biome",
+		"fix-unsafe:biome": "biome check --fix --unsafe"
 	},
 	"engines": {
 		"node": ">=18.18.0"
@@ -34,6 +38,7 @@
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.0.6",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@playwright/test": "^1.53.0",

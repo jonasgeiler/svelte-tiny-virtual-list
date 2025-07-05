@@ -95,13 +95,14 @@ export interface VirtualListProps {
 	 * @param index - The index of the item.
 	 * @return - Anything that uniquely identifies the item.
 	 */
+	// biome-ignore lint/suspicious/noExplicitAny: Svelte allows any object as `{#each ...}` key
 	getKey?: (index: number) => any;
 
 	/** Called when visible items range updates */
-	onListItemsUpdate?: (detail: ItemsUpdatedDetail) => any;
+	onListItemsUpdate?: (detail: ItemsUpdatedDetail) => void;
 
 	/** Called after scroll */
-	onAfterScroll?: (detail: AfterScrollDetail) => any;
+	onAfterScroll?: (detail: AfterScrollDetail) => void;
 
 	/**
 	 * Snippet to render a list item.
