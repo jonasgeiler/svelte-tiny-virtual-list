@@ -47,3 +47,4 @@ vite.config.ts.timestamp-*
 /build/
 /dist/
 /test-results/
+*.tgz

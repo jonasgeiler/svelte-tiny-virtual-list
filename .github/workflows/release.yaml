@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  check:
+    name: Check
+    uses: ./.github/workflows/check.yaml
+
+  release:
+    name: Release
+    needs: check
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    permissions:
+      id-token: write # for NPM provenance establishment
+      contents: write # for GitHub release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20.17.0
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Replace GitHub-flavored Markdown alerts with standard Markdown
+        run: sed -i 's/^> *\[\!\([a-zA-Z]\)\([a-zA-Z]*\)\] */> **\U\1\L\2**  /g' ./*.md
+        # Basically replaces:
+        # > [!NOTE]
+        # with:
+        # > **Note**
+
+      - name: Publish to npmjs.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+        run: pnpm publish --provenance --access=public --no-git-checks
+
+      - name: Create a tarball for the GitHub release
+        run: pnpm pack
+
+      - name: Draft release on GitHub
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
+        with:
+          draft: true
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            svelte-tiny-virtual-list-*.tgz
