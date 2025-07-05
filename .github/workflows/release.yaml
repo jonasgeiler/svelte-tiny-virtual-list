@@ -40,6 +40,39 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Check if tag is for a pre-release
+        id: check-prerelease
+        run: |
+          IFS=$' \t\n'; set -ux
+
+          # Get clean version from the tag name
+          version="${GITHUB_REF_NAME#v}"
+
+          # Check for hyphen in the version
+          if [[ "${version}" == *-* ]]; then
+            : 'Tag is for a pre-release (contains hyphen)'
+            echo 'prerelease=true' >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          # Extract major, minor, patch
+          IFS='.' read -r major minor patch <<< "${version%%-*}"
+
+          # Fallback in case parts are missing or invalid
+          major="${major:-0}"
+          minor="${minor:-0}"
+          patch="${patch:-0}"
+
+          # Check if major version is less than 1
+          if (( major < 1 )); then
+            : 'Tag is for a pre-release (major version < 1)'
+            echo 'prerelease=true' >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          : 'Tag is for a normal release'
+          echo 'prerelease=false' >> "${GITHUB_OUTPUT}"
+
       - name: Replace GitHub-flavored Markdown alerts with standard Markdown
         run: sed -i 's/^> *\[\!\([a-zA-Z]\)\([a-zA-Z]*\)\] */> **\U\1\L\2**  /g' ./*.md
         # Basically replaces:
@@ -50,7 +83,13 @@ jobs:
       - name: Publish to npmjs.com
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: pnpm publish --provenance --access=public --no-git-checks
+          PRERELEASE: ${{ steps.check-prerelease.outputs.prerelease }}
+        run: |
+          if [[ "${PRERELEASE}" == 'true' ]]; then
+            pnpm publish --provenance --access=public --no-git-checks --tag=next
+          else
+            pnpm publish --provenance --access=public --no-git-checks
+          fi
 
       - name: Create a tarball for the GitHub release
         run: pnpm pack
@@ -59,6 +98,7 @@ jobs:
         uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
         with:
           draft: true
+          prerelease: ${{ steps.check-prerelease.outputs.prerelease }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
