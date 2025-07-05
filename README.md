@@ -207,8 +207,20 @@ You can style the elements of the virtual list like this:
 	}
 </style>
 ```
+## Examples / Demo
 
-## Examples / Demo (OUTDATED)
+### v4 (Svelte 5)
+
+- **Basic setup**
+  - [Elements of equal height](https://svelte.dev/playground/59a98b2a0b53421e8fce3df8e66f5e3b)
+  - [Variable heights](https://svelte.dev/playground/51952d1becb345c18154a0a61106617f)
+  - [Horizontal list](https://svelte.dev/playground/d1ca5e2462cf46d5966c98c2cbf80be5)
+- **Controlled props**
+  - [Scroll to index](https://svelte.dev/playground/8610d15e77d34667a65d981b9327a7ad)
+  - [Controlled scroll offset](https://svelte.dev/playground/39452c8fe30b4f618760a1198f6b9769)
+- [Hacker News using svelte-infinite-loading](https://svelte.dev/playground/6719ab725cfd440b9bd3cfa9b85d9d3a)
+
+### v3 (Svelte 4)
 
 - **Basic setup**
   - [Elements of equal height](https://svelte.dev/playground/e3811b44f311461dbbc7c2df830cde68)
