@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/jonasgeiler/svelte-tiny-virtual-list/main/static/logo.svg" alt="Logo" width="225"></p>
+<p align="center"><img src="./static/logo.svg" alt="Logo" width="225"></p>
 <h2 align="center">svelte-tiny-virtual-list</h2>
 <p align="center">A tiny but mighty list virtualization library, with zero dependencies &#128170;</p>
 <p align="center">
