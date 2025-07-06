@@ -1,82 +1,17 @@
 // TODO: Refactor further
 export class ListProps {
-	scrollToIndex = $state(-1);
-	scrollToAlignment = $state('');
-	scrollOffset = $state(0);
-	itemCount = $state(0);
-	itemSize = $state(0);
-	estimatedItemSize = $state(0);
-	height = $state(400);
-	width = $state(400);
-	stickyIndices = $state([]);
-
-	// Default values
-	previousState = $state.raw({
-		scrollToIndex: -1,
-		scrollToAlignment: 'start',
-		scrollOffset: 0,
-		itemCount: 0,
-		itemSize: 0,
-		estimatedItemSize: 50,
-		height: 400,
-		width: 400,
-		stickyIndices: []
-	});
-
-	get hasScrollOffsetChanged() {
-		return this.previousState.scrollOffset !== this.scrollOffset;
-	}
-
-	get haveScrollPropsChanged() {
-		return (
-			this.previousState.scrollToIndex !== this.scrollToIndex ||
-			this.previousState.scrollToAlignment !== this.scrollToAlignment
-		);
-	}
-
-	get haveSizesChanged() {
-		return (
-			this.previousState.itemCount !== this.itemCount ||
-			this.previousState.itemSize !== this.itemSize ||
-			this.previousState.estimatedItemSize !== this.estimatedItemSize
-		);
-	}
-
-	get hasScrollIndexChanged() {
-		return this.scrollToIndex > -1 && (this.haveScrollPropsChanged || this.haveSizesChanged);
-	}
-
-	get haveDimsOrStickyIndicesChanged() {
-		return (
-			this.previousState.height !== this.height ||
-			this.previousState.width !== this.width ||
-			this.previousState.stickyIndices.toString() !== $state.snapshot(this.stickyIndices).toString()
-		);
-	}
-
+	/**
+	 * @param {number} [scrollToIndex]
+	 * @param {import('./types.js').Alignment} scrollToAlignment
+	 * @param {number} [scrollOffset]
+	 * @param {number} itemCount
+	 * @param {import('./types.js').ItemSize} itemSize
+	 * @param {number} estimatedItemSize
+	 * @param {string | number} height
+	 * @param {string | number} width
+	 * @param {number[]} stickyIndices
+	 */
 	constructor(
-		scrollToIndex = -1,
-		scrollToAlignment = 'start',
-		scrollOffset = 0,
-		itemCount = 0,
-		itemSize = 0,
-		estimatedItemSize = 50,
-		height = 400,
-		width = 400,
-		stickyIndices = []
-	) {
-		this.scrollToIndex = scrollToIndex;
-		this.scrollToAlignment = scrollToAlignment;
-		this.scrollOffset = scrollOffset;
-		this.itemCount = itemCount;
-		this.itemSize = itemSize;
-		this.estimatedItemSize = estimatedItemSize;
-		this.height = height;
-		this.width = width;
-		this.stickyIndices = stickyIndices;
-	}
-
-	listen(
 		scrollToIndex,
 		scrollToAlignment,
 		scrollOffset,
@@ -87,41 +22,88 @@ export class ListProps {
 		width,
 		stickyIndices
 	) {
-		if (typeof scrollToIndex === 'number') this.scrollToIndex = scrollToIndex;
+		this.scrollToIndex = $state(scrollToIndex);
+		this.scrollToAlignment = $state(scrollToAlignment);
+		this.scrollOffset = $state(scrollOffset);
+		this.itemCount = $state(itemCount);
+		this.itemSize = $state(itemSize);
+		this.estimatedItemSize = $state(estimatedItemSize);
+		this.height = $state(height);
+		this.width = $state(width);
+		this.stickyIndices = $state(stickyIndices);
 
-		if (typeof scrollToAlignment === 'string') this.scrollToAlignment = scrollToAlignment;
+		/**
+		 * @typedef {object} PreviousProps
+		 * @property {number} [scrollToIndex]
+		 * @property {import('./types.js').Alignment} scrollToAlignment
+		 * @property {number} [scrollOffset]
+		 * @property {number} itemCount
+		 * @property {import('./types.js').ItemSize} itemSize
+		 * @property {number} estimatedItemSize
+		 * @property {string | number} height
+		 * @property {string | number} width
+		 * @property {number[]} stickyIndices
+		 */
 
-		if (typeof scrollOffset === 'number') this.scrollOffset = scrollOffset;
-
-		if (typeof itemCount === 'number') this.itemCount = itemCount;
-
-		if (typeof itemCount === 'number') this.itemCount = itemCount;
-
-		if (typeof itemSize === 'number' || typeof itemSize === 'function' || Array.isArray(itemSize))
-			this.itemSize = itemSize;
-
-		if (typeof estimatedItemSize === 'number')
-			this.estimatedItemSize = estimatedItemSize || this.itemSize || 50;
-
-		if (typeof height === 'number') this.height = height;
-
-		if (typeof width === 'number') this.width = width;
-
-		if (Array.isArray(stickyIndices)) this.stickyIndices = stickyIndices;
+		/** @type {PreviousProps} */
+		this.previous = $state.raw({
+			scrollToIndex,
+			scrollToAlignment,
+			scrollOffset,
+			itemCount,
+			itemSize,
+			estimatedItemSize,
+			height,
+			width,
+			stickyIndices
+		});
 	}
 
-	update() {
-		this.#updateRenderedStateSnapshot();
+	/**
+	 * @param {number} [scrollToIndex]
+	 * @param {import('./types.js').Alignment} scrollToAlignment
+	 * @param {number} [scrollOffset]
+	 * @param {number} itemCount
+	 * @param {import('./types.js').ItemSize} itemSize
+	 * @param {number} estimatedItemSize
+	 * @param {string | number} height
+	 * @param {string | number} width
+	 * @param {number[]} stickyIndices
+	 */
+	update(
+		scrollToIndex,
+		scrollToAlignment,
+		scrollOffset,
+		itemCount,
+		itemSize,
+		estimatedItemSize,
+		height,
+		width,
+		stickyIndices
+	) {
+		this.scrollToIndex = scrollToIndex;
+		this.scrollToAlignment = scrollToAlignment;
+		this.scrollOffset = scrollOffset;
+		this.itemCount = itemCount;
+		this.itemCount = itemCount;
+		this.itemSize = itemSize;
+		this.estimatedItemSize = estimatedItemSize;
+		this.height = height;
+		this.width = width;
+		this.stickyIndices = stickyIndices;
 	}
 
-	#updateRenderedStateSnapshot() {
-		this.previousState = {
+	updatePrevious() {
+		this.previous = {
 			scrollToIndex: $state.snapshot(this.scrollToIndex),
 			scrollToAlignment: $state.snapshot(this.scrollToAlignment),
 			scrollOffset: $state.snapshot(this.scrollOffset),
 			itemCount: $state.snapshot(this.itemCount),
 			itemSize: $state.snapshot(this.itemSize),
-			estimatedItemSize: $state.snapshot(this.estimatedItemSize)
+			estimatedItemSize: $state.snapshot(this.estimatedItemSize),
+			height: $state.snapshot(this.height),
+			width: $state.snapshot(this.width),
+			stickyIndices: $state.snapshot(this.stickyIndices)
 		};
 	}
 }
