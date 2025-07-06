@@ -107,8 +107,9 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/jonas
 
 ### Props
 
+<!-- prettier-ignore -->
 | Property          | Type                                               | Default              | Description                                                                                                                                                                                                                     |
-| ----------------- | -------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| ----------------- | -------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | width             | `number \| string`                                 | REQUIRED or `'100%'` | Width of the list view box. When `scrollDirection` is `'horizontal'`, this property is required to be a `number` and determines the number of rendered items.                                                                   |
 | height            | `number \| string`                                 | REQUIRED or `'100%'` | Height of the list view box. When `scrollDirection` is `'vertical'`, this property is required to be a `number` and determines the number of rendered items.                                                                    |
 | itemCount         | `number`                                           | REQUIRED             | The number of items you want to render.                                                                                                                                                                                         |
