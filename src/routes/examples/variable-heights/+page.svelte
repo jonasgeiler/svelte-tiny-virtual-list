@@ -30,7 +30,7 @@
 
 	<article>
 		<VirtualList height={500} width="auto" itemCount={10000} itemSize={rowHeights}>
-			{#snippet children({ style, index })}
+			{#snippet item({ style, index })}
 				<div {style} class="virtual-list-row">
 					Item #{index}
 				</div>

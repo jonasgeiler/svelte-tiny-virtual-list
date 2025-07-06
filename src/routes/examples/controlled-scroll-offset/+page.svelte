@@ -38,7 +38,7 @@
 			itemSize={(index) => rowHeights[index]}
 			{scrollOffset}
 		>
-			{#snippet children({ style, index })}
+			{#snippet item({ style, index })}
 				<div {style} class="virtual-list-row">
 					Item #{index}
 				</div>

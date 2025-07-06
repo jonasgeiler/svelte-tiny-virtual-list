@@ -77,6 +77,9 @@ importers:
       svelte:
         specifier: ^5.34.5
         version: 5.34.5
+      svelte-check:
+        specifier: ^4.2.1
+        version: 4.2.2(picomatch@4.0.2)(svelte@5.34.5)(typescript@5.8.3)
       svelte-infinite-loading:
         specifier: 1.4.0
         version: 1.4.0
@@ -1359,6 +1362,14 @@ packages:
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
+
+  svelte-check@4.2.2:
+    resolution: {integrity: sha512-1+31EOYZ7NKN0YDMKusav2hhEoA51GD9Ws6o//0SphMT0ve9mBTsTUEX7OmDMadUP3KjNHsSKtJrqdSaD8CrGQ==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0-next.0
+      typescript: '>=5.0.0'
 
   svelte-eslint-parser@1.2.0:
     resolution: {integrity: sha512-mbPtajIeuiyU80BEyGvwAktBeTX7KCr5/0l+uRGLq1dafwRNrjfM5kHGJScEBlPG3ipu6dJqfW/k0/fujvIEVw==}
@@ -2678,6 +2689,18 @@ snapshots:
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
+
+  svelte-check@4.2.2(picomatch@4.0.2)(svelte@5.34.5)(typescript@5.8.3):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      chokidar: 4.0.3
+      fdir: 6.4.6(picomatch@4.0.2)
+      picocolors: 1.1.1
+      sade: 1.8.1
+      svelte: 5.34.5
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - picomatch
 
   svelte-eslint-parser@1.2.0(svelte@5.34.5):
     dependencies:

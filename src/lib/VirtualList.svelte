@@ -1,35 +1,58 @@
 <script>
 	import { untrack } from 'svelte';
 	import SizeAndPositionManager from './SizeAndPositionManager.js';
-	import { DIRECTION, SCROLL_CHANGE_REASON, SCROLL_PROP, SCROLL_PROP_LEGACY } from './constants';
+	import {
+		ALIGNMENT,
+		DIRECTION,
+		SCROLL_CHANGE_REASON,
+		SCROLL_PROP,
+		SCROLL_PROP_LEGACY
+	} from './constants.js';
 	import { ListState } from './utils/ListState.svelte.js';
 	import { ListProps } from './utils/ListProps.svelte.js';
+	/** @import { VirtualListProps, VirtualListEvents, VirtualListSnippets } from './types.js'; */
 
+	/** @type {VirtualListProps & VirtualListEvents & VirtualListSnippets} */
 	let {
-		height = 400,
+		/* Props: */
+
+		height = '100%',
 		width = '100%',
-		itemCount = 0,
-		itemSize = 0,
+
+		itemCount,
+		itemSize,
 		estimatedItemSize = 0,
 		stickyIndices = [],
-		getKey = null,
+		getKey,
+
 		scrollDirection = DIRECTION.VERTICAL,
 		scrollOffset = 0,
 		scrollToIndex = -1,
-		scrollToAlignment = 'start',
+		scrollToAlignment = ALIGNMENT.START,
 		scrollToBehaviour = 'instant',
+
 		overscanCount = 3,
 
-		onListItemsUpdate = () => {},
-		onAfterScroll = () => {},
+		/* Events: */
 
-		header,
-		footer,
-		children
+		onItemsUpdated: handleItemsUpdated,
+		onListItemsUpdate: handleListItemsUpdate, // DEPRECATED
+
+		onAfterScroll: handleAfterScroll,
+
+		/* Snippets: */
+
+		item: itemSnippet,
+		children: childrenSnippet, // DEPRECATED
+
+		header: headerSnippet,
+		footer: footerSnippet
 	} = $props();
 
-	let wrapper = $state.raw();
+	/** @type {HTMLDivElement} */
+	let wrapper;
 
+	/** @type {Record<number, string>} */
 	let styleCache = $state({});
 	let wrapperStyle = $state.raw('');
 	let innerStyle = $state.raw('');
@@ -37,6 +60,7 @@
 	let wrapperHeight = $state(400);
 	let wrapperWidth = $state(400);
 
+	/** @type {{ index: number, style: string }[]} */
 	let items = $state.raw([]);
 
 	const _props = new ListProps(
@@ -53,11 +77,11 @@
 
 	const _state = new ListState(scrollOffset || 0);
 
-	const sizeAndPositionManager = new SizeAndPositionManager({
-		itemCount,
+	const sizeAndPositionManager = new SizeAndPositionManager(
 		itemSize,
-		estimatedItemSize: _props.estimatedItemSize
-	});
+		itemCount,
+		_props.estimatedItemSize
+	);
 
 	// Effect 0: Event listener
 	$effect(() => {
@@ -65,6 +89,7 @@
 		wrapper.addEventListener('scroll', handleScroll, options);
 
 		return () => {
+			// @ts-expect-error because options is not really needed, but maybe in the future
 			wrapper.removeEventListener('scroll', handleScroll, options);
 		};
 	});
@@ -87,11 +112,7 @@
 			let doRecomputeSizes = false;
 
 			if (_props.haveSizesChanged) {
-				sizeAndPositionManager.updateConfig({
-					itemSize,
-					itemCount,
-					estimatedItemSize: _props.estimatedItemSize
-				});
+				sizeAndPositionManager.updateConfig(itemSize, itemCount, _props.estimatedItemSize);
 				doRecomputeSizes = true;
 			}
 
@@ -122,13 +143,17 @@
 		});
 	});
 
+	/**
+	 * Recomputes the sizes of the items and updates the visible items.
+	 */
 	const refresh = () => {
-		const { start, stop } = sizeAndPositionManager.getVisibleRange({
-			containerSize: scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
-			offset: _state.offset,
+		const { start, end } = sizeAndPositionManager.getVisibleRange(
+			scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
+			_state.offset,
 			overscanCount
-		});
+		);
 
+		/** @type {{ index: number, style: string }[]} */
 		const visibleItems = [];
 
 		const totalSize = sizeAndPositionManager.getTotalSize();
@@ -143,10 +168,9 @@
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
-		const hasStickyIndices = Array.isArray(stickyIndices) && stickyIndices.length > 0;
+		const hasStickyIndices = stickyIndices.length > 0;
 		if (hasStickyIndices) {
-			for (let i = 0; i < stickyIndices.length; i++) {
-				const index = stickyIndices[i];
+			for (const index of stickyIndices) {
 				visibleItems.push({
 					index,
 					style: getStyle(index, true)
@@ -154,8 +178,8 @@
 			}
 		}
 
-		if (start !== undefined && stop !== undefined) {
-			for (let index = start; index <= stop; index++) {
+		if (start !== undefined && end !== undefined) {
+			for (let index = start; index <= end; index++) {
 				if (hasStickyIndices && stickyIndices.includes(index)) continue;
 
 				visibleItems.push({
@@ -164,38 +188,54 @@
 				});
 			}
 
-			onListItemsUpdate({ start, end: stop });
+			if (handleItemsUpdated) handleItemsUpdated({ start, end });
+			if (handleListItemsUpdate) handleListItemsUpdate({ start, end }); // DEPRECATED
 		}
 
 		items = visibleItems;
 	};
 
+	/**
+	 * Scrolls the list to a specific coordinate.
+	 * @param {number} value
+	 */
 	const scrollTo = (value) => {
-		if ('scroll' in wrapper)
-			wrapper.scroll({
-				[SCROLL_PROP[scrollDirection]]: value,
-				behavior: scrollToBehaviour
-			});
-		else wrapper[SCROLL_PROP_LEGACY[scrollDirection]] = value;
+		wrapper.scroll({
+			[SCROLL_PROP[scrollDirection]]: value,
+			behavior: scrollToBehaviour
+		});
 	};
 
+	/**
+	 * Recomputes the sizes of the items in the list.
+	 * @param {number} startIndex
+	 */
 	export const recomputeSizes = (startIndex = scrollToIndex) => {
 		styleCache = {};
 		if (startIndex >= 0) sizeAndPositionManager.resetItem(startIndex);
 		refresh();
 	};
 
+	/**
+	 * Calculates the offset for a given index based on the scroll direction and alignment.
+	 * @param {number} index
+	 * @param {import('./types.js').Alignment} align
+	 */
 	const getOffsetForIndex = (index, align = scrollToAlignment) => {
 		if (index < 0 || index >= itemCount) index = 0;
 
-		return sizeAndPositionManager.getUpdatedOffsetForIndex({
+		return sizeAndPositionManager.getUpdatedOffsetForIndex(
 			align,
-			containerSize: scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
-			currentOffset: _state.offset || 0,
-			targetIndex: index
-		});
+			scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
+			_state.offset || 0,
+			index
+		);
 	};
 
+	/**
+	 * Handles the scroll event on the wrapper element.
+	 * @param {Event} event
+	 */
 	const handleScroll = (event) => {
 		const offset = getWrapperOffset();
 
@@ -203,13 +243,22 @@
 
 		_state.listen(offset, SCROLL_CHANGE_REASON.OBSERVED);
 
-		onAfterScroll({ offset, event });
+		if (handleAfterScroll) handleAfterScroll({ offset, event });
 	};
 
+	/**
+	 * Returns the current scroll offset of the wrapper element.
+	 * @returns {number}
+	 */
 	const getWrapperOffset = () => {
 		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
 	};
 
+	/**
+	 * Returns the style for a given item index.
+	 * @param {number} index The index of the item
+	 * @param {boolean} sticky Whether the item should be sticky or not
+	 */
 	const getStyle = (index, sticky) => {
 		if (styleCache[index]) return styleCache[index];
 
@@ -244,20 +293,18 @@
 	class="virtual-list-wrapper"
 	style={wrapperStyle}
 >
-	{#if header}
-		{@render header()}
+	{#if headerSnippet}
+		{@render headerSnippet()}
 	{/if}
 
-	{#if children}
-		<div class="virtual-list-inner" style={innerStyle}>
-			{#each items as item (getKey ? getKey(item.index) : item.index)}
-				{@render children({ style: item.style, index: item.index })}
-			{/each}
-		</div>
-	{/if}
+	<div class="virtual-list-inner" style={innerStyle}>
+		{#each items as item (getKey ? getKey(item.index) : item.index)}
+			{@render (childrenSnippet || itemSnippet)({ style: item.style, index: item.index })}
+		{/each}
+	</div>
 
-	{#if footer}
-		{@render footer()}
+	{#if footerSnippet}
+		{@render footerSnippet()}
 	{/if}
 </div>
 

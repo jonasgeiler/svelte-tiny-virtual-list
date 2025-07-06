@@ -3,7 +3,7 @@
  * forked from react-virtualized.
  */
 
-import { ALIGNMENT } from '$lib/constants.js';
+import { ALIGNMENT } from './constants.js';
 
 /**
  * @callback ItemSizeGetter
@@ -28,19 +28,13 @@ import { ALIGNMENT } from '$lib/constants.js';
  * @type {Object.<number, SizeAndPosition>}
  */
 
-/**
- * @typedef Options
- * @type {object}
- * @property {number} itemCount
- * @property {ItemSize} itemSize
- * @property {number} estimatedItemSize
- */
-
 export default class SizeAndPositionManager {
 	/**
-	 * @param {Options} options
+	 * @param {ItemSize} itemSize
+	 * @param {number} itemCount
+	 * @param {number} estimatedItemSize
 	 */
-	constructor({ itemSize, itemCount, estimatedItemSize }) {
+	constructor(itemSize, itemCount, estimatedItemSize) {
 		/**
 		 * @private
 		 * @type {ItemSize}
@@ -85,20 +79,14 @@ export default class SizeAndPositionManager {
 	}
 
 	/**
-	 * @param {Options} options
+	 * @param {ItemSize} itemSize
+	 * @param {number} itemCount
+	 * @param {number} estimatedItemSize
 	 */
-	updateConfig({ itemSize, itemCount, estimatedItemSize }) {
-		if (itemCount != null) {
-			this.itemCount = itemCount;
-		}
-
-		if (estimatedItemSize != null) {
-			this.estimatedItemSize = estimatedItemSize;
-		}
-
-		if (itemSize != null) {
-			this.itemSize = itemSize;
-		}
+	updateConfig(itemSize, itemCount, estimatedItemSize) {
+		this.itemSize = itemSize;
+		this.itemCount = itemCount;
+		this.estimatedItemSize = estimatedItemSize;
 
 		this.checkForMismatchItemSizeAndItemCount();
 
@@ -237,7 +225,7 @@ export default class SizeAndPositionManager {
 	 * @param {number | undefined} targetIndex
 	 * @return {number} Offset to use to ensure the specified item is visible
 	 */
-	getUpdatedOffsetForIndex({ align = ALIGNMENT.START, containerSize, currentOffset, targetIndex }) {
+	getUpdatedOffsetForIndex(align, containerSize, currentOffset, targetIndex) {
 		if (containerSize <= 0) {
 			return 0;
 		}
@@ -271,9 +259,9 @@ export default class SizeAndPositionManager {
 	 * @param {number} containerSize
 	 * @param {number} offset
 	 * @param {number} overscanCount
-	 * @return {{stop: number|undefined, start: number|undefined}}
+	 * @return {{start: number|undefined, end: number|undefined}}
 	 */
-	getVisibleRange({ containerSize = 0, offset, overscanCount }) {
+	getVisibleRange(containerSize, offset, overscanCount) {
 		const totalSize = this.getTotalSize();
 
 		if (totalSize === 0) {
@@ -290,21 +278,21 @@ export default class SizeAndPositionManager {
 		const datum = this.getSizeAndPositionForIndex(start);
 		offset = datum.offset + datum.size;
 
-		let stop = start;
+		let end = start;
 
-		while (offset < maxOffset && stop < this.itemCount - 1) {
-			stop++;
-			offset += this.getSizeAndPositionForIndex(stop).size;
+		while (offset < maxOffset && end < this.itemCount - 1) {
+			end++;
+			offset += this.getSizeAndPositionForIndex(end).size;
 		}
 
 		if (overscanCount) {
 			start = Math.max(0, start - overscanCount);
-			stop = Math.min(stop + overscanCount, this.itemCount - 1);
+			end = Math.min(end + overscanCount, this.itemCount - 1);
 		}
 
 		return {
 			start,
-			stop
+			end
 		};
 	}
 
@@ -341,29 +329,22 @@ export default class SizeAndPositionManager {
 
 		if (lastMeasuredSizeAndPosition.offset >= offset) {
 			// If we've already measured items within this range just use a binary search as it's faster.
-			return this.binarySearch({
-				high: lastMeasuredIndex,
-				low: 0,
-				offset
-			});
+			return this.binarySearch(lastMeasuredIndex, 0, offset);
 		} else {
 			// If we haven't yet measured this high, fallback to an exponential search with an inner binary search.
 			// The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
 			// The overall complexity for this approach is O(log n).
-			return this.exponentialSearch({
-				index: lastMeasuredIndex,
-				offset
-			});
+			return this.exponentialSearch(lastMeasuredIndex, offset);
 		}
 	}
 
 	/**
 	 * @private
-	 * @param {number} low
 	 * @param {number} high
+	 * @param {number} low
 	 * @param {number} offset
 	 */
-	binarySearch({ low, high, offset }) {
+	binarySearch(high, low, offset) {
 		let middle = 0;
 		let currentOffset = 0;
 
@@ -392,7 +373,7 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 * @param {number} offset
 	 */
-	exponentialSearch({ index, offset }) {
+	exponentialSearch(index, offset) {
 		let interval = 1;
 
 		while (index < this.itemCount && this.getSizeAndPositionForIndex(index).offset < offset) {
@@ -400,10 +381,6 @@ export default class SizeAndPositionManager {
 			interval *= 2;
 		}
 
-		return this.binarySearch({
-			high: Math.min(index, this.itemCount - 1),
-			low: Math.floor(index / 2),
-			offset
-		});
+		return this.binarySearch(Math.min(index, this.itemCount - 1), Math.floor(index / 2), offset);
 	}
 }

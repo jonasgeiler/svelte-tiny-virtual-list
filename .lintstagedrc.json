@@ -1,7 +1,7 @@
 {
 	"*.{js,ts,css,json}": "biome check",
-	"*.{js,ts,svelte}": "eslint",
+	"*.{js,svelte}": "eslint",
 	"*.{js,ts,svelte,css,html,json,yml,yaml,md}": "prettier --check",
-	"*.{test,spec}.{js,ts}": "vitest related --run",
+	"*.{js,ts}": "vitest related --run",
 	"e2e/*.{js,ts}": "playwright test"
 }

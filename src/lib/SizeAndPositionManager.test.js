@@ -1,6 +1,6 @@
-import { ALIGNMENT } from '$lib/constants.js';
-import SizeAndPositionManager from '$lib/SizeAndPositionManager.js';
 import { describe, expect, it } from 'vitest';
+import { ALIGNMENT } from './constants.js';
+import SizeAndPositionManager from './SizeAndPositionManager.js';
 
 const ITEM_SIZE = 10;
 const range = (N) => Array.from({ length: N }, (_, k) => k + 1);
@@ -15,14 +15,14 @@ describe('SizeAndPositionManager', () => {
 		/** @type {number[]} */
 		const itemSizeGetterCalls = [];
 
-		const sizeAndPositionManager = new SizeAndPositionManager({
-			itemCount,
-			itemSize: (index) => {
+		const sizeAndPositionManager = new SizeAndPositionManager(
+			(index) => {
 				itemSizeGetterCalls.push(index);
 				return ITEM_SIZE;
 			},
+			itemCount,
 			estimatedItemSize
-		});
+		);
 
 		return {
 			sizeAndPositionManager,
@@ -36,10 +36,7 @@ describe('SizeAndPositionManager', () => {
 	 * @return {{sizeAndPositionManager: SizeAndPositionManager, totalSize: number, itemSize: number}}
 	 */
 	function getItemSizeAndPositionManagerNumber(itemCount = 100, itemSize = 50) {
-		const sizeAndPositionManager = new SizeAndPositionManager({
-			itemCount,
-			itemSize
-		});
+		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount);
 
 		return {
 			sizeAndPositionManager,
@@ -57,10 +54,7 @@ describe('SizeAndPositionManager', () => {
 			return Math.max(Math.round(Math.random() * 100), 32);
 		});
 
-		const sizeAndPositionManager = new SizeAndPositionManager({
-			itemCount,
-			itemSize
-		});
+		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount);
 
 		return {
 			sizeAndPositionManager,
@@ -256,18 +250,18 @@ describe('SizeAndPositionManager', () => {
 			estimatedItemSize = 15,
 			targetIndex = 0
 		}) {
-			const sizeAndPositionManager = new SizeAndPositionManager({
+			const sizeAndPositionManager = new SizeAndPositionManager(
+				() => itemSize,
 				itemCount,
-				itemSize: () => itemSize,
 				estimatedItemSize
-			});
+			);
 
-			return sizeAndPositionManager.getUpdatedOffsetForIndex({
+			return sizeAndPositionManager.getUpdatedOffsetForIndex(
 				align,
 				containerSize,
 				currentOffset,
 				targetIndex
-			});
+			);
 		}
 
 		it('should scroll to the beginning', () => {
@@ -394,47 +388,31 @@ describe('SizeAndPositionManager', () => {
 	describe('getVisibleRange', () => {
 		it('should not return any indices if :itemCount is 0', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager(0);
-			const { start, stop } = sizeAndPositionManager.getVisibleRange({
-				containerSize: 50,
-				offset: 0,
-				overscanCount: 0
-			});
+			const { start, end } = sizeAndPositionManager.getVisibleRange(50, 0, 0);
 			expect(start).toBeUndefined();
-			expect(stop).toBeUndefined();
+			expect(end).toBeUndefined();
 		});
 
 		it('should return a visible range of items for the beginning of the list', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
-			const { start, stop } = sizeAndPositionManager.getVisibleRange({
-				containerSize: 50,
-				offset: 0,
-				overscanCount: 0
-			});
+			const { start, end } = sizeAndPositionManager.getVisibleRange(50, 0, 0);
 			expect(start).toEqual(0);
-			expect(stop).toEqual(4);
+			expect(end).toEqual(4);
 		});
 
 		it('should return a visible range of items for the middle of the list where some are partially visible', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
-			const { start, stop } = sizeAndPositionManager.getVisibleRange({
-				containerSize: 50,
-				offset: 425,
-				overscanCount: 0
-			});
+			const { start, end } = sizeAndPositionManager.getVisibleRange(50, 425, 0);
 			// 42 and 47 are partially visible
 			expect(start).toEqual(42);
-			expect(stop).toEqual(47);
+			expect(end).toEqual(47);
 		});
 
 		it('should return a visible range of items for the end of the list', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
-			const { start, stop } = sizeAndPositionManager.getVisibleRange({
-				containerSize: 50,
-				offset: 950,
-				overscanCount: 0
-			});
+			const { start, end } = sizeAndPositionManager.getVisibleRange(50, 950, 0);
 			expect(start).toEqual(95);
-			expect(stop).toEqual(99);
+			expect(end).toEqual(99);
 		});
 	});
 

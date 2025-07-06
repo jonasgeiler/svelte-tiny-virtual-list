@@ -20,7 +20,7 @@
 				itemCount={100000}
 				itemSize={150}
 			>
-				{#snippet children({ style, index })}
+				{#snippet item({ style, index })}
 					<div {style} class="virtual-list-col">
 						Item #{index}
 					</div>

@@ -5,7 +5,9 @@
 	let rowHeights = $state.raw([]);
 
 	let scrollToIndex = $state();
+	/** @type {'start' | 'center' | 'end' | 'auto'} */
 	let scrollToAlignment = $state('start');
+	/** @type {'auto' | 'smooth' | 'instant'} */
 	let scrollToBehaviour = $state('instant');
 
 	const NUM_ROWS = 10000;
@@ -65,7 +67,7 @@
 			{scrollToAlignment}
 			{scrollToBehaviour}
 		>
-			{#snippet children({ style, index })}
+			{#snippet item({ style, index })}
 				<div {style} class="virtual-list-row" class:highlighted={index === scrollToIndex}>
 					Item #{index}
 				</div>
