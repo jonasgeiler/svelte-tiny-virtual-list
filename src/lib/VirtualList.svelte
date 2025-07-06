@@ -8,8 +8,6 @@
 		SCROLL_PROP,
 		SCROLL_PROP_LEGACY
 	} from './constants.js';
-	import { ListState } from './utils/ListState.svelte.js';
-	import { ListProps } from './utils/ListProps.svelte.js';
 	/** @import { VirtualListProps, VirtualListEvents, VirtualListSnippets } from './types.js'; */
 
 	/** @type {VirtualListProps & VirtualListEvents & VirtualListSnippets} */
@@ -21,13 +19,13 @@
 
 		itemCount,
 		itemSize,
-		estimatedItemSize = 0,
+		estimatedItemSize: optEstimatedItemSize,
 		stickyIndices = [],
 		getKey,
 
 		scrollDirection = DIRECTION.VERTICAL,
-		scrollOffset = 0,
-		scrollToIndex = -1,
+		scrollOffset,
+		scrollToIndex,
 		scrollToAlignment = ALIGNMENT.START,
 		scrollToBehaviour = 'instant',
 
@@ -49,107 +47,169 @@
 		footer: footerSnippet
 	} = $props();
 
+	let estimatedItemSize = $derived(
+		optEstimatedItemSize || (typeof itemSize === 'number' && itemSize) || 50
+	);
+	const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount, estimatedItemSize);
+
 	/** @type {HTMLDivElement} */
 	let wrapper;
-
-	/** @type {Record<number, string>} */
-	let styleCache = $state({});
-	let wrapperStyle = $state.raw('');
-	let innerStyle = $state.raw('');
-
 	let wrapperHeight = $state(400);
 	let wrapperWidth = $state(400);
-
 	/** @type {{ index: number, style: string }[]} */
 	let items = $state.raw([]);
 
-	const _props = new ListProps(
+	/** @type {{ offset: number, changeReason: number }} */
+	let scroll = $state.raw({
+		offset: scrollOffset || (scrollToIndex !== undefined && getOffsetForIndex(scrollToIndex)) || 0,
+		changeReason: SCROLL_CHANGE_REASON.REQUESTED
+	});
+	let prevScroll = $state.raw(scroll);
+
+	let heightNumber = $derived(Number.isFinite(height) ? Number(height) : wrapperHeight);
+	let widthNumber = $derived(Number.isFinite(width) ? Number(width) : wrapperWidth);
+	let prevProps = $state.raw({
 		scrollToIndex,
 		scrollToAlignment,
 		scrollOffset,
 		itemCount,
 		itemSize,
 		estimatedItemSize,
-		Number.isFinite(height) ? height : 400,
-		Number.isFinite(width) ? width : 400,
+		heightNumber,
+		widthNumber,
 		stickyIndices
-	);
+	});
 
-	const _state = new ListState(scrollOffset || 0);
-
-	const sizeAndPositionManager = new SizeAndPositionManager(
-		itemSize,
-		itemCount,
-		_props.estimatedItemSize
-	);
+	/** @type {Record<number, string>} */
+	let styleCache = $state({});
+	let wrapperStyle = $state.raw('');
+	let innerStyle = $state.raw('');
 
 	// Effect 0: Event listener
 	$effect(() => {
+		/** @type {number | undefined} */
+		let frame;
+		/** @param {Event} event */
+		const handleScrollAsync = (event) => {
+			if (frame !== undefined) {
+				cancelAnimationFrame(frame);
+			}
+			frame = requestAnimationFrame(() => {
+				handleScroll(event);
+				frame = undefined;
+			});
+		};
+
 		const options = { passive: true };
-		wrapper.addEventListener('scroll', handleScroll, options);
+		wrapper.addEventListener('scroll', handleScrollAsync, options);
 
 		return () => {
 			// @ts-expect-error because options is not really needed, but maybe in the future
-			wrapper.removeEventListener('scroll', handleScroll, options);
+			wrapper.removeEventListener('scroll', handleScrollAsync, options);
 		};
 	});
 
 	// Effect 1: Update props from user provided props
 	$effect(() => {
-		_props.listen(
-			scrollToIndex,
-			scrollToAlignment,
-			scrollOffset,
-			itemCount,
-			itemSize,
-			estimatedItemSize,
-			Number.isFinite(height) ? height : wrapperHeight,
-			Number.isFinite(width) ? width : wrapperWidth,
-			stickyIndices
-		);
+		scrollToIndex;
+		scrollToAlignment;
+		scrollOffset;
+		itemCount;
+		itemSize;
+		estimatedItemSize;
+		heightNumber;
+		widthNumber;
+		stickyIndices;
 
-		untrack(() => {
-			let doRecomputeSizes = false;
-
-			if (_props.haveSizesChanged) {
-				sizeAndPositionManager.updateConfig(itemSize, itemCount, _props.estimatedItemSize);
-				doRecomputeSizes = true;
-			}
-
-			if (_props.hasScrollOffsetChanged)
-				_state.listen(_props.scrollOffset, SCROLL_CHANGE_REASON.REQUESTED);
-			else if (_props.hasScrollIndexChanged)
-				_state.listen(
-					getOffsetForIndex(scrollToIndex, scrollToAlignment),
-					SCROLL_CHANGE_REASON.REQUESTED
-				);
-
-			if (_props.haveDimsOrStickyIndicesChanged || doRecomputeSizes) recomputeSizes();
-
-			_props.update();
-		});
+		untrack(propsUpdated);
 	});
 
-	// Effect 2: Update UI from state
+	// Effect 2: Update scroll
 	$effect(() => {
-		_state.offset;
+		scroll;
 
-		untrack(() => {
-			if (_state.doRefresh) refresh();
-
-			if (_state.doScrollToOffset) scrollTo(_state.offset);
-
-			_state.update();
-		});
+		untrack(scrollUpdated);
 	});
+
+	function propsUpdated() {
+		const scrollPropsHaveChanged =
+			prevProps.scrollToIndex !== scrollToIndex ||
+			prevProps.scrollToAlignment !== scrollToAlignment;
+		const itemPropsHaveChanged =
+			prevProps.itemCount !== itemCount ||
+			prevProps.itemSize !== itemSize ||
+			prevProps.estimatedItemSize !== estimatedItemSize;
+
+		let forceRecomputeSizes = false;
+		if (itemPropsHaveChanged) {
+			sizeAndPositionManager.updateConfig(itemSize, itemCount, estimatedItemSize);
+
+			forceRecomputeSizes = true;
+		}
+
+		if (prevProps.scrollOffset !== scrollOffset) {
+			scroll = {
+				offset: scrollOffset || 0,
+				changeReason: SCROLL_CHANGE_REASON.REQUESTED
+			};
+		} else if (
+			typeof scrollToIndex === 'number' &&
+			(scrollPropsHaveChanged || itemPropsHaveChanged)
+		) {
+			scroll = {
+				offset: getOffsetForIndex(scrollToIndex),
+				changeReason: SCROLL_CHANGE_REASON.REQUESTED
+			};
+		}
+
+		if (
+			forceRecomputeSizes ||
+			prevProps.heightNumber !== heightNumber ||
+			prevProps.widthNumber !== widthNumber ||
+			prevProps.stickyIndices.toString() !== $state.snapshot(stickyIndices).toString()
+		) {
+			recomputeSizes();
+		}
+
+		prevProps = {
+			scrollToIndex: $state.snapshot(scrollToIndex),
+			scrollToAlignment: $state.snapshot(scrollToAlignment),
+			scrollOffset: $state.snapshot(scrollOffset),
+			itemCount: $state.snapshot(itemCount),
+			// @ts-expect-error since snapshot does not support functions properly
+			itemSize: $state.snapshot(itemSize),
+			estimatedItemSize: $state.snapshot(estimatedItemSize),
+			heightNumber: $state.snapshot(heightNumber),
+			widthNumber: $state.snapshot(widthNumber),
+			stickyIndices: $state.snapshot(stickyIndices)
+		};
+	}
+
+	function scrollUpdated() {
+		if (prevScroll.offset !== scroll.offset || prevScroll.changeReason !== scroll.changeReason) {
+			refresh();
+		}
+
+		if (
+			prevScroll.offset !== scroll.offset &&
+			scroll.changeReason === SCROLL_CHANGE_REASON.REQUESTED
+		) {
+			wrapper.scroll({
+				[SCROLL_PROP[scrollDirection]]: scroll.offset,
+				behavior: scrollToBehaviour
+			});
+		}
+
+		prevScroll = scroll;
+	}
 
 	/**
 	 * Recomputes the sizes of the items and updates the visible items.
 	 */
-	const refresh = () => {
+	function refresh() {
 		const { start, end } = sizeAndPositionManager.getVisibleRange(
-			scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
-			_state.offset,
+			scrollDirection === DIRECTION.VERTICAL ? heightNumber : widthNumber,
+			scroll.offset,
 			overscanCount
 		);
 
@@ -160,11 +220,10 @@
 		const heightUnit = typeof height === 'number' ? 'px' : '';
 		const widthUnit = typeof width === 'number' ? 'px' : '';
 
+		wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 		if (scrollDirection === DIRECTION.VERTICAL) {
-			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `flex-direction:column;height:${totalSize}px;`;
 		} else {
-			wrapperStyle = `height:${height}${heightUnit};width:${width}${widthUnit};`;
 			innerStyle = `min-height:100%;width:${totalSize}px;`;
 		}
 
@@ -193,97 +252,80 @@
 		}
 
 		items = visibleItems;
-	};
-
-	/**
-	 * Scrolls the list to a specific coordinate.
-	 * @param {number} value
-	 */
-	const scrollTo = (value) => {
-		wrapper.scroll({
-			[SCROLL_PROP[scrollDirection]]: value,
-			behavior: scrollToBehaviour
-		});
-	};
+	}
 
 	/**
 	 * Recomputes the sizes of the items in the list.
-	 * @param {number} startIndex
 	 */
-	export const recomputeSizes = (startIndex = scrollToIndex) => {
+	export function recomputeSizes(startIndex = scrollToIndex) {
 		styleCache = {};
-		if (startIndex >= 0) sizeAndPositionManager.resetItem(startIndex);
+		if (startIndex !== undefined && startIndex >= 0) {
+			sizeAndPositionManager.resetItem(startIndex);
+		}
 		refresh();
-	};
+	}
 
 	/**
 	 * Calculates the offset for a given index based on the scroll direction and alignment.
 	 * @param {number} index
-	 * @param {import('./types.js').Alignment} align
 	 */
-	const getOffsetForIndex = (index, align = scrollToAlignment) => {
+	function getOffsetForIndex(index) {
 		if (index < 0 || index >= itemCount) index = 0;
 
 		return sizeAndPositionManager.getUpdatedOffsetForIndex(
-			align,
-			scrollDirection === DIRECTION.VERTICAL ? _props.height : _props.width,
-			_state.offset || 0,
+			scrollToAlignment,
+			scrollDirection === DIRECTION.VERTICAL ? heightNumber : widthNumber,
+			scroll.offset || 0,
 			index
 		);
-	};
+	}
 
 	/**
 	 * Handles the scroll event on the wrapper element.
 	 * @param {Event} event
 	 */
-	const handleScroll = (event) => {
-		const offset = getWrapperOffset();
+	function handleScroll(event) {
+		const offset = wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
 
-		if (offset < 0 || _state.offset === offset || event.target !== wrapper) return null;
+		if (offset < 0 || scroll.offset === offset || event.target !== wrapper) return;
 
-		_state.listen(offset, SCROLL_CHANGE_REASON.OBSERVED);
+		scroll = { offset, changeReason: SCROLL_CHANGE_REASON.OBSERVED };
 
 		if (handleAfterScroll) handleAfterScroll({ offset, event });
-	};
-
-	/**
-	 * Returns the current scroll offset of the wrapper element.
-	 * @returns {number}
-	 */
-	const getWrapperOffset = () => {
-		return wrapper[SCROLL_PROP_LEGACY[scrollDirection]];
-	};
+	}
 
 	/**
 	 * Returns the style for a given item index.
 	 * @param {number} index The index of the item
 	 * @param {boolean} sticky Whether the item should be sticky or not
 	 */
-	const getStyle = (index, sticky) => {
+	function getStyle(index, sticky) {
 		if (styleCache[index]) return styleCache[index];
 
 		const { size, offset } = sizeAndPositionManager.getSizeAndPositionForIndex(index);
 
 		let style;
-
 		if (scrollDirection === DIRECTION.VERTICAL) {
 			style = `left:0;width:100%;height:${size}px;`;
 
-			if (sticky)
+			if (sticky) {
 				style += `position:sticky;flex-grow:0;z-index:1;top:0;margin-top:${offset}px;margin-bottom:${-(offset + size)}px;`;
-			else style += `position:absolute;top:${offset}px;`;
+			} else {
+				style += `position:absolute;top:${offset}px;`;
+			}
 		} else {
 			style = `top:0;width:${size}px;`;
 
-			if (sticky)
+			if (sticky) {
 				style += `position:sticky;z-index:1;left:0;margin-left:${offset}px;margin-right:${-(offset + size)}px;`;
-			else style += `position:absolute;height:100%;left:${offset}px;`;
+			} else {
+				style += `position:absolute;height:100%;left:${offset}px;`;
+			}
 		}
 
 		styleCache[index] = style;
-
 		return styleCache[index];
-	};
+	}
 </script>
 
 <div
