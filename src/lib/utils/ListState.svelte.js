@@ -1,45 +1,36 @@
-import { SCROLL_CHANGE_REASON } from '$lib/constants.js';
-
 // TODO: Refactor further
 export class ListState {
-	offset = $state(0);
-	scrollChangeReason = $state(SCROLL_CHANGE_REASON.REQUESTED);
+	/**
+	 * @param {number} offset
+	 * @param {number} scrollChangeReason
+	 */
+	constructor(offset, scrollChangeReason) {
+		this.offset = $state(offset);
+		this.scrollChangeReason = $state(scrollChangeReason);
 
-	previousState = $state.raw({
-		offset: 0,
-		scrollChangeReason: SCROLL_CHANGE_REASON.REQUESTED
-	});
+		/**
+		 * @typedef {object} PreviousState
+		 * @property {number} offset
+		 * @property {number} scrollChangeReason
+		 */
 
-	get doRefresh() {
-		return (
-			this.offset !== this.previousState.offset ||
-			this.scrollChangeReason !== this.previousState.scrollChangeReason
-		);
+		/** @type {PreviousState} */
+		this.previous = $state.raw({
+			offset,
+			scrollChangeReason
+		});
 	}
-
-	get doScrollToOffset() {
-		return (
-			this.offset !== this.previousState.offset &&
-			this.scrollChangeReason === SCROLL_CHANGE_REASON.REQUESTED
-		);
-	}
-
-	constructor(offset = 0) {
+	/**
+	 * @param {number} [offset]
+	 * @param {number} [scrollChangeReason]
+	 */
+	update(offset, scrollChangeReason) {
 		this.offset = offset;
+		this.scrollChangeReason = scrollChangeReason;
 	}
 
-	listen(offset, scrollChangeReason) {
-		if (typeof offset === 'number') this.offset = offset;
-
-		if (typeof scrollChangeReason === 'number') this.scrollChangeReason = scrollChangeReason;
-	}
-
-	update() {
-		this.#updateRenderedStateSnapshot();
-	}
-
-	#updateRenderedStateSnapshot() {
-		this.previousState = {
+	updatePrevious() {
+		this.previous = {
 			offset: $state.snapshot(this.offset),
 			scrollChangeReason: $state.snapshot(this.scrollChangeReason)
 		};
