@@ -46,7 +46,7 @@
 		"@playwright/test": "1.53.0",
 		"@sveltejs/adapter-static": "3.0.8",
 		"@sveltejs/kit": "2.21.5",
-		"@sveltejs/package": "2.3.11",
+		"@sveltejs/package": "2.3.12",
 		"@sveltejs/vite-plugin-svelte": "5.1.0",
 		"@vitest/browser": "3.2.4",
 		"beercss": "3.6.13",
