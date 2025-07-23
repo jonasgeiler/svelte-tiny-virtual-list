@@ -59,7 +59,7 @@ $ pnpm install svelte-tiny-virtual-list
 </script>
 
 <VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-	{#snippet children({ style, index })}
+	{#snippet item({ style, index })}
 		<div {style}>
 			Letter: {data[index]}, Row: #{index}
 		</div>
@@ -91,7 +91,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/jonas
 </script>
 
 <VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-	{#snippet children({ style, index })}
+	{#snippet item({ style, index })}
 		<div {style}>
 			Letter: {data[index]}, Row: #{index}
 		</div>
@@ -128,7 +128,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/jonas
 
 ### Snippets
 
-- `children` - Snippet for each item
+- `item` - Snippet for each item
   - Prop: `{ index, style }`
     - `index: number` - Item index
     - `style: string` - Item style, must be applied to the snippet (look above for example)
@@ -167,7 +167,7 @@ However, if you're passing a function to `itemSize`, that type of comparison is 
 	itemCount={data.length}
 	itemSize={50}
 >
-	{#snippet children({ style, index })}
+	{#snippet item({ style, index })}
 		<div {style}>
 			Letter: {data[index]}, Row: #{index}
 		</div>
@@ -188,7 +188,7 @@ You can style the elements of the virtual list like this:
 
 <div class="list">
 	<VirtualList width="100%" height={600} itemCount={data.length} itemSize={50}>
-		{#snippet children({ style, index })}
+		{#snippet item({ style, index })}
 			<div {style}>
 				Letter: {data[index]}, Row: #{index}
 			</div>
