@@ -52,7 +52,7 @@
 		"beercss": "3.6.13",
 		"eslint": "9.29.0",
 		"eslint-config-prettier": "10.1.5",
-		"eslint-plugin-svelte": "3.9.2",
+		"eslint-plugin-svelte": "3.9.3",
 		"globals": "16.2.0",
 		"lint-staged": "16.1.2",
 		"marked": "15.0.12",
