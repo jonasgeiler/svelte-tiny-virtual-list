@@ -57,8 +57,8 @@ importers:
         specifier: 15.0.12
         version: 15.0.12
       marked-base-url:
-        specifier: 1.1.6
-        version: 1.1.6(marked@15.0.12)
+        specifier: 1.1.7
+        version: 1.1.7(marked@15.0.12)
       marked-gfm-heading-id:
         specifier: 4.1.1
         version: 4.1.1(marked@15.0.12)
@@ -1085,10 +1085,10 @@ packages:
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
 
-  marked-base-url@1.1.6:
-    resolution: {integrity: sha512-STFGZN1kBZIWaw5RGwY63mSCwUXUmUDOAPRMAuPkg2Iou4ZWUsd7nFqvh0ifMYekqKuHHdmqJUqCl0HUakBbMQ==}
+  marked-base-url@1.1.7:
+    resolution: {integrity: sha512-CJOfpG2/XOEp8UuI5H0tbELxuS1v8Ud705jamEIpWBQDdkda1i+LrafxLn41rlxhGEeJqo27b/hBFVYHWOYccw==}
     peerDependencies:
-      marked: '>= 4 < 16'
+      marked: '>= 4 < 17'
 
   marked-gfm-heading-id@4.1.1:
     resolution: {integrity: sha512-EeQZieAQmsI6c2tWLx0ETd0VjPwLV8qi+HT0dIsfVMERm0rCIuXfRvZXJbo1SgUi++lmuR1LVY+QzgNiLNvVpw==}
@@ -2439,7 +2439,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  marked-base-url@1.1.6(marked@15.0.12):
+  marked-base-url@1.1.7(marked@15.0.12):
     dependencies:
       marked: 15.0.12
 
