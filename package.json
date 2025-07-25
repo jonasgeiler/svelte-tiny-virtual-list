@@ -47,7 +47,7 @@
 		"@sveltejs/adapter-static": "3.0.8",
 		"@sveltejs/kit": "2.25.1",
 		"@sveltejs/package": "2.3.12",
-		"@sveltejs/vite-plugin-svelte": "5.1.0",
+		"@sveltejs/vite-plugin-svelte": "5.1.1",
 		"@vitest/browser": "3.2.4",
 		"beercss": "3.6.13",
 		"eslint": "9.29.0",
