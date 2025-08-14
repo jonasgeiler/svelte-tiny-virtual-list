@@ -54,7 +54,7 @@
 		"eslint-config-prettier": "10.1.8",
 		"eslint-plugin-svelte": "3.9.3",
 		"globals": "16.2.0",
-		"lint-staged": "16.1.2",
+		"lint-staged": "16.1.5",
 		"marked": "15.0.12",
 		"marked-base-url": "1.1.7",
 		"marked-gfm-heading-id": "4.1.2",
