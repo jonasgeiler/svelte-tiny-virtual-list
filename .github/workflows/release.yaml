@@ -43,7 +43,7 @@ jobs:
       - name: Check if tag is for a pre-release
         id: check-prerelease
         run: |
-          IFS=$' \t\n'; set -ux
+          IFS=$' \n\t'; set -ux
 
           # Get clean version from the tag name
           version="${GITHUB_REF_NAME#v}"
