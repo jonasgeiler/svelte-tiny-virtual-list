@@ -64,21 +64,21 @@
 		offset: scrollOffset || (scrollToIndex !== undefined && getOffsetForIndex(scrollToIndex)) || 0,
 		changeReason: SCROLL_CHANGE_REASON.REQUESTED
 	});
-	let prevScroll = $state.raw(scroll);
+	let prevScroll = $state.snapshot(scroll);
 
 	let heightNumber = $derived(Number.isFinite(height) ? Number(height) : wrapperHeight);
 	let widthNumber = $derived(Number.isFinite(width) ? Number(width) : wrapperWidth);
-	let prevProps = $state.raw({
-		scrollToIndex,
-		scrollToAlignment,
-		scrollOffset,
-		itemCount,
-		itemSize,
-		estimatedItemSize,
-		heightNumber,
-		widthNumber,
-		stickyIndices
-	});
+	let prevProps = {
+		scrollToIndex: $state.snapshot(scrollToIndex),
+		scrollToAlignment: $state.snapshot(scrollToAlignment),
+		scrollOffset: $state.snapshot(scrollOffset),
+		itemCount: $state.snapshot(itemCount),
+		itemSize: typeof itemSize === 'function' ? itemSize : $state.snapshot(itemSize),
+		estimatedItemSize: $state.snapshot(estimatedItemSize),
+		heightNumber: $state.snapshot(heightNumber),
+		widthNumber: $state.snapshot(widthNumber),
+		stickyIndices: $state.snapshot(stickyIndices)
+	};
 
 	/** @type {Record<number, string>} */
 	let styleCache = $state({});
@@ -176,8 +176,7 @@
 			scrollToAlignment: $state.snapshot(scrollToAlignment),
 			scrollOffset: $state.snapshot(scrollOffset),
 			itemCount: $state.snapshot(itemCount),
-			// @ts-expect-error since snapshot does not support functions properly
-			itemSize: $state.snapshot(itemSize),
+			itemSize: typeof itemSize === 'function' ? itemSize : $state.snapshot(itemSize),
 			estimatedItemSize: $state.snapshot(estimatedItemSize),
 			heightNumber: $state.snapshot(heightNumber),
 			widthNumber: $state.snapshot(widthNumber),
@@ -200,7 +199,7 @@
 			});
 		}
 
-		prevScroll = scroll;
+		prevScroll = $state.snapshot(scroll);
 	}
 
 	/**
