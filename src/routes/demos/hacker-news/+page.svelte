@@ -10,8 +10,12 @@
 
 	let page = $state(1);
 	let listHeight = $state(0);
+	/** @type {{story_id: string, created_at: string, title: string, author: string, url: string, points: number, num_comments: number}[]} */
 	let list = $state([]);
 
+	/**
+	 * @param {CustomEvent<{ loaded: () => void; complete: () => void; error: () => void }>} event
+	 */
 	function infiniteHandler({ detail: { loaded, complete, error } }) {
 		fetch(`${api}&page=${page}`)
 			.then((response) => response.json())
@@ -27,6 +31,9 @@
 			.catch(() => error());
 	}
 
+	/**
+	 * @param {string} url
+	 */
 	function formatSite(url) {
 		const domain = new URL(url).hostname;
 		return domain.startsWith('www.') ? domain.slice(4) : domain;
@@ -34,8 +41,11 @@
 
 	const dateFormatter = new Intl.RelativeTimeFormat('en', { style: 'long' });
 
+	/**
+	 * @param {string} createdAt
+	 */
 	function formatCreatedAt(createdAt) {
-		const seconds = Math.floor((new Date() - new Date(createdAt)) / 1000);
+		const seconds = Math.floor((Date.now() - new Date(createdAt).getTime()) / 1000);
 		if (seconds <= 60) {
 			return dateFormatter.format(-seconds, 'second');
 		} else if (seconds <= 3600) {

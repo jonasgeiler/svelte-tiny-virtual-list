@@ -3,6 +3,10 @@ import { ALIGNMENT } from './constants.js';
 import SizeAndPositionManager from './SizeAndPositionManager.js';
 
 const ITEM_SIZE = 10;
+/**
+ * @param {number} N
+ * @returns {number[]}
+ */
 const range = (N) => Array.from({ length: N }, (_, k) => k + 1);
 
 describe('SizeAndPositionManager', () => {
@@ -36,7 +40,7 @@ describe('SizeAndPositionManager', () => {
 	 * @return {{sizeAndPositionManager: SizeAndPositionManager, totalSize: number, itemSize: number}}
 	 */
 	function getItemSizeAndPositionManagerNumber(itemCount = 100, itemSize = 50) {
-		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount);
+		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount, 50);
 
 		return {
 			sizeAndPositionManager,
@@ -54,7 +58,7 @@ describe('SizeAndPositionManager', () => {
 			return Math.max(Math.round(Math.random() * 100), 32);
 		});
 
-		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount);
+		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount, 66);
 
 		return {
 			sizeAndPositionManager,
@@ -232,13 +236,17 @@ describe('SizeAndPositionManager', () => {
 
 	describe('getUpdatedOffsetForIndex', () => {
 		/**
-		 * @param {'auto' | 'start' | 'center' | 'end'} align
-		 * @param {number} itemCount
-		 * @param {number} itemSize
-		 * @param {number} containerSize
-		 * @param {number} currentOffset
-		 * @param {number} estimatedItemSize
-		 * @param {number} targetIndex
+		 * @typedef {Object} GetUpdatedOffsetForIndexParams
+		 * @property {'auto' | 'start' | 'center' | 'end'} [align]
+		 * @property {number} [itemCount]
+		 * @property {number} [itemSize]
+		 * @property {number} [containerSize]
+		 * @property {number} [currentOffset]
+		 * @property {number} [estimatedItemSize]
+		 * @property {number} [targetIndex]
+		 */
+		/**
+		 * @param {GetUpdatedOffsetForIndexParams} params
 		 * @return {number}
 		 */
 		function getUpdatedOffsetForIndexHelper({

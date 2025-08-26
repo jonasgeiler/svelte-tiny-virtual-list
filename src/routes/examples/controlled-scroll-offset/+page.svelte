@@ -1,6 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 
+	/** @type {number[]} */
 	let rowHeights = $state([]);
 
 	let scrollOffset = $state();

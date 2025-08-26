@@ -220,9 +220,9 @@ export default class SizeAndPositionManager {
 	 * Determines a new offset that ensures a certain item is visible, given the alignment.
 	 *
 	 * @param {'auto' | 'start' | 'center' | 'end'} align Desired alignment within container
-	 * @param {number | undefined} containerSize Size (width or height) of the container viewport
-	 * @param {number | undefined} currentOffset
-	 * @param {number | undefined} targetIndex
+	 * @param {number} containerSize Size (width or height) of the container viewport
+	 * @param {number} currentOffset
+	 * @param {number} targetIndex
 	 * @return {number} Offset to use to ensure the specified item is visible
 	 */
 	getUpdatedOffsetForIndex(align, containerSize, currentOffset, targetIndex) {
@@ -259,7 +259,7 @@ export default class SizeAndPositionManager {
 	 * @param {number} containerSize
 	 * @param {number} offset
 	 * @param {number} overscanCount
-	 * @return {{start: number|undefined, end: number|undefined}}
+	 * @return {{start?: number, end?: number}}
 	 */
 	getVisibleRange(containerSize, offset, overscanCount) {
 		const totalSize = this.getTotalSize();
