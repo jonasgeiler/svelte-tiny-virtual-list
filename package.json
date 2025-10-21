@@ -58,7 +58,7 @@
 		"marked": "15.0.12",
 		"marked-base-url": "1.1.7",
 		"marked-gfm-heading-id": "4.1.2",
-		"playwright": "1.53.2",
+		"playwright": "1.55.1",
 		"prettier": "3.5.3",
 		"prettier-plugin-svelte": "3.4.0",
 		"publint": "0.3.14",
