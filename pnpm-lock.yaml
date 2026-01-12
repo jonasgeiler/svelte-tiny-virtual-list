@@ -22,10 +22,10 @@ importers:
         version: 1.53.2
       '@sveltejs/adapter-static':
         specifier: 3.0.10
-        version: 3.0.10(@sveltejs/kit@2.25.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))
+        version: 3.0.10(@sveltejs/kit@2.49.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(typescript@5.8.3)(vite@6.3.7(yaml@2.8.1)))
       '@sveltejs/kit':
-        specifier: 2.25.2
-        version: 2.25.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1))
+        specifier: 2.49.4
+        version: 2.49.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(typescript@5.8.3)(vite@6.3.7(yaml@2.8.1))
       '@sveltejs/package':
         specifier: 2.3.12
         version: 2.3.12(svelte@5.34.9)(typescript@5.8.3)
@@ -521,6 +521,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@standard-schema/spec@1.1.0':
+    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
   '@sveltejs/acorn-typescript@1.0.5':
     resolution: {integrity: sha512-IwQk4yfwLdibDlrXVE04jTZYlLnwsTT2PIOQQGNLWfjavGifnk1JD1LcZjZaBTRcxZu2FfPfNLOE04DSu9lqtQ==}
     peerDependencies:
@@ -531,14 +534,21 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
-  '@sveltejs/kit@2.25.2':
-    resolution: {integrity: sha512-aKfj82vqEINedoH9Pw4Ip16jj3w8soNq9F3nJqc56kxXW74TcEu/gdTAuLUI+gsl8i+KXfetRqg1F+gG/AZRVQ==}
+  '@sveltejs/kit@2.49.4':
+    resolution: {integrity: sha512-JFtOqDoU0DI/+QSG8qnq5bKcehVb3tCHhOG4amsSYth5/KgO4EkJvi42xSAiyKmXAAULW1/Zdb6lkgGEgSxdZg==}
     engines: {node: '>=18.13'}
     hasBin: true
     peerDependencies:
+      '@opentelemetry/api': ^1.0.0
       '@sveltejs/vite-plugin-svelte': ^3.0.0 || ^4.0.0-next.1 || ^5.0.0 || ^6.0.0-next.0
       svelte: ^4.0.0 || ^5.0.0-next.0
+      typescript: ^5.3.3
       vite: ^5.0.3 || ^6.0.0 || ^7.0.0-beta.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
+      typescript:
+        optional: true
 
   '@sveltejs/package@2.3.12':
     resolution: {integrity: sha512-PUl5aNbk2x28rPdAVTZMtrZmAx6yxQ+s33OtOkE0j0fWtoi9GzENXKRJPHrGk5rwGrczqY0LtNi8dycRPL+yzA==}
@@ -802,8 +812,8 @@ packages:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
 
-  devalue@5.1.1:
-    resolution: {integrity: sha512-maua5KUiapvEwiEAe+XnlZ3Rh0GD+qI1J/nb9vrJc3muPXvcF/8gXYTWF76+5DAqHyDUtOIImEuo0YKE9mshVw==}
+  devalue@5.6.1:
+    resolution: {integrity: sha512-jDwizj+IlEZBunHcOuuFVBnIMPAEHvTsJj0BcIp94xYguLRVBcXO853px/MyIJvbVzWdsGvrRweIUWJw8hBP7A==}
 
   dom-accessibility-api@0.5.16:
     resolution: {integrity: sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg==}
@@ -1853,22 +1863,25 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.43.0':
     optional: true
 
+  '@standard-schema/spec@1.1.0': {}
+
   '@sveltejs/acorn-typescript@1.0.5(acorn@8.15.0)':
     dependencies:
       acorn: 8.15.0
 
-  '@sveltejs/adapter-static@3.0.10(@sveltejs/kit@2.25.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))':
+  '@sveltejs/adapter-static@3.0.10(@sveltejs/kit@2.49.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(typescript@5.8.3)(vite@6.3.7(yaml@2.8.1)))':
     dependencies:
-      '@sveltejs/kit': 2.25.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1))
+      '@sveltejs/kit': 2.49.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(typescript@5.8.3)(vite@6.3.7(yaml@2.8.1))
 
-  '@sveltejs/kit@2.25.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1))':
+  '@sveltejs/kit@2.49.4(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(typescript@5.8.3)(vite@6.3.7(yaml@2.8.1))':
     dependencies:
+      '@standard-schema/spec': 1.1.0
       '@sveltejs/acorn-typescript': 1.0.5(acorn@8.15.0)
       '@sveltejs/vite-plugin-svelte': 5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1))
       '@types/cookie': 0.6.0
       acorn: 8.15.0
       cookie: 0.6.0
-      devalue: 5.1.1
+      devalue: 5.6.1
       esm-env: 1.2.2
       kleur: 4.1.5
       magic-string: 0.30.17
@@ -1878,6 +1891,8 @@ snapshots:
       sirv: 3.0.1
       svelte: 5.34.9
       vite: 6.3.7(yaml@2.8.1)
+    optionalDependencies:
+      typescript: 5.8.3
 
   '@sveltejs/package@2.3.12(svelte@5.34.9)(typescript@5.8.3)':
     dependencies:
@@ -2132,7 +2147,7 @@ snapshots:
 
   dequal@2.0.3: {}
 
-  devalue@5.1.1: {}
+  devalue@5.6.1: {}
 
   dom-accessibility-api@0.5.16: {}
 
