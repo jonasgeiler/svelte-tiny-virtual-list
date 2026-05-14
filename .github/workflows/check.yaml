@@ -121,7 +121,7 @@ jobs:
           steps.changed-files.outputs.shellcheck_any_changed == 'true'
         env:
           # renovate: datasource=github-releases depName=koalaman/shellcheck
-          SHELLCHECK_VERSION: v0.10.0
+          SHELLCHECK_VERSION: v0.11.0
           SHELLCHECK_ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.shellcheck_all_changed_files }}
           # renovate: datasource=github-releases depName=lumaxis/shellcheck-problem-matchers
           SHELLCHECK_PROBLEM_MATCHERS_VERSION: v2.1.0
