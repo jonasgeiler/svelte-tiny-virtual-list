@@ -67,7 +67,7 @@
 		"svelte-infinite-loading": "1.4.0",
 		"typescript": "5.8.3",
 		"vite": "6.3.7",
-		"vitest": "3.2.4",
+		"vitest": "3.2.6",
 		"vitest-browser-svelte": "0.1.0"
 	},
 	"files": [
