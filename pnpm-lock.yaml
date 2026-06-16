@@ -33,8 +33,8 @@ importers:
         specifier: 5.1.1
         version: 5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1))
       '@vitest/browser':
-        specifier: 3.2.4
-        version: 3.2.4(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)
+        specifier: 3.2.5
+        version: 3.2.5(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)
       beercss:
         specifier: 3.6.13
         version: 3.6.13
@@ -91,10 +91,10 @@ importers:
         version: 6.3.7(yaml@2.8.1)
       vitest:
         specifier: 3.2.6
-        version: 3.2.6(@vitest/browser@3.2.4)(yaml@2.8.1)
+        version: 3.2.6(@vitest/browser@3.2.5)(yaml@2.8.1)
       vitest-browser-svelte:
         specifier: 0.1.0
-        version: 0.1.0(@vitest/browser@3.2.4)(svelte@5.34.9)(vitest@3.2.6)
+        version: 0.1.0(@vitest/browser@3.2.5)(svelte@5.34.9)(vitest@3.2.6)
 
 packages:
 
@@ -593,12 +593,12 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@vitest/browser@3.2.4':
-    resolution: {integrity: sha512-tJxiPrWmzH8a+w9nLKlQMzAKX/7VjFs50MWgcAj7p9XQ7AQ9/35fByFYptgPELyLw+0aixTnC4pUWV+APcZ/kw==}
+  '@vitest/browser@3.2.5':
+    resolution: {integrity: sha512-+nja5Xt7FIbHqO/HstCUN5Y77qlRice9IV29jphviusIJA7hKgePSAP7iSz6XSolKFKh5/hEyMfz3fVDgwym+A==}
     peerDependencies:
       playwright: '*'
       safaridriver: '*'
-      vitest: 3.2.4
+      vitest: 3.2.5
       webdriverio: ^7.0.0 || ^8.0.0 || ^9.0.0
     peerDependenciesMeta:
       playwright:
@@ -611,8 +611,8 @@ packages:
   '@vitest/expect@3.2.6':
     resolution: {integrity: sha512-1+7q9BtaKzEmO+fmNT3kYvoNn5Y71XWAx2Q5HRim4tTVRQVRv4uJFAQ5FbK0OPUeNP/WmVCpxYxoJdvuHVjzBQ==}
 
-  '@vitest/mocker@3.2.4':
-    resolution: {integrity: sha512-46ryTE9RZO/rfDd7pEqFl7etuyzekzEhUbTW3BvmeO/BcCMEgq59BKhek3dXDWgAj4oMK6OZi+vRr1wPW6qjEQ==}
+  '@vitest/mocker@3.2.5':
+    resolution: {integrity: sha512-pSn90JZwcoavFhHqH7zyHdsvtPHgdVjAipgvU1go35ALm3j3hSQwlS51RkSTdFb+IEIiZAC5QZr9vmjicpG2Ig==}
     peerDependencies:
       msw: ^2.4.9
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0-0
@@ -633,8 +633,8 @@ packages:
       vite:
         optional: true
 
-  '@vitest/pretty-format@3.2.4':
-    resolution: {integrity: sha512-IVNZik8IVRJRTr9fxlitMKeJeXFFFN0JaB9PHPGQ8NKQbGpfjlTx9zO4RefN8gp7eqjNy8nyK3NZmBzOPeIxtA==}
+  '@vitest/pretty-format@3.2.5':
+    resolution: {integrity: sha512-lgiuL0rvqzUHGcfaETD0OeLLhOyXEYypWX408BHVmi2m+fBQyeb8Rm106mcYSfF89U6CP3UycLJ4Y3S5cGnhKg==}
 
   '@vitest/pretty-format@3.2.6':
     resolution: {integrity: sha512-lb7XXXzmm2h2ASzFnRvQpDo6onT1NmMJA3tkGTWiBFtRJ9lxGY3d3mm/Apt36gej2bkkOVLL/yTOtufDaFa/jA==}
@@ -645,14 +645,14 @@ packages:
   '@vitest/snapshot@3.2.6':
     resolution: {integrity: sha512-H+ZjNTWGpObenh0YnlBctAPnJSI20P81PL8BPzWpx54YXLLTm8hEsWawtcYLMrwvpK48hGxLLbCS+1KRXhsKhw==}
 
-  '@vitest/spy@3.2.4':
-    resolution: {integrity: sha512-vAfasCOe6AIK70iP5UD11Ac4siNUNJ9i/9PZ3NKx07sG6sUxeag1LWdNrMWeKKYBLlzuK+Gn65Yd5nyL6ds+nw==}
+  '@vitest/spy@3.2.5':
+    resolution: {integrity: sha512-DtLO2Cx9IZpjfnOf6pjZ/48boCwVFd5TQZXkXEN6iUoghtljx7ZOBptnnNrjQXN5oXXhmPS4v2kIYo9nY29aGA==}
 
   '@vitest/spy@3.2.6':
     resolution: {integrity: sha512-oq6BbH68WzcWmwtBrU9nqLeaXTR4XwJF7FSLkKEZo4i6eoXcrxjcwSuTvWBIRUTC6VC72nXYunzqgZA+IKdtxg==}
 
-  '@vitest/utils@3.2.4':
-    resolution: {integrity: sha512-fB2V0JFrQSMsCo9HiSq3Ezpdv4iYaXRG1Sx8edX3MwxfyNn83mKiGzOcH+Fkxt4MHxr3y42fQi1oeAInqgX2QA==}
+  '@vitest/utils@3.2.5':
+    resolution: {integrity: sha512-54Z5mdFlTYRl5DH4NTe+eFR8S5mOPZu4Gew0KzGUtPKiSsUfD1xlfpnOTHkKocSb/En6E/lpyTo+aI7n9tAYGg==}
 
   '@vitest/utils@3.2.6':
     resolution: {integrity: sha512-lI23nIs4bnT3T8NIoh+vFaz5s2/DdP0Jgt2jxwgWljvwn82cLJtyi/If+fjFyoLMGIOz0U/fKvWE0d4jsNQEfg==}
@@ -1963,16 +1963,16 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@vitest/browser@3.2.4(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)':
+  '@vitest/browser@3.2.5(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)':
     dependencies:
       '@testing-library/dom': 10.4.0
       '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.0)
-      '@vitest/mocker': 3.2.4(vite@6.3.7(yaml@2.8.1))
-      '@vitest/utils': 3.2.4
+      '@vitest/mocker': 3.2.5(vite@6.3.7(yaml@2.8.1))
+      '@vitest/utils': 3.2.5
       magic-string: 0.30.17
       sirv: 3.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.6(@vitest/browser@3.2.4)(yaml@2.8.1)
+      vitest: 3.2.6(@vitest/browser@3.2.5)(yaml@2.8.1)
       ws: 8.18.3
     optionalDependencies:
       playwright: 1.53.2
@@ -1990,9 +1990,9 @@ snapshots:
       chai: 5.2.0
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.2.4(vite@6.3.7(yaml@2.8.1))':
+  '@vitest/mocker@3.2.5(vite@6.3.7(yaml@2.8.1))':
     dependencies:
-      '@vitest/spy': 3.2.4
+      '@vitest/spy': 3.2.5
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
@@ -2006,7 +2006,7 @@ snapshots:
     optionalDependencies:
       vite: 6.3.7(yaml@2.8.1)
 
-  '@vitest/pretty-format@3.2.4':
+  '@vitest/pretty-format@3.2.5':
     dependencies:
       tinyrainbow: 2.0.0
 
@@ -2026,7 +2026,7 @@ snapshots:
       magic-string: 0.30.17
       pathe: 2.0.3
 
-  '@vitest/spy@3.2.4':
+  '@vitest/spy@3.2.5':
     dependencies:
       tinyspy: 4.0.3
 
@@ -2034,9 +2034,9 @@ snapshots:
     dependencies:
       tinyspy: 4.0.3
 
-  '@vitest/utils@3.2.4':
+  '@vitest/utils@3.2.5':
     dependencies:
-      '@vitest/pretty-format': 3.2.4
+      '@vitest/pretty-format': 3.2.5
       loupe: 3.1.4
       tinyrainbow: 2.0.0
 
@@ -2848,13 +2848,13 @@ snapshots:
     optionalDependencies:
       vite: 6.3.7(yaml@2.8.1)
 
-  vitest-browser-svelte@0.1.0(@vitest/browser@3.2.4)(svelte@5.34.9)(vitest@3.2.6):
+  vitest-browser-svelte@0.1.0(@vitest/browser@3.2.5)(svelte@5.34.9)(vitest@3.2.6):
     dependencies:
-      '@vitest/browser': 3.2.4(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)
+      '@vitest/browser': 3.2.5(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)
       svelte: 5.34.9
-      vitest: 3.2.6(@vitest/browser@3.2.4)(yaml@2.8.1)
+      vitest: 3.2.6(@vitest/browser@3.2.5)(yaml@2.8.1)
 
-  vitest@3.2.6(@vitest/browser@3.2.4)(yaml@2.8.1):
+  vitest@3.2.6(@vitest/browser@3.2.5)(yaml@2.8.1):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.6
@@ -2880,7 +2880,7 @@ snapshots:
       vite-node: 3.2.4(yaml@2.8.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@vitest/browser': 3.2.4(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)
+      '@vitest/browser': 3.2.5(playwright@1.53.2)(vite@6.3.7(yaml@2.8.1))(vitest@3.2.6)
     transitivePeerDependencies:
       - jiti
       - less

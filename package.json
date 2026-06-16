@@ -48,7 +48,7 @@
 		"@sveltejs/kit": "2.25.2",
 		"@sveltejs/package": "2.3.12",
 		"@sveltejs/vite-plugin-svelte": "5.1.1",
-		"@vitest/browser": "3.2.4",
+		"@vitest/browser": "3.2.5",
 		"beercss": "3.6.13",
 		"eslint": "9.33.0",
 		"eslint-config-prettier": "10.1.8",
