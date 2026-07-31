@@ -90,6 +90,11 @@ export default class SizeAndPositionManager {
 
 		this.checkForMismatchItemSizeAndItemCount();
 
+		// Ensure lastMeasuredIndex in range after itemCount change
+		if (this.lastMeasuredIndex >= itemCount) {
+			this.lastMeasuredIndex = itemCount - 1;
+		}
+
 		if (this.justInTime && this.totalSize != null) {
 			this.totalSize = undefined;
 		} else {
