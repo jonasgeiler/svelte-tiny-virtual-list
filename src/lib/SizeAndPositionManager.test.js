@@ -450,7 +450,7 @@ describe('SizeAndPositionManager', () => {
 		// and only contain the new item
 		expect(sizeAndPositionManager.getTotalSize()).toEqual(10);
 		expect(Object.keys(sizeAndPositionManager.itemSizeAndPositionData)).toEqual(['0']);
-		expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(-1);
+		expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(0);
 	});
 
 	describe('resetItem', () => {
