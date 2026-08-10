@@ -239,6 +239,13 @@ describe('SizeAndPositionManager', () => {
 			const { sizeAndPositionManager, totalSize } = getItemSizeAndPositionManagerArray();
 			expect(sizeAndPositionManager.getTotalSize()).toEqual(totalSize);
 		});
+
+		it('should return correct totalSize when all item sizes are zero', () => {
+			const itemSize = [0, 0, 0];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(0);
+		});
 	});
 
 	describe('getUpdatedOffsetForIndex', () => {

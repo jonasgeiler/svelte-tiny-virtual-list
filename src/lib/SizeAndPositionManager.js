@@ -205,7 +205,9 @@ export default class SizeAndPositionManager {
 	 */
 	getTotalSize() {
 		// Return the pre computed totalSize when itemSize is number or array.
-		if (this.totalSize) return this.totalSize;
+		// Use an explicit undefined check instead of a truthy check so a totalSize of
+		// 0 is returned correctly.
+		if (this.totalSize !== undefined) return this.totalSize;
 
 		/**
 		 * When itemSize is a function,
