@@ -438,6 +438,21 @@ describe('SizeAndPositionManager', () => {
 		});
 	});
 
+	it('should clear stale precomputed cache entries when recomputing with a smaller itemCount', () => {
+		const itemSize = [10, 20, 30];
+		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+
+		expect(sizeAndPositionManager.getTotalSize()).toEqual(60);
+
+		sizeAndPositionManager.updateConfig(itemSize, 1, 50);
+
+		// After updateConfig with smaller itemCount, the cache should be cleared
+		// and only contain the new item
+		expect(sizeAndPositionManager.getTotalSize()).toEqual(10);
+		expect(Object.keys(sizeAndPositionManager.itemSizeAndPositionData)).toEqual(['0']);
+		expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(0);
+	});
+
 	describe('resetItem', () => {
 		it('should clear size and position metadata for the specified index and all items after it', () => {
 			const { sizeAndPositionManager } = getItemSizeAndPositionManager();
