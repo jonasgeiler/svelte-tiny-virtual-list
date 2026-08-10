@@ -171,6 +171,13 @@ describe('SizeAndPositionManager', () => {
 			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(100)).toThrow();
 		});
 
+		it('should mark all precomputed items as measured when created from an array', () => {
+			const itemSize = [10, 20, 30];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+
+			expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(itemSize.length - 1);
+		});
+
 		it('should return the correct size and position information for the requested item', () => {
 			const { sizeAndPositionManager, itemSize } = getItemSizeAndPositionManagerArray();
 			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).offset).toEqual(0);
@@ -231,6 +238,13 @@ describe('SizeAndPositionManager', () => {
 		it('should calculate total size by counting together all of the itemSize items', () => {
 			const { sizeAndPositionManager, totalSize } = getItemSizeAndPositionManagerArray();
 			expect(sizeAndPositionManager.getTotalSize()).toEqual(totalSize);
+		});
+
+		it('should return correct totalSize when all item sizes are zero', () => {
+			const itemSize = [0, 0, 0];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(0);
 		});
 	});
 
@@ -467,6 +481,19 @@ describe('SizeAndPositionManager', () => {
 			expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(1);
 			sizeAndPositionManager.resetItem(0);
 			expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(-1);
+		});
+
+		it('should recompute precomputed cache when resetItem is called in array mode', () => {
+			const itemSize = [10, 10, 10];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(30);
+
+			// Mutate one item's size and call resetItem to indicate it changed
+			itemSize[1] = 20;
+			sizeAndPositionManager.resetItem(1);
+
+			// The manager should recompute its cached sizes and reflect the change
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(40);
 		});
 	});
 });
