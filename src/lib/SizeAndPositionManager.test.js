@@ -171,6 +171,13 @@ describe('SizeAndPositionManager', () => {
 			expect(() => sizeAndPositionManager.getSizeAndPositionForIndex(100)).toThrow();
 		});
 
+		it('should mark all precomputed items as measured when created from an array', () => {
+			const itemSize = [10, 20, 30];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+
+			expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(itemSize.length - 1);
+		});
+
 		it('should return the correct size and position information for the requested item', () => {
 			const { sizeAndPositionManager, itemSize } = getItemSizeAndPositionManagerArray();
 			expect(sizeAndPositionManager.getSizeAndPositionForIndex(0).offset).toEqual(0);

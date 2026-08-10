@@ -134,6 +134,11 @@ export default class SizeAndPositionManager {
 		}
 
 		this.totalSize = totalSize;
+
+		// Mark all items as measured when sizes are precomputed (non-just-in-time mode).
+		// This keeps lastMeasuredIndex consistent with the precomputed cache and
+		// allows search algorithms to choose the fast binary-search path.
+		this.lastMeasuredIndex = Math.max(-1, this.itemCount - 1);
 	}
 
 	getLastMeasuredIndex() {
