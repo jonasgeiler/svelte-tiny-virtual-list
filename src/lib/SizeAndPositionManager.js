@@ -134,6 +134,11 @@ export default class SizeAndPositionManager {
 		}
 
 		this.totalSize = totalSize;
+
+		// Mark all items as measured when sizes are precomputed (non-just-in-time mode).
+		// This keeps lastMeasuredIndex consistent with the precomputed cache and
+		// allows search algorithms to choose the fast binary-search path.
+		this.lastMeasuredIndex = Math.max(-1, this.itemCount - 1);
 	}
 
 	getLastMeasuredIndex() {
@@ -200,7 +205,9 @@ export default class SizeAndPositionManager {
 	 */
 	getTotalSize() {
 		// Return the pre computed totalSize when itemSize is number or array.
-		if (this.totalSize) return this.totalSize;
+		// Use an explicit undefined check instead of a truthy check so a totalSize of
+		// 0 is returned correctly.
+		if (this.totalSize !== undefined) return this.totalSize;
 
 		/**
 		 * When itemSize is a function,
@@ -304,7 +311,15 @@ export default class SizeAndPositionManager {
 	 * @param {number} index
 	 */
 	resetItem(index) {
-		this.lastMeasuredIndex = Math.min(this.lastMeasuredIndex, index - 1);
+		if (this.justInTime) {
+			// In just-in-time mode we can simply reduce the lastMeasuredIndex so
+			// subsequent calls will recompute sizes from this index onward.
+			this.lastMeasuredIndex = Math.min(this.lastMeasuredIndex, index - 1);
+		} else {
+			// When sizes were precomputed (itemSize is number/array) we need to
+			// recompute the full cache since individual item sizes may have changed.
+			this.computeTotalSizeAndPositionData();
+		}
 	}
 
 	/**
