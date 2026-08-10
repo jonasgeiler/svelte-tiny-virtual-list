@@ -56,7 +56,7 @@ export default class SizeAndPositionManager {
 		/**
 		 * Cache of size and position data for items, mapped by item index.
 		 *
-		 * @private
+		 * @public
 		 * @type {SizeAndPositionData}
 		 */
 		this.itemSizeAndPositionData = {};
@@ -87,6 +87,9 @@ export default class SizeAndPositionManager {
 		this.itemSize = itemSize;
 		this.itemCount = itemCount;
 		this.estimatedItemSize = estimatedItemSize;
+
+		this.lastMeasuredIndex = -1;
+		this.itemSizeAndPositionData = {};
 
 		this.checkForMismatchItemSizeAndItemCount();
 
