@@ -43,7 +43,7 @@
 		"@biomejs/biome": "2.0.6",
 		"@eslint/compat": "1.4.1",
 		"@eslint/js": "9.33.0",
-		"@playwright/test": "1.53.2",
+		"@playwright/test": "1.55.1",
 		"@sveltejs/adapter-static": "3.0.10",
 		"@sveltejs/kit": "2.25.2",
 		"@sveltejs/package": "2.3.12",

@@ -18,8 +18,8 @@ importers:
         specifier: 9.33.0
         version: 9.33.0
       '@playwright/test':
-        specifier: 1.53.2
-        version: 1.53.2
+        specifier: 1.55.1
+        version: 1.55.1
       '@sveltejs/adapter-static':
         specifier: 3.0.10
         version: 3.0.10(@sveltejs/kit@2.25.2(@sveltejs/vite-plugin-svelte@5.1.1(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))(svelte@5.34.9)(vite@6.3.7(yaml@2.8.1)))
@@ -409,8 +409,8 @@ packages:
   '@material/material-color-utilities@0.2.7':
     resolution: {integrity: sha512-0FCeqG6WvK4/Cc06F/xXMd/pv4FeisI0c1tUpBbfhA2n9Y8eZEv4Karjbmf2ZqQCPUWMrGp8A571tCjizxoTiQ==}
 
-  '@playwright/test@1.53.2':
-    resolution: {integrity: sha512-tEB2U5z74ebBeyfGNZ3Jfg29AnW+5HlWhvHtb/Mqco9pFdZU1ZLNdVb2UtB5CvmiilNr2ZfVH/qMmAROG/XTzw==}
+  '@playwright/test@1.55.1':
+    resolution: {integrity: sha512-IVAh/nOJaw6W9g+RJVlIQJ6gSiER+ae6mKQ5CX1bERzQgbC1VSeBlwdvczT7pxb0GWiyrxH4TGKbMfDb4Sq/ig==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1214,18 +1214,8 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  playwright-core@1.53.2:
-    resolution: {integrity: sha512-ox/OytMy+2w1jcYEYlOo1Hhp8hZkLCximMTUTMBXjGUA1KoFfiSZ+DU+3a739jsPY0yoKH2TFy9S2fsJas8yAw==}
-    engines: {node: '>=18'}
-    hasBin: true
-
   playwright-core@1.55.1:
     resolution: {integrity: sha512-Z6Mh9mkwX+zxSlHqdr5AOcJnfp+xUWLCt9uKV18fhzA8eyxUd8NUWzAjxUh55RZKSYwDGX0cfaySdhZJGMoJ+w==}
-    engines: {node: '>=18'}
-    hasBin: true
-
-  playwright@1.53.2:
-    resolution: {integrity: sha512-6K/qQxVFuVQhRQhFsVZ9fGeatxirtrpPgxzBYWyZLEXJzqYwuL4fuNmfOfD5et1tJE4GScKyPNeLhZeRwuTU3A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1815,9 +1805,9 @@ snapshots:
 
   '@material/material-color-utilities@0.2.7': {}
 
-  '@playwright/test@1.53.2':
+  '@playwright/test@1.55.1':
     dependencies:
-      playwright: 1.53.2
+      playwright: 1.55.1
 
   '@polka/url@1.0.0-next.29': {}
 
@@ -2578,15 +2568,7 @@ snapshots:
 
   pidtree@0.6.0: {}
 
-  playwright-core@1.53.2: {}
-
   playwright-core@1.55.1: {}
-
-  playwright@1.53.2:
-    dependencies:
-      playwright-core: 1.53.2
-    optionalDependencies:
-      fsevents: 2.3.2
 
   playwright@1.55.1:
     dependencies:
