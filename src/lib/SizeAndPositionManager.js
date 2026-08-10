@@ -56,7 +56,7 @@ export default class SizeAndPositionManager {
 		/**
 		 * Cache of size and position data for items, mapped by item index.
 		 *
-		 * @private
+		 * @public
 		 * @type {SizeAndPositionData}
 		 */
 		this.itemSizeAndPositionData = {};
