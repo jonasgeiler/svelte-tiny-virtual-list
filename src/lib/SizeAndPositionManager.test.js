@@ -467,5 +467,18 @@ describe('SizeAndPositionManager', () => {
 			sizeAndPositionManager.resetItem(0);
 			expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(-1);
 		});
+
+		it('should recompute precomputed cache when resetItem is called in array mode', () => {
+			const itemSize = [10, 10, 10];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(30);
+
+			// Mutate one item's size and call resetItem to indicate it changed
+			itemSize[1] = 20;
+			sizeAndPositionManager.resetItem(1);
+
+			// The manager should recompute its cached sizes and reflect the change
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(40);
+		});
 	});
 });
