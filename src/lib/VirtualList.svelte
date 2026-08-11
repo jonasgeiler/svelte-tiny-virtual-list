@@ -144,12 +144,6 @@
 		if (itemPropsHaveChanged) {
 			sizeAndPositionManager.updateConfig(itemSize, itemCount, estimatedItemSize);
 
-			// Clear items when itemCount decreases
-			// Prevents stale indices rendering before refresh()
-			if (itemCount < prevProps.itemCount) {
-				items = [];
-			}
-
 			forceRecomputeSizes = true;
 		}
 
