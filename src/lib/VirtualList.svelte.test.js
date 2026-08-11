@@ -2,14 +2,14 @@ import { tick } from 'svelte';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 
-import Wrapper from './VirtualListTestWrapper.svelte';
+import VirtualListTest from './VirtualList.test.svelte';
 
 const data = (n) => Array.from({ length: n }, (_, i) => ({ id: i, label: `Item ${i}` }));
 
 describe('VirtualList', () => {
 	it('should not render stale items when itemCount decreases', async () => {
 		const rendered = [];
-		const { rerender } = render(Wrapper, {
+		const { rerender } = render(VirtualListTest, {
 			data: data(100),
 			scrollOffset: 4800,
 			onItemRender: (i) => rendered.push(i)
