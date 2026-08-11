@@ -5,73 +5,48 @@ on:
     tags:
       - 'v*.*.*'
 
-jobs:
-  check:
-    name: Check
-    uses: ./.github/workflows/check.yaml
+env:
+  # If the SemVer tag contains a hyphen (e.g., v1.0.0-beta.1) or
+  # starts with "v0." (e.g., v0.5.0), consider it a pre-release.
+  IS_PRERELEASE: ${{ contains(github.ref_name, '-') || startsWith(github.ref_name, 'v0.') }}
 
-  release:
-    name: Release
-    needs: check
+jobs:
+  pre-check:
+    name: Pre-Check
+    uses: ./.github/workflows/check.yaml
+    with:
+      skip-build: true
+
+  publish-package-and-create-github-release:
+    name: Publish package and create GitHub release
+    needs: pre-check
 
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash
+        shell: bash --noprofile --norc -euxo pipefail {0}
 
     permissions:
-      id-token: write # for NPM provenance establishment
-      contents: write # for GitHub release
+      id-token: write # Required for OIDC.
+      contents: write # Required to create GitHub releases.
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3.0.0
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
 
       - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: 20.17.0
+          node-version-file: package.json
           cache: pnpm
-          registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Check if tag is for a pre-release
-        id: check-prerelease
-        run: |
-          IFS=$' \n\t'; set -ux
-
-          # Get clean version from the tag name
-          version="${GITHUB_REF_NAME#v}"
-
-          # Check for hyphen in the version
-          if [[ "${version}" == *-* ]]; then
-            : 'Tag is for a pre-release (contains hyphen)'
-            echo 'prerelease=true' >> "${GITHUB_OUTPUT}"
-            exit 0
-          fi
-
-          # Extract major, minor, patch
-          IFS='.' read -r major minor patch <<< "${version%%-*}"
-
-          # Fallback in case parts are missing or invalid
-          major="${major:-0}"
-          minor="${minor:-0}"
-          patch="${patch:-0}"
-
-          # Check if major version is less than 1
-          if (( major < 1 )); then
-            : 'Tag is for a pre-release (major version < 1)'
-            echo 'prerelease=true' >> "${GITHUB_OUTPUT}"
-            exit 0
-          fi
-
-          : 'Tag is for a normal release'
-          echo 'prerelease=false' >> "${GITHUB_OUTPUT}"
 
       - name: Replace GitHub-flavored Markdown alerts with standard Markdown
         run: sed -i 's/^> *\[\!\([a-zA-Z]\)\([a-zA-Z]*\)\] */> **\U\1\L\2**  /g' ./*.md
@@ -80,25 +55,19 @@ jobs:
         # with:
         # > **Note**
 
-      - name: Publish to npmjs.com
+      - name: Publish package to npmjs.com
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-          PRERELEASE: ${{ steps.check-prerelease.outputs.prerelease }}
-        run: |
-          if [[ "${PRERELEASE}" == 'true' ]]; then
-            pnpm publish --provenance --access=public --no-git-checks --tag=next
-          else
-            pnpm publish --provenance --access=public --no-git-checks
-          fi
+          TAG: ${{ env.IS_PRERELEASE == 'true' && 'next' || 'latest' }}
+        run: pnpm publish --access=public --no-git-checks --tag="${TAG}"
 
-      - name: Create a tarball for the GitHub release
+      - name: Create package tarball
         run: pnpm pack
 
-      - name: Draft release on GitHub
-        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2.4.2
         with:
           draft: true
-          prerelease: ${{ steps.check-prerelease.outputs.prerelease }}
+          prerelease: ${{ env.IS_PRERELEASE }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |

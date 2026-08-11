@@ -1,0 +1,21 @@
+name: Check GitHub Actions Workflows
+
+on:
+  push:
+    branches:
+      - main
+      - 'renovate/**'
+    paths: &paths
+      - '.github/workflows/*.ya?ml'
+
+  pull_request:
+    branches:
+      - main
+    paths: *paths
+
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  _:
+    uses: jonasgeiler/.github/.github/workflows/check-github-actions-workflows.yaml@main
