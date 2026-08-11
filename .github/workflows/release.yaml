@@ -43,7 +43,9 @@ jobs:
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: package.json
-          cache: pnpm
+          registry-url: https://registry.npmjs.org
+          # Never use caching in release builds, as recommended by npm Docs.
+          package-manager-cache: false
 
       - name: Install dependencies
         run: pnpm install
@@ -55,10 +57,10 @@ jobs:
         # with:
         # > **Note**
 
-      - name: Publish package to npmjs.com
+      - name: Stage publishing package to npmjs.com
         env:
           TAG: ${{ env.IS_PRERELEASE == 'true' && 'next' || 'latest' }}
-        run: pnpm publish --access=public --no-git-checks --tag="${TAG}"
+        run: pnpm stage publish --access=public --no-git-checks --tag="${TAG}"
 
       - name: Create package tarball
         run: pnpm pack
