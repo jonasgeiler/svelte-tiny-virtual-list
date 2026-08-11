@@ -1,6 +1,7 @@
 <script>
 	import VirtualList from './VirtualList.svelte';
 
+	/** @type {{ data: { id: number, label: string }[], scrollOffset: number, onItemRender: (index: number) => void }} */
 	let { data = [], scrollOffset, onItemRender = () => {} } = $props();
 </script>
 

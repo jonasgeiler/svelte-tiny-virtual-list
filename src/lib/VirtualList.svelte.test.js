@@ -4,10 +4,15 @@ import { render } from 'vitest-browser-svelte';
 
 import VirtualListTest from './VirtualList.test.svelte';
 
+/**
+ * @param {number} n
+ * @returns {{id: number, label: string}[]}
+ */
 const data = (n) => Array.from({ length: n }, (_, i) => ({ id: i, label: `Item ${i}` }));
 
 describe('VirtualList', () => {
 	it('should not render stale items when itemCount decreases', async () => {
+		/** @type {number[]} */
 		const rendered = [];
 		const { rerender } = render(VirtualListTest, {
 			data: data(100),
