@@ -1,7 +1,7 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
 	import InfiniteLoading from 'svelte-infinite-loading';
-	import { base } from '$app/paths';
+	import { asset } from '$app/paths';
 
 	const api =
 		'https://hn.algolia.com/api/v1/search_by_date' +
@@ -72,7 +72,7 @@
 	<header class="primary">
 		<nav>
 			<i class="border white-border" aria-hidden="true">
-				<img src="{base}/y18.svg" alt="Hacker News Logo" />
+				<img src={asset('/y18.svg')} alt="Hacker News Logo" />
 			</i>
 			<h5>Hacker News</h5>
 		</nav>
@@ -88,6 +88,7 @@
 								class="inline link"
 								href={list[index].url ||
 									`https://news.ycombinator.com/item?id=${list[index].story_id}`}
+								rel="external noopener noreferrer nofollow"
 								target="_blank"
 							>
 								{list[index].title}
