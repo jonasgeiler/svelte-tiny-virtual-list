@@ -124,7 +124,7 @@ Also works pretty well with [`svelte-infinite-loading`](https://github.com/jonas
 | estimatedItemSize | `number`                                           | `0`                  | Used to estimate the total size of the list before all of its items have actually been measured. The estimated total height is progressively adjusted as items are rendered.                                                    |
 | getKey            | `((index: number) => any) \| null`                 | `undefined`          | Function that returns the key of an item in the list, which is used to uniquely identify an item. This is useful for dynamic data coming from a database or similar. By default, it's using the item's index.                   |
 | onAfterScroll     | `({ event: ScrollEvent, offset: number }) => void` | `undefined`          | Function that fires after handling the scroll event. Props: `event: ScrollEvent` - The original scroll event, `offset: number` - Either the value of `wrapper.scrollTop` or `wrapper.scrollLeft`                                |
-| onListItemsUpdate | `({ start: number, end: number }) => void`         | `undefined`          | Function that fires when the visible items are updated. Props: `start: number` - Index of the first visible item, `end: number` - Index of the last visible item.                                                               |
+| onItemsUpdated    | `({ start: number, end: number }) => void`         | `undefined`          | Function that fires when the visible items are updated. Props: `start: number` - Index of the first visible item, `end: number` - Index of the last visible item.                                                               |
 
 ### Snippets
 
