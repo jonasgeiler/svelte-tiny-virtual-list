@@ -345,7 +345,7 @@
 	<div class="virtual-list-inner" style={innerStyle}>
 		{#each items as item (getKey ? getKey(item.index) : item.index)}
 			{#if item.index < itemCount}
-				{@render (childrenSnippet || itemSnippet)({ style: item.style, index: item.index })}
+				{@render (itemSnippet || childrenSnippet)({ style: item.style, index: item.index })}
 			{/if}
 		{/each}
 	</div>
