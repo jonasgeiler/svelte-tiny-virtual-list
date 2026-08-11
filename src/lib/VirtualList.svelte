@@ -58,7 +58,6 @@
 	let wrapperWidth = $state(400);
 	/** @type {{ index: number, style: string }[]} */
 	let items = $state.raw([]);
-	let validItems = $derived(items.filter((item) => item.index < itemCount));
 
 	/** @type {{ offset: number, changeReason: number }} */
 	let scroll = $state.raw({
@@ -350,8 +349,10 @@
 	{/if}
 
 	<div class="virtual-list-inner" style={innerStyle}>
-		{#each validItems as item (getKey ? getKey(item.index) : item.index)}
-			{@render (childrenSnippet || itemSnippet)({ style: item.style, index: item.index })}
+		{#each items as item (getKey ? getKey(item.index) : item.index)}
+			{#if item.index < itemCount}
+				{@render (childrenSnippet || itemSnippet)({ style: item.style, index: item.index })}
+			{/if}
 		{/each}
 	</div>
 
