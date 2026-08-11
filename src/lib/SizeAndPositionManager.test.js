@@ -438,19 +438,40 @@ describe('SizeAndPositionManager', () => {
 		});
 	});
 
-	it('should clear stale precomputed cache entries when recomputing with a smaller itemCount', () => {
-		const itemSize = [10, 20, 30];
-		const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+	describe('updateConfig with decreased itemCount', () => {
+		it('should handle getVisibleRange when offset exceeds new size', () => {
+			// 1. List has 100 items, user scrolls to offset 4800 (near the end)
+			const { sizeAndPositionManager } = getItemSizeAndPositionManager(100);
+			sizeAndPositionManager.getVisibleRange(50, 900, 0);
 
-		expect(sizeAndPositionManager.getTotalSize()).toEqual(60);
+			// 2. itemCount decreases to 10 (total size now 100px with itemSize=10)
+			sizeAndPositionManager.updateConfig(() => ITEM_SIZE, 10, 15);
 
-		sizeAndPositionManager.updateConfig(itemSize, 1, 50);
+			// 3. getVisibleRange is called with the stale offset 4800
+			// findNearestItem should clamp to the last valid item (index 9)
+			// Without proper handling, this throws "Requested index X is outside of range 0..10"
+			const { start, end } = sizeAndPositionManager.getVisibleRange(50, 900, 0);
 
-		// After updateConfig with smaller itemCount, the cache should be cleared
-		// and only contain the new item
-		expect(sizeAndPositionManager.getTotalSize()).toEqual(10);
-		expect(Object.keys(sizeAndPositionManager.itemSizeAndPositionData)).toEqual(['0']);
-		expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(0);
+			expect(start).toBeDefined();
+			expect(end).toBeDefined();
+			expect(start).toBeLessThan(10);
+			expect(end).toBeLessThan(10);
+		});
+
+		it('should clear stale precomputed cache entries when recomputing with a smaller itemCount', () => {
+			const itemSize = [10, 20, 30];
+			const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemSize.length, 50);
+
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(60);
+
+			sizeAndPositionManager.updateConfig(itemSize, 1, 50);
+
+			// After updateConfig with smaller itemCount, the cache should be cleared
+			// and only contain the new item
+			expect(sizeAndPositionManager.getTotalSize()).toEqual(10);
+			expect(Object.keys(sizeAndPositionManager.itemSizeAndPositionData)).toEqual(['0']);
+			expect(sizeAndPositionManager.getLastMeasuredIndex()).toEqual(0);
+		});
 	});
 
 	describe('resetItem', () => {

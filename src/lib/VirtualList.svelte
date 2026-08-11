@@ -206,16 +206,20 @@
 	 * Recomputes the sizes of the items and updates the visible items.
 	 */
 	function refresh() {
+		const containerSize = scrollDirection === DIRECTION.VERTICAL ? heightNumber : widthNumber;
+		const totalSize = sizeAndPositionManager.getTotalSize();
+		const maxOffset = Math.max(0, totalSize - containerSize);
+		const clampedOffset = Math.min(scroll.offset, maxOffset);
+
 		const { start, end } = sizeAndPositionManager.getVisibleRange(
-			scrollDirection === DIRECTION.VERTICAL ? heightNumber : widthNumber,
-			scroll.offset,
+			containerSize,
+			clampedOffset,
 			overscanCount
 		);
 
 		/** @type {{ index: number, style: string }[]} */
 		const visibleItems = [];
 
-		const totalSize = sizeAndPositionManager.getTotalSize();
 		const heightUnit = typeof height === 'number' ? 'px' : '';
 		const widthUnit = typeof width === 'number' ? 'px' : '';
 
@@ -340,7 +344,9 @@
 
 	<div class="virtual-list-inner" style={innerStyle}>
 		{#each items as item (getKey ? getKey(item.index) : item.index)}
-			{@render (childrenSnippet || itemSnippet)({ style: item.style, index: item.index })}
+			{#if item.index < itemCount}
+				{@render (childrenSnippet || itemSnippet)({ style: item.style, index: item.index })}
+			{/if}
 		{/each}
 	</div>
 
