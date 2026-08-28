@@ -60,8 +60,8 @@ importers:
         specifier: 1.1.10
         version: 1.1.10(marked@15.0.12)
       marked-gfm-heading-id:
-        specifier: 4.1.2
-        version: 4.1.2(marked@15.0.12)
+        specifier: 4.1.4
+        version: 4.1.4(marked@15.0.12)
       playwright:
         specifier: 1.55.1
         version: 1.55.1
@@ -1125,10 +1125,10 @@ packages:
     peerDependencies:
       marked: '>= 4 < 19'
 
-  marked-gfm-heading-id@4.1.2:
-    resolution: {integrity: sha512-EQ1WiEGHJh0C8viU+hbXbhHyWTDgEia2i96fiSemm2wdYER6YBw/9QI5TB6YFTqFfmMOxBFXPcPJtlgD0fVV2w==}
+  marked-gfm-heading-id@4.1.4:
+    resolution: {integrity: sha512-CspnvVfHSkb/znqdPS4jUR8HtCjq3M/DnrsJCrfLBLvdrgbemmoINKpeWKQYkBiXAoBGejw0cV7xzqrPdup3WA==}
     peerDependencies:
-      marked: '>=13 <17'
+      marked: '>=13 <19'
 
   marked@15.0.12:
     resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
@@ -2475,7 +2475,7 @@ snapshots:
     dependencies:
       marked: 15.0.12
 
-  marked-gfm-heading-id@4.1.2(marked@15.0.12):
+  marked-gfm-heading-id@4.1.4(marked@15.0.12):
     dependencies:
       github-slugger: 2.0.0
       marked: 15.0.12
