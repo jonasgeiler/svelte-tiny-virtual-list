@@ -60,7 +60,7 @@
 		"marked-gfm-heading-id": "4.1.4",
 		"playwright": "1.55.1",
 		"prettier": "3.5.3",
-		"prettier-plugin-svelte": "3.4.0",
+		"prettier-plugin-svelte": "3.4.1",
 		"publint": "0.3.14",
 		"svelte": "5.55.7",
 		"svelte-check": "4.2.2",
