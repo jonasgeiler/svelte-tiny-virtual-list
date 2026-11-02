@@ -62,7 +62,7 @@
 		"prettier": "3.9.10",
 		"prettier-plugin-svelte": "3.4.1",
 		"publint": "0.3.25",
-		"svelte": "5.55.10",
+		"svelte": "5.57.3",
 		"svelte-check": "4.2.2",
 		"svelte-infinite-loading": "1.4.0",
 		"typescript": "5.8.3",
