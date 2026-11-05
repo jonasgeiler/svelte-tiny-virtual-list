@@ -18,4 +18,4 @@ on:
 
 jobs:
   _:
-    uses: jonasgeiler/.github/.github/workflows/check-github-actions-workflows.yaml@main
+    uses: jonasgeiler/.github/.github/workflows/check-github-actions-workflows.yaml@d02e8d71a8ca31744bdbb5c83449771294563c9a # main
