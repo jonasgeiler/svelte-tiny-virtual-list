@@ -50,7 +50,9 @@
 	let estimatedItemSize = $derived(
 		optEstimatedItemSize || (typeof itemSize === 'number' && itemSize) || 50
 	);
-	const sizeAndPositionManager = new SizeAndPositionManager(itemSize, itemCount, estimatedItemSize);
+	const sizeAndPositionManager = untrack(
+		() => new SizeAndPositionManager(itemSize, itemCount, estimatedItemSize)
+	);
 
 	/** @type {HTMLDivElement} */
 	let wrapper;
@@ -60,15 +62,18 @@
 	let items = $state.raw([]);
 
 	/** @type {{ offset: number, changeReason: number }} */
-	let scroll = $state.raw({
-		offset: scrollOffset || (scrollToIndex !== undefined && getOffsetForIndex(scrollToIndex)) || 0,
-		changeReason: SCROLL_CHANGE_REASON.REQUESTED
-	});
-	let prevScroll = $state.snapshot(scroll);
+	let scroll = $state.raw(
+		untrack(() => ({
+			offset:
+				scrollOffset || (scrollToIndex !== undefined && getOffsetForIndex(scrollToIndex)) || 0,
+			changeReason: SCROLL_CHANGE_REASON.REQUESTED
+		}))
+	);
+	let prevScroll = untrack(() => $state.snapshot(scroll));
 
 	let heightNumber = $derived(Number.isFinite(height) ? Number(height) : wrapperHeight);
 	let widthNumber = $derived(Number.isFinite(width) ? Number(width) : wrapperWidth);
-	let prevProps = {
+	let prevProps = untrack(() => ({
 		scrollToIndex: $state.snapshot(scrollToIndex),
 		scrollToAlignment: $state.snapshot(scrollToAlignment),
 		scrollOffset: $state.snapshot(scrollOffset),
@@ -78,7 +83,7 @@
 		heightNumber: $state.snapshot(heightNumber),
 		widthNumber: $state.snapshot(widthNumber),
 		stickyIndices: $state.snapshot(stickyIndices)
-	};
+	}));
 
 	/** @type {Record<number, string>} */
 	let styleCache = $state({});
