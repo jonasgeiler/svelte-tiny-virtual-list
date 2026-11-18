@@ -1,7 +1,11 @@
 <script>
 	import VirtualList from '$lib/VirtualList.svelte';
-	import InfiniteLoading from 'svelte-infinite-loading';
+	import RawInfiniteLoading from 'svelte-infinite-loading';
 	import { asset } from '$app/paths';
+
+	const InfiniteLoading = /** @type {import('svelte').Component<Record<string, unknown>>} */ (
+		/** @type {unknown} */ (RawInfiniteLoading)
+	);
 
 	const api =
 		'https://hn.algolia.com/api/v1/search_by_date' +
