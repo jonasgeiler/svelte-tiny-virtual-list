@@ -26,4 +26,4 @@ on:
 
 jobs:
   _:
-    uses: jonasgeiler/.github/.github/workflows/check-shell-scripts.yaml@main
+    uses: jonasgeiler/.github/.github/workflows/check-shell-scripts.yaml@35e9f9d376dfae54a41ca0c0d3e059904fcdf385 # main
